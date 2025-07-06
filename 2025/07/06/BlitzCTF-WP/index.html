@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="google-site-verification" content="TZE0rZyIqLl10trYu3BWBWa1Vmz6HFwhb2OcNEK4u-s" />
+     <link rel="shortcut icon" href= /img/huaji.ico >
+    <title>
+        blog
+    </title>
+    <meta name="description" content= 歪比歪比 >
+    <meta name="keywords" content= Blog,Hexo,Huaji >
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-home
+ replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            BlitzCTF-WP
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <h1 id="2025-BlitzCTF-WP"><a href="#2025-BlitzCTF-WP" class="headerlink" title="2025 BlitzCTF WP"></a>2025 BlitzCTF WP</h1><p>主播太懒了，就看了两个题，后面两个web题都是个位数的解，就没细看了，不如去刷其他靶场</p>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="Fleg-Store"><a href="#Fleg-Store" class="headerlink" title="Fleg Store"></a>Fleg Store</h3><p><a target="_blank" rel="noopener" href="https://flegstore-asd8webfs.blitzhack.xyz/login">https://flegstore-asd8webfs.blitzhack.xyz/login</a></p>
+<p>很正常的一个业务漏洞，价格显示在前端，如果余额不够就会给你的购买按钮打上disable标签，所以只需要把价格和disable删掉，就可以获得flag。</p>
+<h3 id="Unstoppable-force-meets-immovable-object"><a href="#Unstoppable-force-meets-immovable-object" class="headerlink" title="Unstoppable force meets immovable object"></a>Unstoppable force meets immovable object</h3><p>白盒代码审计题，对密码进行哈希验证，需要写一个脚本计算</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment"># 原始密码</span></span><br><span class="line">not_password = <span class="string">b&#x27;P@ssword@123&#x27;</span> + <span class="string">b&#x27;\x00&#x27;</span> * (<span class="number">32</span> - <span class="built_in">len</span>(<span class="string">&quot;P@ssword@123&quot;</span>))</span><br><span class="line"><span class="keyword">assert</span> <span class="built_in">len</span>(not_password) == <span class="number">32</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改最后一个字节</span></span><br><span class="line">mod_block1 = <span class="built_in">bytearray</span>(not_password)</span><br><span class="line">mod_block1[-<span class="number">1</span>] ^= <span class="number">1</span>  <span class="comment"># 改变一位，制造差异</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 构造补偿块，使哈希不变</span></span><br><span class="line">orig_int = <span class="built_in">int</span>.from_bytes(not_password, <span class="string">&quot;big&quot;</span>)</span><br><span class="line">mod1_int = <span class="built_in">int</span>.from_bytes(mod_block1, <span class="string">&quot;big&quot;</span>)</span><br><span class="line">block2_int = orig_int ^ mod1_int</span><br><span class="line">block2 = block2_int.to_bytes(<span class="number">32</span>, <span class="string">&quot;big&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拼接两个 32 字节的块，最终输入为 64 字节</span></span><br><span class="line">evil_input = <span class="built_in">bytes</span>(mod_block1) + block2</span><br><span class="line"><span class="keyword">assert</span> evil_input != not_password</span><br><span class="line"><span class="keyword">assert</span> <span class="built_in">len</span>(evil_input) == <span class="number">64</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证哈希一致性</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">immovable_object</span>(<span class="params">data, block_size=<span class="number">32</span></span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(data) % block_size != <span class="number">0</span>:</span><br><span class="line">        data += <span class="string">b&quot;\0&quot;</span> * (block_size - <span class="built_in">len</span>(data) % block_size)</span><br><span class="line">    h = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(data), block_size):</span><br><span class="line">        block = <span class="built_in">int</span>.from_bytes(data[i:i+block_size], <span class="string">&quot;big&quot;</span>)</span><br><span class="line">        h ^= block</span><br><span class="line">    <span class="keyword">return</span> h</span><br><span class="line"></span><br><span class="line"><span class="keyword">assert</span> immovable_object(evil_input) == immovable_object(not_password)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[+] Generated evil input:&quot;</span>, evil_input.<span class="built_in">hex</span>())</span><br><span class="line"><span class="comment"># 提交 payload</span></span><br><span class="line">url = <span class="string">&quot;https://ufmio-n1sj9nsb.blitzhack.xyz/&quot;</span>  <span class="comment"># 改为你的实际地址</span></span><br><span class="line">payload = &#123;<span class="string">&quot;password&quot;</span>: evil_input.decode(<span class="string">&quot;latin1&quot;</span>)&#125;  <span class="comment"># 以latin1发送原始字节</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[+] Sending evil password to:&quot;</span>, url)</span><br><span class="line">resp = requests.post(url, data=payload)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出结果</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[+] Response status:&quot;</span>, resp.status_code)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[+] Response text:\n&quot;</span>, resp.text)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+        <hr class="fhr">
+        <div id="vcomments"></div>
+    
+</div>
+    <div class="footer" id="footer">
+    <p><h4>版权所有 © 2020 | 作者: Huaji | 主题 By <a class="theme-author" target="_blank" rel="noopener" href="https://github.com/Xunzhuo/hexo-theme-coder" style="font-size:14px; color: #969696">Coder</a></h4>
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <span id="busuanzi_container_site_pv">本站浏览总访问量: <span id="busuanzi_value_site_pv"></span></span>
+        <span class="post-meta-divider">|</span>
+        <span id="busuanzi_container_site_uv">本站访问人数: <span id="busuanzi_value_site_uv"></span></span>
+    
+    <label class="el-switch el-switch-blue el-switch-sm" style="vertical-align: sub;">
+        <input type="checkbox" name="switch" id="update_style">
+        <span class="el-switch-style"></span>
+    </label>
+
+    <!--         <script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+    </script> -->
+</p>
+</div>
+
+<input type="hidden" id="web_style" value="black">
+<input type="hidden" id="valine_appid" value="">
+<input type="hidden" id="valine_appKey" value="">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+color: #698fca;
+}
+.v .vlist .vcard .vhead .vsys {
+color: #3a3e4a;
+}
+.v .vlist .vcard .vh .vmeta .vat {
+color: #638fd5;
+}
+.v .vlist .vcard .vhead .vnick {
+color: #6ba1ff;
+}
+.v a {
+color: #8696b1;
+}
+.v .vlist .vcard .vhead .vnick:hover {
+color: #669bfc;
+}
+</style>
+    <script type="text/javascript" color="173,174,173" opacity='1' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+</body>
+</html>
