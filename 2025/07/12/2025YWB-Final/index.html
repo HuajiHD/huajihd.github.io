@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="google-site-verification" content="TZE0rZyIqLl10trYu3BWBWa1Vmz6HFwhb2OcNEK4u-s" />
+     <link rel="shortcut icon" href= /img/huaji.ico >
+    <title>
+        blog
+    </title>
+    <meta name="description" content= 歪比歪比 >
+    <meta name="keywords" content= Blog,Hexo,Huaji >
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-home
+ replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            2025御网杯线下赛
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <h1 id="2025御网杯线下半决赛本科组"><a href="#2025御网杯线下半决赛本科组" class="headerlink" title="2025御网杯线下半决赛本科组"></a>2025御网杯线下半决赛本科组</h1><p>​	主包头一次打到线下，还是比较有压力的，假期放了快半个月，憋在寝室里疯狂刷题，结果也很不错，半决赛ctf拿了第一，所有非零解的题都出了，也算是给自己的18岁和大一生涯一个交代了。同时也感谢两位队友带飞。</p>
+<p>​	决赛就不是非常理想了，两个本科生都没怎么接触过相关内容，研究生学长是学pwn的，不出意外的出意外了，但lemon扛下重任，给俺们混了个一等奖（大概）</p>
+<p>俺主要负责web和misc。</p>
+<h2 id="WP"><a href="#WP" class="headerlink" title="WP"></a>WP</h2><p>这次俺负责的题目除了那个零解题以外都很简单</p>
+<h2 id="web"><a href="#web" class="headerlink" title="web"></a>web</h2><h3 id="双重编码"><a href="#双重编码" class="headerlink" title="双重编码"></a>双重编码</h3><p>这题很傻逼，抽象在他自己网站的参数都会显示“路径异常”，而且谁家好人会把flag.php放根目录下面啊。</p>
+<p>所以这个题就很简单，但是还是要考虑一下抽象路径</p>
+<p>payload：?cx&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;&#x2F;flag.php</p>
+<h3 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h3><p>前几天刷过类似的题，这里忘记把题目copy下来了，所以写了个类似的内容（非原题，而且也<strong>忘了payload能不能通，过几天就改</strong>）</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="comment">//复刻版，原版忘了保存了</span></span><br><span class="line"><span class="comment">//flag在flag.php</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$cmd</span>=<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/\;|cat|php|[0-9]|more|wget|less|head|sort|tail|strings|od|curl|\`|\%|\&gt;|\&lt;/i&quot;</span>, <span class="variable">$cmd</span>))&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/\*\?/i&quot;</span>,<span class="variable">$cmd</span>))&#123;</span><br><span class="line">            <span class="keyword">eval</span>(<span class="variable">$cmd</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&#x27;HACK!!!&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&#x27;HACK!!!&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span><span class="comment">//等到找到原件就改</span></span><br></pre></td></tr></table></figure>
+
+<p>最后执行的命令好像是?cmd&#x3D;var_export(scandir(‘glob:&#x2F;&#x2F;&#x2F;*’))，受上一题影响，跑到根目录看了一下，无果。</p>
+<p>那肯定就在当前目录下了（当时是猜的），所以直接读payload：?cmd&#x3D;system(“tac f*”)<br>这题是在记不清楚了，只能这么写了</p>
+<h3 id="sql注入"><a href="#sql注入" class="headerlink" title="sql注入"></a>sql注入</h3><p>sqlmap一把梭，脑子都不需要</p>
+<h2 id="misc"><a href="#misc" class="headerlink" title="misc"></a>misc</h2><h3 id="键盘流量"><a href="#键盘流量" class="headerlink" title="键盘流量"></a>键盘流量</h3><p>netA一把梭出来</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">666c61677b44477377546667793147443233366673327366463264736b4c6e677d</span><br></pre></td></tr></table></figure>
+
+<p>用hex解一下就可以了</p>
+<h3 id="图片隐写"><a href="#图片隐写" class="headerlink" title="图片隐写"></a>图片隐写</h3><p>打开发现有个“这是一张图片.png”，读取文件头发现是0050开头，修复文件头为8950之后就可以看见图片内容了，图片上是解压密码：ctf@welcome，拿这个来解压压缩包，获得一个flag.jpg，查看图片块信息有字符串</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Y3RmX3lvdV9wYXNzZWQ=</span><br></pre></td></tr></table></figure>
+
+<p>base64解码即可</p>
+<h3 id="文档（忘名字了）"><a href="#文档（忘名字了）" class="headerlink" title="文档（忘名字了）"></a>文档（忘名字了）</h3><p>把文档进行foremost提取，发现一个zip，解压后用everything来搜content:flag，可以发现document.xml里有关键字，打开发现flag</p>
+<p>具体内容到时候搭个靶场放题目</p>
+
+    </div>
+
+    
+        <hr class="fhr">
+        <div id="vcomments"></div>
+    
+</div>
+    <div class="footer" id="footer">
+    <p><h4>版权所有 © 2020 | 作者: Huaji | 主题 By <a class="theme-author" target="_blank" rel="noopener" href="https://github.com/Xunzhuo/hexo-theme-coder" style="font-size:14px; color: #969696">Coder</a></h4>
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <span id="busuanzi_container_site_pv">本站浏览总访问量: <span id="busuanzi_value_site_pv"></span></span>
+        <span class="post-meta-divider">|</span>
+        <span id="busuanzi_container_site_uv">本站访问人数: <span id="busuanzi_value_site_uv"></span></span>
+    
+    <label class="el-switch el-switch-blue el-switch-sm" style="vertical-align: sub;">
+        <input type="checkbox" name="switch" id="update_style">
+        <span class="el-switch-style"></span>
+    </label>
+
+    <!--         <script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+    </script> -->
+</p>
+</div>
+
+<input type="hidden" id="web_style" value="black">
+<input type="hidden" id="valine_appid" value="">
+<input type="hidden" id="valine_appKey" value="">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+color: #698fca;
+}
+.v .vlist .vcard .vhead .vsys {
+color: #3a3e4a;
+}
+.v .vlist .vcard .vh .vmeta .vat {
+color: #638fd5;
+}
+.v .vlist .vcard .vhead .vnick {
+color: #6ba1ff;
+}
+.v a {
+color: #8696b1;
+}
+.v .vlist .vcard .vhead .vnick:hover {
+color: #669bfc;
+}
+</style>
+    <script type="text/javascript" color="173,174,173" opacity='1' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+</body>
+</html>
