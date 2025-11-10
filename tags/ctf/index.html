@@ -13,7 +13,7 @@
     <meta name="description" content="搞到现在总算有个博客了">
 <meta property="og:type" content="website">
 <meta property="og:title" content="blog">
-<meta property="og:url" content="http://huajihd.github.io/tags/ctf/index.html">
+<meta property="og:url" content="http://huajihd.github.io/tags/CTF/index.html">
 <meta property="og:site_name" content="blog">
 <meta property="og:description" content="搞到现在总算有个博客了">
 <meta property="og:locale">
@@ -401,6 +401,118 @@
                 <main class="main index-page">
             
         <article class="index-post">
+            <a class="abstract-title" href="/2025/11/09/Pikachu/">
+                <span class="abstract-title-text">Pikachu</span>
+            </a>
+            <div class="abstract-content">
+                Pikachu靶场一直忘了刷这个靶场了，国庆结束想起来做一下，内容都非常基础所以写的比较简单，没有别的大佬的博客内容写的清晰。
+暴力破解基于表单的暴力破解发现&#x2F;vul&#x2F;burteforce&#x2F;bf_form.php是提交用的，post请求体里有username=123&amp;password=123&amp;submit=Login，所以扔到burpsuite里的intruder直接爆破即可
+
+验证码绕过(onserver）输入验证码后发现验证码长期有效，所以内容应该同基于表单的暴力破解中的内容。
+验证码绕过(onclient)123456789101112...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/11/09</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/07/12/YWB2025-Final/">
+                <span class="abstract-title-text">御网杯2025线下赛</span>
+            </a>
+            <div class="abstract-content">
+                御网杯2025线下半决赛本科组​	主包头一次打到线下，还是比较有压力的，假期放了快半个月，憋在寝室里疯狂刷题，结果也很不错，半决赛ctf拿了第一，所有非零解的题都出了，也算是给自己的18岁和大一生涯一个交代了。同时也感谢两位队友带飞。
+​	决赛就不是非常理想了，两个本科生都没怎么接触过相关内容，研究生学长是学pwn的，不出意外的出意外了，但lemon扛下重任，给俺们混了个一等奖（大概）
+俺主要负责web和misc。
+WP这次俺负责的题目除了那个零解题以外都很简单
+web双重编码这题很傻逼，抽象在他自己网站的参数都会显示“路径异常”，而且谁家好人会把flag.php放根目录下面啊。
+所以这...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/07/12</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/05/18/ISCC-WP/">
+                <span class="abstract-title-text">ISCC2025-WP</span>
+            </a>
+            <div class="abstract-content">
+                ISCC2025-WP一大坨，没认真打导致没奖，明年还得吃（伤心）
+区域赛web-哪吒的试炼题目提到要吃藕，并且附上了翻译，所以想到在get里填参数，即
+112.126.73.173:9999?food=lotus root，跳转
+
+进去发现按钮点不了，f12删掉标签中的disabled=&quot;&quot;，点击之后看见php
+
+分析得知，第一个用双写绕过，第二个用md5值为0e的两个字符串绕过，所以post请求：
+1nezha=&#123;&quot;incantation&quot;:&quot;I_am_the_I_am_the_spirit_of_firespirit_of...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/05/18</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/04/20/UCSC-WP/">
+                <span class="abstract-title-text">UCSC-WP</span>
+            </a>
+            <div class="abstract-content">
+                2025 ucsc CTF7.6才发现这个wp没传上来，补档（）
+web-ezLaravel-ucscdirsearch扫一下目录，就能发现flag了
+crypto-essential-ucsc两个脚本
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354from Crypto.Util.number import long_to_bytesimport math# =======================================...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/04/20</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
             <a class="abstract-title" href="/2025/04/06/XYCTF-WP/">
                 <span class="abstract-title-text">XYCTF-WP</span>
             </a>
@@ -412,39 +524,13 @@ reverseWARMUPemm，不知道在哪里上传显示到博客上，那我就讲一�
             <!-- read more -->
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2025/04/06">
+                <div class="abstract-date" title="Last updated: 2025/11/10">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/04/06</span>
                 </div>
                 <!-- tags -->
                     <div class="abstract-tags" >
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf">ctf</a>
-        <a class="post-tag" href="javascript:void(0);" data-tags="writeup">writeup</a>
-</div>
-
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-            
-        <article class="index-post">
-            <a class="abstract-title" href="/2025/02/16/EHAX-WP/">
-                <span class="abstract-title-text">EHAX_WP</span>
-            </a>
-            <div class="abstract-content">
-                2.16EHAXWelcome开盖即食，进discord，EH4X{w3lc0m3_t0_f1rst_ed1t10n_0f_eh4x_CTF}
-阴间网站背景，根本看不见文字
-Dots &amp; Dashes.–&#x2F;—–&#x2F;.-.&#x2F;-.–&#x2F;…–&#x2F;-..&#x2F;.—-&#x2F;–.-&#x2F;…–&#x2F;-.&#x2F;…–&#x2F;-..-&#x2F;…–&#x2F;—–&#x2F;-..-&#x2F;…–&#x2F;-…&#x2F;….-&#x2F;-&#x2F;.—-&#x2F;—–&#x2F;-&#x2F;
-好的没解出来W...
-            </div>
-            <!-- read more -->
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2025/02/24">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/02/16</span>
-                </div>
-                <!-- tags -->
-                    <div class="abstract-tags" >
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf">ctf</a>
-        <a class="post-tag" href="javascript:void(0);" data-tags="writeup">writeup</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
 </div>
 
             </div>
@@ -466,13 +552,13 @@ My First Secret常规payload：...
             <!-- read more -->
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2025/02/24">
+                <div class="abstract-date" title="Last updated: 2025/11/10">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/01/27</span>
                 </div>
                 <!-- tags -->
                     <div class="abstract-tags" >
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf">ctf</a>
-        <a class="post-tag" href="javascript:void(0);" data-tags="writeup">writeup</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
 </div>
 
             </div>
@@ -497,12 +583,12 @@ and 和or绕过：1234or    ||an...
             <!-- read more -->
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/12/31">
+                <div class="abstract-date" title="Last updated: 2025/11/10">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/12/31</span>
                 </div>
                 <!-- tags -->
                     <div class="abstract-tags" >
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf">ctf</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
         <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
 </div>
 
@@ -670,45 +756,29 @@ and 和or绕过：1234or    ||an...
                 <span class="iconfont-archer">&#xe606;</span>
                 writeup
             </span>
+            <span class="sidebar-tag-name" data-tags="CTF">
+                <span class="iconfont-archer">&#xe606;</span>
+                CTF
+            </span>
             <span class="sidebar-tag-name" data-tags="web">
                 <span class="iconfont-archer">&#xe606;</span>
                 web
+            </span>
+            <span class="sidebar-tag-name" data-tags="writeups">
+                <span class="iconfont-archer">&#xe606;</span>
+                writeups
             </span>
             <span class="sidebar-tag-name" data-tags="python">
                 <span class="iconfont-archer">&#xe606;</span>
                 python
             </span>
-            <span class="sidebar-tag-name" data-tags="requests">
-                <span class="iconfont-archer">&#xe606;</span>
-                requests
-            </span>
             <span class="sidebar-tag-name" data-tags="青龙面板">
                 <span class="iconfont-archer">&#xe606;</span>
                 青龙面板
             </span>
-            <span class="sidebar-tag-name" data-tags="debian">
-                <span class="iconfont-archer">&#xe606;</span>
-                debian
-            </span>
-            <span class="sidebar-tag-name" data-tags="selenium">
-                <span class="iconfont-archer">&#xe606;</span>
-                selenium
-            </span>
-            <span class="sidebar-tag-name" data-tags="javascript">
-                <span class="iconfont-archer">&#xe606;</span>
-                javascript
-            </span>
-            <span class="sidebar-tag-name" data-tags="js">
-                <span class="iconfont-archer">&#xe606;</span>
-                js
-            </span>
             <span class="sidebar-tag-name" data-tags="vbs">
                 <span class="iconfont-archer">&#xe606;</span>
                 vbs
-            </span>
-            <span class="sidebar-tag-name" data-tags="-web">
-                <span class="iconfont-archer">&#xe606;</span>
-                -web
             </span>
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>

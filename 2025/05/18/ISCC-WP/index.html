@@ -10,12 +10,12 @@
     <meta name="copyright" content="Huaji">
         <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
     <meta name="description" content="搞到现在总算有个博客了">
-    <meta name="description" content="ISCC2025-WP区域赛web-哪吒的试炼题目提到要吃藕，并且附上了翻译，所以想到在get里填参数，即 112.126.73.173:9999?food&#x3D;lotus root，跳转  进去发现按钮点不了，f12删掉标签中的disabled&#x3D;&quot;&quot;，点击之后看见php  分析得知，第一个用双写绕过，第二个用md5值为0e的两个字符串绕过，所以post请求： 1nezha&#x3D;&amp;#1">
+    <meta name="description" content="ISCC2025-WP一大坨，没认真打导致没奖，明年还得吃（伤心） 区域赛web-哪吒的试炼题目提到要吃藕，并且附上了翻译，所以想到在get里填参数，即 112.126.73.173:9999?food&#x3D;lotus root，跳转  进去发现按钮点不了，f12删掉标签中的disabled&#x3D;&quot;&quot;，点击之后看见php  分析得知，第一个用双写绕过，第二个用md5值为0e的两个字符串">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ISCC2025-WP">
 <meta property="og:url" content="http://huajihd.github.io/2025/05/18/ISCC-WP/index.html">
 <meta property="og:site_name" content="blog">
-<meta property="og:description" content="ISCC2025-WP区域赛web-哪吒的试炼题目提到要吃藕，并且附上了翻译，所以想到在get里填参数，即 112.126.73.173:9999?food&#x3D;lotus root，跳转  进去发现按钮点不了，f12删掉标签中的disabled&#x3D;&quot;&quot;，点击之后看见php  分析得知，第一个用双写绕过，第二个用md5值为0e的两个字符串绕过，所以post请求： 1nezha&#x3D;&amp;#1">
+<meta property="og:description" content="ISCC2025-WP一大坨，没认真打导致没奖，明年还得吃（伤心） 区域赛web-哪吒的试炼题目提到要吃藕，并且附上了翻译，所以想到在get里填参数，即 112.126.73.173:9999?food&#x3D;lotus root，跳转  进去发现按钮点不了，f12删掉标签中的disabled&#x3D;&quot;&quot;，点击之后看见php  分析得知，第一个用双写绕过，第二个用md5值为0e的两个字符串">
 <meta property="og:locale">
 <meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/qy-web1-1.png">
 <meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/qy-web1-2.png">
@@ -37,8 +37,10 @@
 <meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/re2-2.png">
 <meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/re2-3.png">
 <meta property="article:published_time" content="2025-05-18T05:45:52.000Z">
-<meta property="article:modified_time" content="2025-07-07T05:53:03.749Z">
+<meta property="article:modified_time" content="2025-11-10T15:48:10.695Z">
 <meta property="article:author" content="Huaji">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="writeups">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/qy-web1-1.png">
     <meta http-equiv="Cache-control" content="no-cache">
@@ -301,6 +303,8 @@
             <div class="post-intros">
                 <!-- 文章页标签  -->
                     <div class="post-intro-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
 </div>
 
                 <!-- 文章字数统计 -->
@@ -459,7 +463,8 @@
             <div class="container container-unloaded">
                 <main class="main post-page">
     <article class="article-entry">
-        <h1 id="ISCC2025-WP"><a href="#ISCC2025-WP" class="headerlink" title="ISCC2025-WP"></a>ISCC2025-WP</h1><h1 id="区域赛"><a href="#区域赛" class="headerlink" title="区域赛"></a>区域赛</h1><h3 id="web-哪吒的试炼"><a href="#web-哪吒的试炼" class="headerlink" title="web-哪吒的试炼"></a>web-哪吒的试炼</h3><p>题目提到要吃藕，并且附上了翻译，所以想到在get里填参数，即</p>
+        <h1 id="ISCC2025-WP"><a href="#ISCC2025-WP" class="headerlink" title="ISCC2025-WP"></a>ISCC2025-WP</h1><p>一大坨，没认真打导致没奖，明年还得吃（伤心）</p>
+<h1 id="区域赛"><a href="#区域赛" class="headerlink" title="区域赛"></a>区域赛</h1><h3 id="web-哪吒的试炼"><a href="#web-哪吒的试炼" class="headerlink" title="web-哪吒的试炼"></a>web-哪吒的试炼</h3><p>题目提到要吃藕，并且附上了翻译，所以想到在get里填参数，即</p>
 <p><code>112.126.73.173:9999?food=lotus root</code>，跳转</p>
 <p><img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/qy-web1-1.png" alt="qy-web1-1"></p>
 <p>进去发现按钮点不了，f12删掉标签中的<code>disabled=&quot;&quot;</code>，点击之后看见php</p>
@@ -536,7 +541,7 @@
             <p>原文作者：<a href="http://huajihd.github.io">Huaji</a>
             <p>原文链接：<a href="http://huajihd.github.io/2025/05/18/ISCC-WP/">http://huajihd.github.io/2025/05/18/ISCC-WP/</a>
             <p>发表日期：<a href="http://huajihd.github.io/2025/05/18/ISCC-WP/">May 18th 2025, 1:45:52 pm</a>
-            <p>更新日期：<a href="http://huajihd.github.io/2025/05/18/ISCC-WP/">July 7th 2025, 1:53:03 pm</a>
+            <p>更新日期：<a href="http://huajihd.github.io/2025/05/18/ISCC-WP/">November 10th 2025, 11:48:10 pm</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     <!-- paginator -->
@@ -740,45 +745,29 @@
                 <span class="iconfont-archer">&#xe606;</span>
                 writeup
             </span>
+            <span class="sidebar-tag-name" data-tags="CTF">
+                <span class="iconfont-archer">&#xe606;</span>
+                CTF
+            </span>
             <span class="sidebar-tag-name" data-tags="web">
                 <span class="iconfont-archer">&#xe606;</span>
                 web
+            </span>
+            <span class="sidebar-tag-name" data-tags="writeups">
+                <span class="iconfont-archer">&#xe606;</span>
+                writeups
             </span>
             <span class="sidebar-tag-name" data-tags="python">
                 <span class="iconfont-archer">&#xe606;</span>
                 python
             </span>
-            <span class="sidebar-tag-name" data-tags="requests">
-                <span class="iconfont-archer">&#xe606;</span>
-                requests
-            </span>
             <span class="sidebar-tag-name" data-tags="青龙面板">
                 <span class="iconfont-archer">&#xe606;</span>
                 青龙面板
             </span>
-            <span class="sidebar-tag-name" data-tags="debian">
-                <span class="iconfont-archer">&#xe606;</span>
-                debian
-            </span>
-            <span class="sidebar-tag-name" data-tags="selenium">
-                <span class="iconfont-archer">&#xe606;</span>
-                selenium
-            </span>
-            <span class="sidebar-tag-name" data-tags="javascript">
-                <span class="iconfont-archer">&#xe606;</span>
-                javascript
-            </span>
-            <span class="sidebar-tag-name" data-tags="js">
-                <span class="iconfont-archer">&#xe606;</span>
-                js
-            </span>
             <span class="sidebar-tag-name" data-tags="vbs">
                 <span class="iconfont-archer">&#xe606;</span>
                 vbs
-            </span>
-            <span class="sidebar-tag-name" data-tags="-web">
-                <span class="iconfont-archer">&#xe606;</span>
-                -web
             </span>
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>

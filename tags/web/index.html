@@ -401,6 +401,33 @@
                 <main class="main index-page">
             
         <article class="index-post">
+            <a class="abstract-title" href="/2025/11/09/Pikachu/">
+                <span class="abstract-title-text">Pikachu</span>
+            </a>
+            <div class="abstract-content">
+                Pikachu靶场一直忘了刷这个靶场了，国庆结束想起来做一下，内容都非常基础所以写的比较简单，没有别的大佬的博客内容写的清晰。
+暴力破解基于表单的暴力破解发现&#x2F;vul&#x2F;burteforce&#x2F;bf_form.php是提交用的，post请求体里有username=123&amp;password=123&amp;submit=Login，所以扔到burpsuite里的intruder直接爆破即可
+
+验证码绕过(onserver）输入验证码后发现验证码长期有效，所以内容应该同基于表单的暴力破解中的内容。
+验证码绕过(onclient)123456789101112...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/11/09</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
             <a class="abstract-title" href="/2025/10/14/ycb2025-web/">
                 <span class="abstract-title-text">羊城杯2025-web</span>
             </a>
@@ -411,12 +438,72 @@ ez_unserialize思路：H-&gt;__destruct() → A::start() 回显 $a-&gt;next，�
             <!-- read more -->
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2025/10/15">
+                <div class="abstract-date" title="Last updated: 2025/11/10">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/10/14</span>
                 </div>
                 <!-- tags -->
                     <div class="abstract-tags" >
-        <a class="post-tag" href="javascript:void(0);" data-tags="-web">-web</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/07/12/YWB2025-Final/">
+                <span class="abstract-title-text">御网杯2025线下赛</span>
+            </a>
+            <div class="abstract-content">
+                御网杯2025线下半决赛本科组​	主包头一次打到线下，还是比较有压力的，假期放了快半个月，憋在寝室里疯狂刷题，结果也很不错，半决赛ctf拿了第一，所有非零解的题都出了，也算是给自己的18岁和大一生涯一个交代了。同时也感谢两位队友带飞。
+​	决赛就不是非常理想了，两个本科生都没怎么接触过相关内容，研究生学长是学pwn的，不出意外的出意外了，但lemon扛下重任，给俺们混了个一等奖（大概）
+俺主要负责web和misc。
+WP这次俺负责的题目除了那个零解题以外都很简单
+web双重编码这题很傻逼，抽象在他自己网站的参数都会显示“路径异常”，而且谁家好人会把flag.php放根目录下面啊。
+所以这...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/07/12</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2024/12/31/SQLByPass/">
+                <span class="abstract-title-text">sql注入绕过技巧</span>
+            </a>
+            <div class="abstract-content">
+                sql注入绕过技巧刚学，大佬们轻喷（）
+空格绕过：%20 %09 %0a %0b %0c %0d %a0 %00 /**/  /*!*/
+数字注入可以使用科学技术法和小数：123?id=1.0 union select 1,2,3,4--?id=1e0union select 1,2,3,4--
+
+也可以使用括号，如：
+select(user())from huaji where(1=1)and(2=2)
+好像通常是在盲注中使用
+?id=1&#39;and(sleep(ascii(substr(database(),1))=109))--
+and 和or绕过：1234or    ||an...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/12/31</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
 </div>
 
             </div>
@@ -583,45 +670,29 @@ ez_unserialize思路：H-&gt;__destruct() → A::start() 回显 $a-&gt;next，�
                 <span class="iconfont-archer">&#xe606;</span>
                 writeup
             </span>
+            <span class="sidebar-tag-name" data-tags="CTF">
+                <span class="iconfont-archer">&#xe606;</span>
+                CTF
+            </span>
             <span class="sidebar-tag-name" data-tags="web">
                 <span class="iconfont-archer">&#xe606;</span>
                 web
+            </span>
+            <span class="sidebar-tag-name" data-tags="writeups">
+                <span class="iconfont-archer">&#xe606;</span>
+                writeups
             </span>
             <span class="sidebar-tag-name" data-tags="python">
                 <span class="iconfont-archer">&#xe606;</span>
                 python
             </span>
-            <span class="sidebar-tag-name" data-tags="requests">
-                <span class="iconfont-archer">&#xe606;</span>
-                requests
-            </span>
             <span class="sidebar-tag-name" data-tags="青龙面板">
                 <span class="iconfont-archer">&#xe606;</span>
                 青龙面板
             </span>
-            <span class="sidebar-tag-name" data-tags="debian">
-                <span class="iconfont-archer">&#xe606;</span>
-                debian
-            </span>
-            <span class="sidebar-tag-name" data-tags="selenium">
-                <span class="iconfont-archer">&#xe606;</span>
-                selenium
-            </span>
-            <span class="sidebar-tag-name" data-tags="javascript">
-                <span class="iconfont-archer">&#xe606;</span>
-                javascript
-            </span>
-            <span class="sidebar-tag-name" data-tags="js">
-                <span class="iconfont-archer">&#xe606;</span>
-                js
-            </span>
             <span class="sidebar-tag-name" data-tags="vbs">
                 <span class="iconfont-archer">&#xe606;</span>
                 vbs
-            </span>
-            <span class="sidebar-tag-name" data-tags="-web">
-                <span class="iconfont-archer">&#xe606;</span>
-                -web
             </span>
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>

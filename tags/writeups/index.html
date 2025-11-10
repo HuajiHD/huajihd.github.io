@@ -13,7 +13,7 @@
     <meta name="description" content="搞到现在总算有个博客了">
 <meta property="og:type" content="website">
 <meta property="og:title" content="blog">
-<meta property="og:url" content="http://huajihd.github.io/tags/javascript/index.html">
+<meta property="og:url" content="http://huajihd.github.io/tags/writeups/index.html">
 <meta property="og:site_name" content="blog">
 <meta property="og:description" content="搞到现在总算有个博客了">
 <meta property="og:locale">
@@ -401,33 +401,137 @@
                 <main class="main index-page">
             
         <article class="index-post">
-            <a class="abstract-title" href="/2024/11/27/oucBookSeminar/">
-                <span class="abstract-title-text">研讨室预约填写信息自动化工具</span>
+            <a class="abstract-title" href="/2025/07/12/YWB2025-Final/">
+                <span class="abstract-title-text">御网杯2025线下赛</span>
             </a>
             <div class="abstract-content">
-                研讨室预约填写信息自动化工具由于填写研讨室预约信息过程繁琐，开发了一个自动化工具来节省时间，基于 Python 和任务调度框架实现。
-注意：本工具仅供学习和个人使用，请勿用于商业用途。
-实现思路1.使用 selenium 模拟表单提交，自动化处理输入信息，搭配定时任务实现全流程自动化。
-2.使用JavaScript在当前预约界面执行输入。
-背景来源最近发现研讨室预约系统繁琐，填写时间、用途等信息需要耗费很多精力，因此萌生了通过脚本实现简化流程的想法。
-具体操作步骤
-分析预约系统接口
-
-使用浏览器开发者工具（F12）捕获预约系统的网络请求，定位提交信息的接口。
-获取所需的表单字段，如姓名、...
+                御网杯2025线下半决赛本科组​	主包头一次打到线下，还是比较有压力的，假期放了快半个月，憋在寝室里疯狂刷题，结果也很不错，半决赛ctf拿了第一，所有非零解的题都出了，也算是给自己的18岁和大一生涯一个交代了。同时也感谢两位队友带飞。
+​	决赛就不是非常理想了，两个本科生都没怎么接触过相关内容，研究生学长是学pwn的，不出意外的出意外了，但lemon扛下重任，给俺们混了个一等奖（大概）
+俺主要负责web和misc。
+WP这次俺负责的题目除了那个零解题以外都很简单
+web双重编码这题很傻逼，抽象在他自己网站的参数都会显示“路径异常”，而且谁家好人会把flag.php放根目录下面啊。
+所以这...
             </div>
             <!-- read more -->
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/12/25">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/11/27</span>
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/07/12</span>
                 </div>
                 <!-- tags -->
                     <div class="abstract-tags" >
-        <a class="post-tag" href="javascript:void(0);" data-tags="python">python</a>
-        <a class="post-tag" href="javascript:void(0);" data-tags="selenium">selenium</a>
-        <a class="post-tag" href="javascript:void(0);" data-tags="javascript">javascript</a>
-        <a class="post-tag" href="javascript:void(0);" data-tags="js">js</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/05/18/ISCC-WP/">
+                <span class="abstract-title-text">ISCC2025-WP</span>
+            </a>
+            <div class="abstract-content">
+                ISCC2025-WP一大坨，没认真打导致没奖，明年还得吃（伤心）
+区域赛web-哪吒的试炼题目提到要吃藕，并且附上了翻译，所以想到在get里填参数，即
+112.126.73.173:9999?food=lotus root，跳转
+
+进去发现按钮点不了，f12删掉标签中的disabled=&quot;&quot;，点击之后看见php
+
+分析得知，第一个用双写绕过，第二个用md5值为0e的两个字符串绕过，所以post请求：
+1nezha=&#123;&quot;incantation&quot;:&quot;I_am_the_I_am_the_spirit_of_firespirit_of...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/05/18</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/04/20/UCSC-WP/">
+                <span class="abstract-title-text">UCSC-WP</span>
+            </a>
+            <div class="abstract-content">
+                2025 ucsc CTF7.6才发现这个wp没传上来，补档（）
+web-ezLaravel-ucscdirsearch扫一下目录，就能发现flag了
+crypto-essential-ucsc两个脚本
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354from Crypto.Util.number import long_to_bytesimport math# =======================================...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/04/20</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/04/06/XYCTF-WP/">
+                <span class="abstract-title-text">XYCTF-WP</span>
+            </a>
+            <div class="abstract-content">
+                XYCTF-WP不知道为什么，身为web手却做不出来web方向的题目，只能做做其他的了
+reverseWARMUPemm，不知道在哪里上传显示到博客上，那我就讲一下大概思路吧，题目是一个vbs（刚好我学过），执行内容先从ascii码转换之后在进行数据处理，所以写一个python脚本对他进行处理
+123456789101112131415161718import recommand=&#x27;&#x27;&#x27;这里写vbs代码&#x27;&#x27;&#x27;# 提取所有chr()中的表达式parts = re.findall(r&#x27;chr\(([^)]+)\)&#x27...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/04/06</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/01/27/TUCTF-WP/">
+                <span class="abstract-title-text">TUCTF_WP</span>
+            </a>
+            <div class="abstract-content">
+                1.27TUCTF  WPMystery Boxida打开看到可疑字符ReverseMe，尝试作为密码，运行程序得出flag
+1234567Welcome to Mystery Box!1. Play Game2. ExitEnter your choice: 1Enter the secret code to continue: ReverseMeCongratulations! You&#x27;ve unlocked the secret feature!Flag: TUCTF&#123;Banana_Socks&#125;
+
+
+
+My First Secret常规payload：...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/01/27</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
 </div>
 
             </div>
@@ -594,45 +698,29 @@
                 <span class="iconfont-archer">&#xe606;</span>
                 writeup
             </span>
+            <span class="sidebar-tag-name" data-tags="CTF">
+                <span class="iconfont-archer">&#xe606;</span>
+                CTF
+            </span>
             <span class="sidebar-tag-name" data-tags="web">
                 <span class="iconfont-archer">&#xe606;</span>
                 web
+            </span>
+            <span class="sidebar-tag-name" data-tags="writeups">
+                <span class="iconfont-archer">&#xe606;</span>
+                writeups
             </span>
             <span class="sidebar-tag-name" data-tags="python">
                 <span class="iconfont-archer">&#xe606;</span>
                 python
             </span>
-            <span class="sidebar-tag-name" data-tags="requests">
-                <span class="iconfont-archer">&#xe606;</span>
-                requests
-            </span>
             <span class="sidebar-tag-name" data-tags="青龙面板">
                 <span class="iconfont-archer">&#xe606;</span>
                 青龙面板
             </span>
-            <span class="sidebar-tag-name" data-tags="debian">
-                <span class="iconfont-archer">&#xe606;</span>
-                debian
-            </span>
-            <span class="sidebar-tag-name" data-tags="selenium">
-                <span class="iconfont-archer">&#xe606;</span>
-                selenium
-            </span>
-            <span class="sidebar-tag-name" data-tags="javascript">
-                <span class="iconfont-archer">&#xe606;</span>
-                javascript
-            </span>
-            <span class="sidebar-tag-name" data-tags="js">
-                <span class="iconfont-archer">&#xe606;</span>
-                js
-            </span>
             <span class="sidebar-tag-name" data-tags="vbs">
                 <span class="iconfont-archer">&#xe606;</span>
                 vbs
-            </span>
-            <span class="sidebar-tag-name" data-tags="-web">
-                <span class="iconfont-archer">&#xe606;</span>
-                -web
             </span>
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
