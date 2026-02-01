@@ -13,7 +13,7 @@
     <meta name="description" content="搞到现在总算有个博客了">
 <meta property="og:type" content="website">
 <meta property="og:title" content="blog">
-<meta property="og:url" content="http://huajihd.github.io/archives/2024/11/index.html">
+<meta property="og:url" content="http://huajihd.github.io/archives/page/3/index.html">
 <meta property="og:site_name" content="blog">
 <meta property="og:description" content="搞到现在总算有个博客了">
 <meta property="og:locale">
@@ -401,36 +401,38 @@
                 <main class="main index-page">
             
         <article class="index-post">
-            <a class="abstract-title" href="/2024/11/27/oucBookSeminar/">
-                <span class="abstract-title-text">研讨室预约填写信息自动化工具</span>
+            <a class="abstract-title" href="/2024/10/27/oucAutoCheckIn/">
+                <span class="abstract-title-text">ouc接龙管家自动晚打卡</span>
             </a>
             <div class="abstract-content">
-                研讨室预约填写信息自动化工具由于填写研讨室预约信息过程繁琐，开发了一个自动化工具来节省时间，基于 Python 和任务调度框架实现。
-注意：本工具仅供学习和个人使用，请勿用于商业用途。
-实现思路1.使用 selenium 模拟表单提交，自动化处理输入信息，搭配定时任务实现全流程自动化。
-2.使用JavaScript在当前预约界面执行输入。
-背景来源最近发现研讨室预约系统繁琐，填写时间、用途等信息需要耗费很多精力，因此萌生了通过脚本实现简化流程的想法。
-具体操作步骤
-分析预约系统接口
-
-使用浏览器开发者工具（F12）捕获预约系统的网络请求，定位提交信息的接口。
-获取所需的表单字段，如姓名、...
+                ouc接龙管家自动晚打卡ouc信院晚上打卡，采用python requests和青龙面板
+前几天闲来无事，在github上面搜到ExistoT01学长的自动打卡脚本，突然心生想法，用青龙面板来实现定时打卡。
+注意：仅供学习交流之用，请勿用作商业用途
+大佬说authorization 可能三天左右更换一次，刚写第一天，不知道现在啥情况，过几天我再看一下。
+实现思路requests模拟发出请求，携带data和authorization。
+思路来源近几天整理东西，发现来学校报到时带的两个wifi棒子ufi001c，
+心生歹念，给它来个爆改。
+具体操作先给wifi棒子刷了一个debian包，这个...
             </div>
             <!-- read more -->
             <div class="abstract-post-meta">
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2025/11/10">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/11/27</span>
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/10/27</span>
                 </div>
                 <!-- tags -->
                     <div class="abstract-tags" >
         <a class="post-tag" href="javascript:void(0);" data-tags="python">python</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="青龙面板">青龙面板</a>
 </div>
 
             </div>
         </article>
         <div class="index-post-divider"></div>
     <!-- paginator  -->
+        <nav class="page-nav">
+            <a class="extend prev" rel="prev" href="/archives/page/2/">&lt; PREV</a><a class="page-number" href="/archives/">1</a><a class="page-number" href="/archives/page/2/">2</a><span class="page-number current">3</span>
+        </nav>
 </main>
 
                 <!-- profile -->
