@@ -401,6 +401,39 @@
                 <main class="main index-page">
             
         <article class="index-post">
+            <a class="abstract-title" href="/2026/02/03/2026UniCTF-web/">
+                <span class="abstract-title-text">UniCTF web单方向wp</span>
+            </a>
+            <div class="abstract-content">
+                UniCTF web单方向wp才发现哥几个都是懒勾，写脚本不写注释，下回得好好学学怎么写wp.
+Websecure docai直出
+解题思路（核心漏洞）
+
+该站点只解析 XFA 表单（XML），&#x2F;upload 接收 PDF，&#x2F;download&#x2F;.txt 回显解析文本
+XFA XML 解析未禁用外部实体 → XXE 文件读取
+通过在 XFA 中构造 &lt;!ENTITY xxe SYSTEM &quot;file:///flag&quot;&gt;，即可回显 &#x2F;flag 内容
+
+Burp Suite + MCP 操作步骤（建议截图点）
+
+抓包上传请...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2026/02/03">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2026/02/03</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
             <a class="abstract-title" href="/2025/11/09/Pikachu/">
                 <span class="abstract-title-text">Pikachu</span>
             </a>
@@ -565,15 +598,20 @@ and 和or绕过：1234or    ||an...
         
         
         
+        
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 21
+        Total : 22
         </div>
         <!-- search  -->
     </div>
     <div class="post-archive">
             <div class="archive-year"> 2026 </div>
             <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/03</span>
+            <a class="archive-post-title" href="/2026/02/03/2026UniCTF-web/">UniCTF web单方向wp</a>
+        </li>
         <li class="archive-post-item">
             <span class="archive-post-date">01/31</span>
             <a class="archive-post-title" href="/2026/01/31/2025chixi/">2025下半年吃席回忆录</a>
@@ -599,11 +637,11 @@ and 和or绕过：1234or    ||an...
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">07/20</span>
-            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week2/">NewStar CTF 2024 Web Week2复现</a>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week3/">NewStar CTF 2024 Web Week3复现</a>
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">07/20</span>
-            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week3/">NewStar CTF 2024 Web Week3复现</a>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week2/">NewStar CTF 2024 Web Week2复现</a>
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">07/18</span>
@@ -678,6 +716,10 @@ and 和or绕过：1234or    ||an...
                 <span class="iconfont-archer">&#xe606;</span>
                 吃席
             </span>
+            <span class="sidebar-tag-name" data-tags="writeups">
+                <span class="iconfont-archer">&#xe606;</span>
+                writeups
+            </span>
             <span class="sidebar-tag-name" data-tags="ctf">
                 <span class="iconfont-archer">&#xe606;</span>
                 ctf
@@ -685,10 +727,6 @@ and 和or绕过：1234or    ||an...
             <span class="sidebar-tag-name" data-tags="writeup">
                 <span class="iconfont-archer">&#xe606;</span>
                 writeup
-            </span>
-            <span class="sidebar-tag-name" data-tags="writeups">
-                <span class="iconfont-archer">&#xe606;</span>
-                writeups
             </span>
             <span class="sidebar-tag-name" data-tags="web">
                 <span class="iconfont-archer">&#xe606;</span>

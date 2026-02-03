@@ -401,6 +401,39 @@
                 <main class="main index-page">
             
         <article class="index-post">
+            <a class="abstract-title" href="/2026/02/03/2026UniCTF-web/">
+                <span class="abstract-title-text">UniCTF web单方向wp</span>
+            </a>
+            <div class="abstract-content">
+                UniCTF web单方向wp才发现哥几个都是懒勾，写脚本不写注释，下回得好好学学怎么写wp.
+Websecure docai直出
+解题思路（核心漏洞）
+
+该站点只解析 XFA 表单（XML），&#x2F;upload 接收 PDF，&#x2F;download&#x2F;.txt 回显解析文本
+XFA XML 解析未禁用外部实体 → XXE 文件读取
+通过在 XFA 中构造 &lt;!ENTITY xxe SYSTEM &quot;file:///flag&quot;&gt;，即可回显 &#x2F;flag 内容
+
+Burp Suite + MCP 操作步骤（建议截图点）
+
+抓包上传请...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2026/02/03">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2026/02/03</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
             <a class="abstract-title" href="/2026/01/31/2025chixi/">
                 <span class="abstract-title-text">2025下半年吃席回忆录</span>
             </a>
@@ -408,6 +441,7 @@
                 2025下半年吃席回忆录到了年终总结的时候，看看自己这学期吃了些啥，吃了什么不重要，重点在经历。
 吃吃吃、吃吃吃
 2025.8 青岛刚搬到吸嗨岸校区，和一直从未见过面的学长吃席，大一刚入学问了他很多问题，爽赤。
+
 
 2025.9 北京第一次来北京上学，到一个学校，先品品里面的食堂，emm，这里给到拉完了（后续是点外卖比吃食堂次数多），又贵又难吃啊，吸嗨岸中的吸嗨岸qaq。
 
@@ -418,7 +452,7 @@
 
 2025.9 北京都来北京上学了，总得和贵社的远古牢登吃个饭，于是和三万✌🏻、🏠博士一拍即合，16级、19级和24级顺利会晤，仨人吃了个羊蝎子。聊了聊贵社の往事。
 
-2025.9 北京一个人被塞进了5人寝...
+2025.9 北京一个人被塞进了5人...
             </div>
             <!-- read more -->
             <div class="abstract-post-meta">
@@ -491,15 +525,20 @@
         
         
         
+        
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 21
+        Total : 22
         </div>
         <!-- search  -->
     </div>
     <div class="post-archive">
             <div class="archive-year"> 2026 </div>
             <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/03</span>
+            <a class="archive-post-title" href="/2026/02/03/2026UniCTF-web/">UniCTF web单方向wp</a>
+        </li>
         <li class="archive-post-item">
             <span class="archive-post-date">01/31</span>
             <a class="archive-post-title" href="/2026/01/31/2025chixi/">2025下半年吃席回忆录</a>
@@ -525,11 +564,11 @@
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">07/20</span>
-            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week2/">NewStar CTF 2024 Web Week2复现</a>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week3/">NewStar CTF 2024 Web Week3复现</a>
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">07/20</span>
-            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week3/">NewStar CTF 2024 Web Week3复现</a>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week2/">NewStar CTF 2024 Web Week2复现</a>
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">07/18</span>
@@ -604,6 +643,10 @@
                 <span class="iconfont-archer">&#xe606;</span>
                 吃席
             </span>
+            <span class="sidebar-tag-name" data-tags="writeups">
+                <span class="iconfont-archer">&#xe606;</span>
+                writeups
+            </span>
             <span class="sidebar-tag-name" data-tags="ctf">
                 <span class="iconfont-archer">&#xe606;</span>
                 ctf
@@ -611,10 +654,6 @@
             <span class="sidebar-tag-name" data-tags="writeup">
                 <span class="iconfont-archer">&#xe606;</span>
                 writeup
-            </span>
-            <span class="sidebar-tag-name" data-tags="writeups">
-                <span class="iconfont-archer">&#xe606;</span>
-                writeups
             </span>
             <span class="sidebar-tag-name" data-tags="web">
                 <span class="iconfont-archer">&#xe606;</span>

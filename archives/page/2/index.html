@@ -401,6 +401,28 @@
                 <main class="main index-page">
             
         <article class="index-post">
+            <a class="abstract-title" href="/2025/07/06/BlitzCTF-WP/">
+                <span class="abstract-title-text">BlitzCTF-WP</span>
+            </a>
+            <div class="abstract-content">
+                2025 BlitzCTF WP主播太懒了，就看了两个题，后面两个web题都是个位数的解，就没细看了，不如去刷其他靶场
+WebFleg Storehttps://flegstore-asd8webfs.blitzhack.xyz/login
+很正常的一个业务漏洞，价格显示在前端，如果余额不够就会给你的购买按钮打上disable标签，所以只需要把价格和disable删掉，就可以获得flag。
+Unstoppable force meets immovable object白盒代码审计题，对密码进行哈希验证，需要写一个脚本计算
+12345678910111213141516171819202...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/07/06">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/07/06</span>
+                </div>
+                <!-- tags -->
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
             <a class="abstract-title" href="/2025/07/02/Junior-Crypt-2025/">
                 <span class="abstract-title-text">Junior.Crypt.2025 CTF</span>
             </a>
@@ -642,37 +664,6 @@ and 和or绕过：1234or    ||an...
             </div>
         </article>
         <div class="index-post-divider"></div>
-            
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/11/27/oucBookSeminar/">
-                <span class="abstract-title-text">研讨室预约填写信息自动化工具</span>
-            </a>
-            <div class="abstract-content">
-                研讨室预约填写信息自动化工具由于填写研讨室预约信息过程繁琐，开发了一个自动化工具来节省时间，基于 Python 和任务调度框架实现。
-注意：本工具仅供学习和个人使用，请勿用于商业用途。
-实现思路1.使用 selenium 模拟表单提交，自动化处理输入信息，搭配定时任务实现全流程自动化。
-2.使用JavaScript在当前预约界面执行输入。
-背景来源最近发现研讨室预约系统繁琐，填写时间、用途等信息需要耗费很多精力，因此萌生了通过脚本实现简化流程的想法。
-具体操作步骤
-分析预约系统接口
-
-使用浏览器开发者工具（F12）捕获预约系统的网络请求，定位提交信息的接口。
-获取所需的表单字段，如姓名、...
-            </div>
-            <!-- read more -->
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2025/11/10">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/11/27</span>
-                </div>
-                <!-- tags -->
-                    <div class="abstract-tags" >
-        <a class="post-tag" href="javascript:void(0);" data-tags="python">python</a>
-</div>
-
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
     <!-- paginator  -->
         <nav class="page-nav">
             <a class="extend prev" rel="prev" href="/archives/">&lt; PREV</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="extend next" rel="next" href="/archives/page/3/">NEXT &gt;</a>
@@ -732,15 +723,20 @@ and 和or绕过：1234or    ||an...
         
         
         
+        
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 21
+        Total : 22
         </div>
         <!-- search  -->
     </div>
     <div class="post-archive">
             <div class="archive-year"> 2026 </div>
             <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/03</span>
+            <a class="archive-post-title" href="/2026/02/03/2026UniCTF-web/">UniCTF web单方向wp</a>
+        </li>
         <li class="archive-post-item">
             <span class="archive-post-date">01/31</span>
             <a class="archive-post-title" href="/2026/01/31/2025chixi/">2025下半年吃席回忆录</a>
@@ -766,11 +762,11 @@ and 和or绕过：1234or    ||an...
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">07/20</span>
-            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week2/">NewStar CTF 2024 Web Week2复现</a>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week3/">NewStar CTF 2024 Web Week3复现</a>
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">07/20</span>
-            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week3/">NewStar CTF 2024 Web Week3复现</a>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week2/">NewStar CTF 2024 Web Week2复现</a>
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">07/18</span>
@@ -845,6 +841,10 @@ and 和or绕过：1234or    ||an...
                 <span class="iconfont-archer">&#xe606;</span>
                 吃席
             </span>
+            <span class="sidebar-tag-name" data-tags="writeups">
+                <span class="iconfont-archer">&#xe606;</span>
+                writeups
+            </span>
             <span class="sidebar-tag-name" data-tags="ctf">
                 <span class="iconfont-archer">&#xe606;</span>
                 ctf
@@ -852,10 +852,6 @@ and 和or绕过：1234or    ||an...
             <span class="sidebar-tag-name" data-tags="writeup">
                 <span class="iconfont-archer">&#xe606;</span>
                 writeup
-            </span>
-            <span class="sidebar-tag-name" data-tags="writeups">
-                <span class="iconfont-archer">&#xe606;</span>
-                writeups
             </span>
             <span class="sidebar-tag-name" data-tags="web">
                 <span class="iconfont-archer">&#xe606;</span>
