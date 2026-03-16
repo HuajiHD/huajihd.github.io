@@ -401,18 +401,46 @@
                 <main class="main index-page">
             
         <article class="index-post">
+            <a class="abstract-title" href="/2026/03/16/2026ccsssc-wp/">
+                <span class="abstract-title-text">2026软件系统安全赛 WP</span>
+            </a>
+            <div class="abstract-content">
+                2026软件系统安全赛 WPsteganography解题步骤1.查看原始文件类型题目给的是一个没有后缀的文件：
+1file steganography_challenge
+
+结果并不能直接识别成常见文件格式，只显示成 data。
+这类题第一反应就是查文件头 &#x2F; 查魔数。扫描后能发现文件内部出现了 PNG 头：
+123456from pathlib import Pathdata = Path(&quot;steganography_challenge&quot;).read_bytes()png_sig = b&#x27;\x89PNG\r\n\x1a\n&#x27;off ...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2026/03/16">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2026/03/16</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
             <a class="abstract-title" href="/2026/03/09/openclawusegpt/">
                 <span class="abstract-title-text">openclaw怎么调用gpt中的模型</span>
             </a>
             <div class="abstract-content">
-                这几天openclaw不知道为什么突然这么火，写一个调用模型教程
+                这几天openclaw不知道为什么突然这么火，写一个调用模型教程，节点需要自备。
 OpenClaw 官方文档写得很明确：它支持把 OpenAI 作为 provider，并且模型名要写成 provider/model 这种格式，例如 openai/gpt-5.2 或 openai-codex/gpt-5.2。
 方案一：用 OpenAI API Key适合按量计费、直接走 API。
+前置要求：一个api key
 先准备好你的 OpenAI API Key，然后在命令行里执行：
 1openclaw onboard --auth-choice openai-api-key
 
 或者非交互方式：
-1openclaw onboard --open...
+1...
             </div>
             <!-- read more -->
             <div class="abstract-post-meta">
@@ -482,15 +510,20 @@ OpenClaw 官方文档写得很明确：它支持把 OpenAI 作为 provider，并
         
         
         
+        
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 23
+        Total : 24
         </div>
         <!-- search  -->
     </div>
     <div class="post-archive">
             <div class="archive-year"> 2026 </div>
             <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/16</span>
+            <a class="archive-post-title" href="/2026/03/16/2026ccsssc-wp/">2026软件系统安全赛 WP</a>
+        </li>
         <li class="archive-post-item">
             <span class="archive-post-date">03/09</span>
             <a class="archive-post-title" href="/2026/03/09/openclawusegpt/">openclaw怎么调用gpt中的模型</a>
@@ -524,11 +557,11 @@ OpenClaw 官方文档写得很明确：它支持把 OpenAI 作为 provider，并
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">07/20</span>
-            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week3/">NewStar CTF 2024 Web Week3复现</a>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week2/">NewStar CTF 2024 Web Week2复现</a>
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">07/20</span>
-            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week2/">NewStar CTF 2024 Web Week2复现</a>
+            <a class="archive-post-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week3/">NewStar CTF 2024 Web Week3复现</a>
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">07/18</span>
