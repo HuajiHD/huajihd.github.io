@@ -13,7 +13,7 @@
     <meta name="description" content="搞到现在总算有个博客了">
 <meta property="og:type" content="website">
 <meta property="og:title" content="blog">
-<meta property="og:url" content="http://huajihd.github.io/tags/writeup/index.html">
+<meta property="og:url" content="http://huajihd.github.io/tags/CTF/page/2/index.html">
 <meta property="og:site_name" content="blog">
 <meta property="og:description" content="搞到现在总算有个博客了">
 <meta property="og:locale">
@@ -401,31 +401,39 @@
                 <main class="main index-page">
             
         <article class="index-post">
-            <a class="abstract-title" href="/2025/02/16/EHAX-WP/">
-                <span class="abstract-title-text">EHAX_WP</span>
+            <a class="abstract-title" href="/2024/12/31/SQLByPass/">
+                <span class="abstract-title-text">sql注入绕过技巧</span>
             </a>
             <div class="abstract-content">
-                2.16EHAXWelcome开盖即食，进discord，EH4X{w3lc0m3_t0_f1rst_ed1t10n_0f_eh4x_CTF}
-阴间网站背景，根本看不见文字
-Dots &amp; Dashes.–&#x2F;—–&#x2F;.-.&#x2F;-.–&#x2F;…–&#x2F;-..&#x2F;.—-&#x2F;–.-&#x2F;…–&#x2F;-.&#x2F;…–&#x2F;-..-&#x2F;…–&#x2F;—–&#x2F;-..-&#x2F;…–&#x2F;-…&#x2F;….-&#x2F;-&#x2F;.—-&#x2F;—–&#x2F;-&#x2F;
-好的没解出来W...
+                sql注入绕过技巧刚学，大佬们轻喷（）
+空格绕过：%20 %09 %0a %0b %0c %0d %a0 %00 /**/  /*!*/
+数字注入可以使用科学技术法和小数：123?id=1.0 union select 1,2,3,4--?id=1e0union select 1,2,3,4--
+
+也可以使用括号，如：
+select(user())from huaji where(1=1)and(2=2)
+好像通常是在盲注中使用
+?id=1&#39;and(sleep(ascii(substr(database(),1))=109))--
+and 和or绕过：1234or    ||an...
             </div>
             <!-- read more -->
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2025/02/24">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/02/16</span>
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/12/31</span>
                 </div>
                 <!-- tags -->
                     <div class="abstract-tags" >
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf">ctf</a>
-        <a class="post-tag" href="javascript:void(0);" data-tags="writeup">writeup</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
 </div>
 
             </div>
         </article>
         <div class="index-post-divider"></div>
     <!-- paginator  -->
+        <nav class="page-nav">
+            <a class="extend prev" rel="prev" href="/tags/CTF/">&lt; PREV</a><a class="page-number" href="/tags/CTF/">1</a><span class="page-number current">2</span>
+        </nav>
 </main>
 
                 <!-- profile -->
@@ -433,7 +441,7 @@ Dots &amp; Dashes.–&#x2F;—–&#x2F;.-.&#x2F;-.–&#x2F;…–&#x2F;-..&#x2F;
             <footer class="footer footer-unloaded">
     <!-- social  -->
         <div class="social">
-                            <a href="mailto:2185374541@qq.com" class="iconfont-archer email" title="email" ></a>
+                            <a href="mailto:huajihd@qq.com" class="iconfont-archer email" title="email" ></a>
                 <a href="//github.com/HuajiHD" class="iconfont-archer github" target="_blank" title="github"></a>
 
         </div>
@@ -484,15 +492,20 @@ Dots &amp; Dashes.–&#x2F;—–&#x2F;.-.&#x2F;-.–&#x2F;…–&#x2F;-..&#x2F;
         
         
         
+        
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 24
+        Total : 25
         </div>
         <!-- search  -->
     </div>
     <div class="post-archive">
             <div class="archive-year"> 2026 </div>
             <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span>
+            <a class="archive-post-title" href="/2026/05/26/2026ccsssc-final/">2026ccsssc决赛小记</a>
+        </li>
         <li class="archive-post-item">
             <span class="archive-post-date">03/16</span>
             <a class="archive-post-title" href="/2026/03/16/2026ccsssc-wp/">2026软件系统安全赛 WP</a>
@@ -523,6 +536,10 @@ Dots &amp; Dashes.–&#x2F;—–&#x2F;.-.&#x2F;-.–&#x2F;…–&#x2F;-..&#x2F;
         <li class="archive-post-item">
             <span class="archive-post-date">10/07</span>
             <a class="archive-post-title" href="/2025/10/07/bugkuawd-10-7/">bugku-awd小记10.7</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span>
+            <a class="archive-post-title" href="/2025/09/27/2025sdnisc-wp/">鹏云杯第十二届山东省大学生网络安全技能大赛初赛wp</a>
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">08/11</span>
@@ -565,10 +582,6 @@ Dots &amp; Dashes.–&#x2F;—–&#x2F;.-.&#x2F;-.–&#x2F;…–&#x2F;-..&#x2F;
             <a class="archive-post-title" href="/2025/04/06/XYCTF-WP/">XYCTF-WP</a>
         </li>
         <li class="archive-post-item">
-            <span class="archive-post-date">02/16</span>
-            <a class="archive-post-title" href="/2025/02/16/EHAX-WP/">EHAX_WP</a>
-        </li>
-        <li class="archive-post-item">
             <span class="archive-post-date">01/27</span>
             <a class="archive-post-title" href="/2025/01/27/TUCTF-WP/">TUCTF_WP</a>
         </li>
@@ -601,6 +614,10 @@ Dots &amp; Dashes.–&#x2F;—–&#x2F;.-.&#x2F;-.–&#x2F;…–&#x2F;-..&#x2F;
 
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
+            <span class="sidebar-tag-name" data-tags="web">
+                <span class="iconfont-archer">&#xe606;</span>
+                web
+            </span>
             <span class="sidebar-tag-name" data-tags="CTF">
                 <span class="iconfont-archer">&#xe606;</span>
                 CTF
@@ -608,18 +625,6 @@ Dots &amp; Dashes.–&#x2F;—–&#x2F;.-.&#x2F;-.–&#x2F;…–&#x2F;-..&#x2F;
             <span class="sidebar-tag-name" data-tags="吃席">
                 <span class="iconfont-archer">&#xe606;</span>
                 吃席
-            </span>
-            <span class="sidebar-tag-name" data-tags="web">
-                <span class="iconfont-archer">&#xe606;</span>
-                web
-            </span>
-            <span class="sidebar-tag-name" data-tags="ctf">
-                <span class="iconfont-archer">&#xe606;</span>
-                ctf
-            </span>
-            <span class="sidebar-tag-name" data-tags="writeup">
-                <span class="iconfont-archer">&#xe606;</span>
-                writeup
             </span>
             <span class="sidebar-tag-name" data-tags="writeups">
                 <span class="iconfont-archer">&#xe606;</span>

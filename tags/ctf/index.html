@@ -13,7 +13,7 @@
     <meta name="description" content="搞到现在总算有个博客了">
 <meta property="og:type" content="website">
 <meta property="og:title" content="blog">
-<meta property="og:url" content="http://huajihd.github.io/tags/ctf/index.html">
+<meta property="og:url" content="http://huajihd.github.io/tags/CTF/index.html">
 <meta property="og:site_name" content="blog">
 <meta property="og:description" content="搞到现在总算有个博客了">
 <meta property="og:locale">
@@ -401,31 +401,305 @@
                 <main class="main index-page">
             
         <article class="index-post">
-            <a class="abstract-title" href="/2025/02/16/EHAX-WP/">
-                <span class="abstract-title-text">EHAX_WP</span>
+            <a class="abstract-title" href="/2026/05/26/2026ccsssc-final/">
+                <span class="abstract-title-text">2026ccsssc决赛小记</span>
             </a>
             <div class="abstract-content">
-                2.16EHAXWelcome开盖即食，进discord，EH4X{w3lc0m3_t0_f1rst_ed1t10n_0f_eh4x_CTF}
-阴间网站背景，根本看不见文字
-Dots &amp; Dashes.–&#x2F;—–&#x2F;.-.&#x2F;-.–&#x2F;…–&#x2F;-..&#x2F;.—-&#x2F;–.-&#x2F;…–&#x2F;-.&#x2F;…–&#x2F;-..-&#x2F;…–&#x2F;—–&#x2F;-..-&#x2F;…–&#x2F;-…&#x2F;….-&#x2F;-&#x2F;.—-&#x2F;—–&#x2F;-&#x2F;
-好的没解出来W...
+                上周刚打完其他的比赛，这周又要忙着来科大打软件系统安全赛，有个研二师兄出去实习了导致没有人会做re和pwn（悲）。
+周五就到了，酒店环境不错。
+
+和发小出去随便吃了个烤肉，人均69感觉还好。
+
+周六签到，和联队师傅们吃了点好的，竟然有科大高材生。
+周日打比赛，一共就三道web题，一道php、两道java，无敌了，只fix了一道web，没招了
+
+不会java，连IDEA都没有，给jar包解了登上管理员就不知道怎么做了，后面打完让ai复现了一下
+
+我：不知道、不会、看不懂。下回老老实实学javasec了
+不过还有个php题，稀里糊涂给修好了ovo，
+应该是在public&#x2F;offic...
             </div>
             <!-- read more -->
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2025/02/24">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/02/16</span>
+                <div class="abstract-date" title="Last updated: 2026/05/26">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2026/05/26</span>
                 </div>
                 <!-- tags -->
                     <div class="abstract-tags" >
-        <a class="post-tag" href="javascript:void(0);" data-tags="ctf">ctf</a>
-        <a class="post-tag" href="javascript:void(0);" data-tags="writeup">writeup</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="吃席">吃席</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2026/03/16/2026ccsssc-wp/">
+                <span class="abstract-title-text">2026软件系统安全赛 WP</span>
+            </a>
+            <div class="abstract-content">
+                2026软件系统安全赛 WPsteganography解题步骤1.查看原始文件类型题目给的是一个没有后缀的文件：
+1file steganography_challenge
+
+结果并不能直接识别成常见文件格式，只显示成 data。
+这类题第一反应就是查文件头 &#x2F; 查魔数。扫描后能发现文件内部出现了 PNG 头：
+123456from pathlib import Pathdata = Path(&quot;steganography_challenge&quot;).read_bytes()png_sig = b&#x27;\x89PNG\r\n\x1a\n&#x27;off ...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2026/04/22">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2026/03/16</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2026/02/03/2026UniCTF-web/">
+                <span class="abstract-title-text">UniCTF web单方向wp</span>
+            </a>
+            <div class="abstract-content">
+                UniCTF web单方向wp才发现哥几个都是懒勾，写脚本不写注释，下回得好好学学怎么写wp.
+Websecure docai直出
+解题思路（核心漏洞）
+
+该站点只解析 XFA 表单（XML），&#x2F;upload 接收 PDF，&#x2F;download&#x2F;.txt 回显解析文本
+XFA XML 解析未禁用外部实体 → XXE 文件读取
+通过在 XFA 中构造 &lt;!ENTITY xxe SYSTEM &quot;file:///flag&quot;&gt;，即可回显 &#x2F;flag 内容
+
+Burp Suite + MCP 操作步骤（建议截图点）
+
+抓包上传请...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2026/02/03">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2026/02/03</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2026/01/31/2025chixi/">
+                <span class="abstract-title-text">2025下半年吃席回忆录</span>
+            </a>
+            <div class="abstract-content">
+                2025下半年吃席回忆录到了年终总结的时候，看看自己这学期吃了些啥，吃了什么不重要，重点在经历。
+吃吃吃、吃吃吃
+2025.8 青岛刚搬到吸嗨岸校区，和一直从未见过面的学长吃席，大一刚入学问了他很多问题，爽赤。
+
+
+2025.9 北京第一次来北京上学，到一个学校，先品品里面的食堂，emm，这里给到拉完了（后续是点外卖比吃食堂次数多），又贵又难吃啊，吸嗨岸中的吸嗨岸qaq。
+
+
+
+
+
+
+2025.9 北京都来北京上学了，总得和贵社的远古牢登吃个饭，于是和三万✌🏻、🏠博士一拍即合，16级、19级和24级顺利会晤，仨人吃了个羊蝎子。聊了聊贵社の往事。
+
+2025.9 北京一个人被塞进了5人...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2026/02/02">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2026/01/31</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="吃席">吃席</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/11/09/Pikachu/">
+                <span class="abstract-title-text">Pikachu</span>
+            </a>
+            <div class="abstract-content">
+                Pikachu靶场一直忘了刷这个靶场了，国庆结束想起来做一下，内容都非常基础所以写的比较简单，没有别的大佬的博客内容写的清晰。
+暴力破解基于表单的暴力破解发现&#x2F;vul&#x2F;burteforce&#x2F;bf_form.php是提交用的，post请求体里有username=123&amp;password=123&amp;submit=Login，所以扔到burpsuite里的intruder直接爆破即可
+
+验证码绕过(onserver）输入验证码后发现验证码长期有效，所以内容应该同基于表单的暴力破解中的内容。
+验证码绕过(onclient)123456789101112...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/11/09</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/07/12/YWB2025-Final/">
+                <span class="abstract-title-text">御网杯2025线下赛</span>
+            </a>
+            <div class="abstract-content">
+                御网杯2025线下半决赛本科组​	主包头一次打到线下，还是比较有压力的，假期放了快半个月，憋在寝室里疯狂刷题，结果也很不错，半决赛ctf拿了第一，所有非零解的题都出了，也算是给自己的18岁和大一生涯一个交代了。同时也感谢两位队友带飞。
+​	决赛就不是非常理想了，两个本科生都没怎么接触过相关内容，研究生学长是学pwn的，不出意外的出意外了，但lemon扛下重任，给俺们混了个一等奖（大概）
+俺主要负责web和misc。
+WP这次俺负责的题目除了那个零解题以外都很简单
+web双重编码这题很傻逼，抽象在他自己网站的参数都会显示“路径异常”，而且谁家好人会把flag.php放根目录下面啊。
+所以这...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/07/12</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/05/18/ISCC-WP/">
+                <span class="abstract-title-text">ISCC2025-WP</span>
+            </a>
+            <div class="abstract-content">
+                ISCC2025-WP一大坨，没认真打导致没奖，明年还得吃（伤心）
+区域赛web-哪吒的试炼题目提到要吃藕，并且附上了翻译，所以想到在get里填参数，即
+112.126.73.173:9999?food=lotus root，跳转
+
+进去发现按钮点不了，f12删掉标签中的disabled=&quot;&quot;，点击之后看见php
+
+分析得知，第一个用双写绕过，第二个用md5值为0e的两个字符串绕过，所以post请求：
+1nezha=&#123;&quot;incantation&quot;:&quot;I_am_the_I_am_the_spirit_of_firespirit_of...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/05/18</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/04/20/UCSC-WP/">
+                <span class="abstract-title-text">UCSC-WP</span>
+            </a>
+            <div class="abstract-content">
+                2025 ucsc CTF7.6才发现这个wp没传上来，补档（）
+web-ezLaravel-ucscdirsearch扫一下目录，就能发现flag了
+crypto-essential-ucsc两个脚本
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354from Crypto.Util.number import long_to_bytesimport math# =======================================...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/04/20</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/04/06/XYCTF-WP/">
+                <span class="abstract-title-text">XYCTF-WP</span>
+            </a>
+            <div class="abstract-content">
+                XYCTF-WP不知道为什么，身为web手却做不出来web方向的题目，只能做做其他的了
+reverseWARMUPemm，不知道在哪里上传显示到博客上，那我就讲一下大概思路吧，题目是一个vbs（刚好我学过），执行内容先从ascii码转换之后在进行数据处理，所以写一个python脚本对他进行处理
+123456789101112131415161718import recommand=&#x27;&#x27;&#x27;这里写vbs代码&#x27;&#x27;&#x27;# 提取所有chr()中的表达式parts = re.findall(r&#x27;chr\(([^)]+)\)&#x27...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/04/06</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
+            <a class="abstract-title" href="/2025/01/27/TUCTF-WP/">
+                <span class="abstract-title-text">TUCTF_WP</span>
+            </a>
+            <div class="abstract-content">
+                1.27TUCTF  WPMystery Boxida打开看到可疑字符ReverseMe，尝试作为密码，运行程序得出flag
+1234567Welcome to Mystery Box!1. Play Game2. ExitEnter your choice: 1Enter the secret code to continue: ReverseMeCongratulations! You&#x27;ve unlocked the secret feature!Flag: TUCTF&#123;Banana_Socks&#125;
+
+
+
+My First Secret常规payload：...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2025/11/10">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/01/27</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="writeups">writeups</a>
 </div>
 
             </div>
         </article>
         <div class="index-post-divider"></div>
     <!-- paginator  -->
+        <nav class="page-nav">
+            <span class="page-number current">1</span><a class="page-number" href="/tags/CTF/page/2/">2</a><a class="extend next" rel="next" href="/tags/CTF/page/2/">NEXT &gt;</a>
+        </nav>
 </main>
 
                 <!-- profile -->
@@ -433,7 +707,7 @@ Dots &amp; Dashes.–&#x2F;—–&#x2F;.-.&#x2F;-.–&#x2F;…–&#x2F;-..&#x2F;
             <footer class="footer footer-unloaded">
     <!-- social  -->
         <div class="social">
-                            <a href="mailto:2185374541@qq.com" class="iconfont-archer email" title="email" ></a>
+                            <a href="mailto:huajihd@qq.com" class="iconfont-archer email" title="email" ></a>
                 <a href="//github.com/HuajiHD" class="iconfont-archer github" target="_blank" title="github"></a>
 
         </div>
@@ -484,15 +758,20 @@ Dots &amp; Dashes.–&#x2F;—–&#x2F;.-.&#x2F;-.–&#x2F;…–&#x2F;-..&#x2F;
         
         
         
+        
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 24
+        Total : 25
         </div>
         <!-- search  -->
     </div>
     <div class="post-archive">
             <div class="archive-year"> 2026 </div>
             <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span>
+            <a class="archive-post-title" href="/2026/05/26/2026ccsssc-final/">2026ccsssc决赛小记</a>
+        </li>
         <li class="archive-post-item">
             <span class="archive-post-date">03/16</span>
             <a class="archive-post-title" href="/2026/03/16/2026ccsssc-wp/">2026软件系统安全赛 WP</a>
@@ -523,6 +802,10 @@ Dots &amp; Dashes.–&#x2F;—–&#x2F;.-.&#x2F;-.–&#x2F;…–&#x2F;-..&#x2F;
         <li class="archive-post-item">
             <span class="archive-post-date">10/07</span>
             <a class="archive-post-title" href="/2025/10/07/bugkuawd-10-7/">bugku-awd小记10.7</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span>
+            <a class="archive-post-title" href="/2025/09/27/2025sdnisc-wp/">鹏云杯第十二届山东省大学生网络安全技能大赛初赛wp</a>
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">08/11</span>
@@ -565,10 +848,6 @@ Dots &amp; Dashes.–&#x2F;—–&#x2F;.-.&#x2F;-.–&#x2F;…–&#x2F;-..&#x2F;
             <a class="archive-post-title" href="/2025/04/06/XYCTF-WP/">XYCTF-WP</a>
         </li>
         <li class="archive-post-item">
-            <span class="archive-post-date">02/16</span>
-            <a class="archive-post-title" href="/2025/02/16/EHAX-WP/">EHAX_WP</a>
-        </li>
-        <li class="archive-post-item">
             <span class="archive-post-date">01/27</span>
             <a class="archive-post-title" href="/2025/01/27/TUCTF-WP/">TUCTF_WP</a>
         </li>
@@ -601,6 +880,10 @@ Dots &amp; Dashes.–&#x2F;—–&#x2F;.-.&#x2F;-.–&#x2F;…–&#x2F;-..&#x2F;
 
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
+            <span class="sidebar-tag-name" data-tags="web">
+                <span class="iconfont-archer">&#xe606;</span>
+                web
+            </span>
             <span class="sidebar-tag-name" data-tags="CTF">
                 <span class="iconfont-archer">&#xe606;</span>
                 CTF
@@ -608,18 +891,6 @@ Dots &amp; Dashes.–&#x2F;—–&#x2F;.-.&#x2F;-.–&#x2F;…–&#x2F;-..&#x2F;
             <span class="sidebar-tag-name" data-tags="吃席">
                 <span class="iconfont-archer">&#xe606;</span>
                 吃席
-            </span>
-            <span class="sidebar-tag-name" data-tags="web">
-                <span class="iconfont-archer">&#xe606;</span>
-                web
-            </span>
-            <span class="sidebar-tag-name" data-tags="ctf">
-                <span class="iconfont-archer">&#xe606;</span>
-                ctf
-            </span>
-            <span class="sidebar-tag-name" data-tags="writeup">
-                <span class="iconfont-archer">&#xe606;</span>
-                writeup
             </span>
             <span class="sidebar-tag-name" data-tags="writeups">
                 <span class="iconfont-archer">&#xe606;</span>

@@ -408,6 +408,41 @@
                 <main class="main index-page">
             
         <article class="index-post">
+            <a class="abstract-title" href="/2026/05/26/2026ccsssc-final/">
+                <span class="abstract-title-text">2026ccsssc决赛小记</span>
+            </a>
+            <div class="abstract-content">
+                上周刚打完其他的比赛，这周又要忙着来科大打软件系统安全赛，有个研二师兄出去实习了导致没有人会做re和pwn（悲）。
+周五就到了，酒店环境不错。
+
+和发小出去随便吃了个烤肉，人均69感觉还好。
+
+周六签到，和联队师傅们吃了点好的，竟然有科大高材生。
+周日打比赛，一共就三道web题，一道php、两道java，无敌了，只fix了一道web，没招了
+
+不会java，连IDEA都没有，给jar包解了登上管理员就不知道怎么做了，后面打完让ai复现了一下
+
+我：不知道、不会、看不懂。下回老老实实学javasec了
+不过还有个php题，稀里糊涂给修好了ovo，
+应该是在public&#x2F;offic...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2026/05/26">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2026/05/26</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="吃席">吃席</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
             <a class="abstract-title" href="/2026/03/16/2026ccsssc-wp/">
                 <span class="abstract-title-text">2026软件系统安全赛 WP</span>
             </a>
@@ -422,7 +457,7 @@
             <!-- read more -->
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2026/03/16">
+                <div class="abstract-date" title="Last updated: 2026/04/22">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2026/03/16</span>
                 </div>
                 <!-- tags -->
@@ -485,8 +520,8 @@ Burp Suite + MCP 操作步骤（建议截图点）
                 </div>
                 <!-- tags -->
                     <div class="abstract-tags" >
-        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
         <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
 </div>
 
             </div>
@@ -549,8 +584,8 @@ Burp Suite + MCP 操作步骤（建议截图点）
                 </div>
                 <!-- tags -->
                     <div class="abstract-tags" >
-        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
         <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
 </div>
 
             </div>
@@ -615,6 +650,30 @@ attack：1.文件包含访问，直接能读到flag
         <div class="index-post-divider"></div>
             
         <article class="index-post">
+            <a class="abstract-title" href="/2025/09/27/2025sdnisc-wp/">
+                <span class="abstract-title-text">鹏云杯第十二届山东省大学生网络安全技能大赛初赛wp</span>
+            </a>
+            <div class="abstract-content">
+                “鹏云杯”第十二届山东省大学生网络安全技能大赛 初赛wp题目不算难，但比赛py似乎有点严重
+web1_fix
+JWT 验证绕过与提权受影响版本的 python-jwt 会同时接受 JSON JWS 与 compact JWS。将一枚合法签名的 compact JWT拆成 header.payload.signature，再构造一个 JSON 形式的 JWS，把这三个字段原样放在 &quot;protected&quot;|&quot;payload&quot;|&quot;signature&quot;，同时在 JSON 的最前面再放入一个假的 compact 片段：&quot;head...
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2026/05/27">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/09/27</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+            
+        <article class="index-post">
             <a class="abstract-title" href="/2025/08/11/fengshentai/">
                 <span class="abstract-title-text">封神台2025</span>
             </a>
@@ -640,49 +699,6 @@ EzPyeditor因为 t...
             </div>
         </article>
         <div class="index-post-divider"></div>
-            
-        <article class="index-post">
-            <a class="abstract-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week3/">
-                <span class="abstract-title-text">NewStar CTF 2024 Web Week3复现</span>
-            </a>
-            <div class="abstract-content">
-                NewStar CTF 2024 Web Week3复现平台链接https://ctf.xidian.edu.cn/training/14
-紧跟上次week1和week2的题目
-写于7.18和7.19
-include me1234567891011121314151617181920&lt;?phphighlight_file(__FILE__);function waf()&#123;    if(preg_match(&quot;/&lt;|\?|php|&gt;|echo|filter|flag|system|file|%|&amp;|=|`|eval/i&quot;,$_GET[...
-            </div>
-            <!-- read more -->
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2025/07/20">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/07/20</span>
-                </div>
-                <!-- tags -->
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-            
-        <article class="index-post">
-            <a class="abstract-title" href="/2025/07/20/NewStar-CTF-2024-Web-Week2/">
-                <span class="abstract-title-text">NewStar CTF 2024 Web Week2复现</span>
-            </a>
-            <div class="abstract-content">
-                NewStar CTF 2024 Web Week2复现平台链接https://ctf.xidian.edu.cn/training/14
-紧跟上次week1的题目
-写于7.17
-你能在一秒内打出八句英文吗看题目就像一个自动化测试的题，主包selenium写的比较好所以就用它了
-1234567891011from selenium import webdriverfrom selenium.webdriver.common.by import Bydriver=webdriver.Firefox()driver.get(&quot;http://127.0.0.1:48254/&quot...
-            </div>
-            <!-- read more -->
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2025/07/20">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/07/20</span>
-                </div>
-                <!-- tags -->
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
     <!-- paginator  -->
         <nav class="page-nav">
             <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">NEXT &gt;</a>
@@ -692,12 +708,12 @@ include me1234567891011121314151617181920&lt;?phphighlight_file(__FILE__);functi
                 <!-- profile -->
                     <div class="profile">
     <img class="profile-avatar" alt="avatar" src="/avatar/dog.jpg" >
-    <div class="profile-name">Huaji</div>
+    <div class="profile-name">HuajiHD</div>
         <div class="profile-signature">
-            witness me
+            我要成为ctf糕手
         </div>
         <div class="profile-social">
-                            <a href="mailto:2185374541@qq.com" class="iconfont-archer email" title="email" ></a>
+                            <a href="mailto:huajihd@qq.com" class="iconfont-archer email" title="email" ></a>
                 <a href="//github.com/HuajiHD" class="iconfont-archer github" target="_blank" title="github"></a>
 
         </div>
@@ -720,7 +736,7 @@ include me1234567891011121314151617181920&lt;?phphighlight_file(__FILE__);functi
             <footer class="footer footer-unloaded">
     <!-- social  -->
         <div class="social">
-                            <a href="mailto:2185374541@qq.com" class="iconfont-archer email" title="email" ></a>
+                            <a href="mailto:huajihd@qq.com" class="iconfont-archer email" title="email" ></a>
                 <a href="//github.com/HuajiHD" class="iconfont-archer github" target="_blank" title="github"></a>
 
         </div>
@@ -771,15 +787,20 @@ include me1234567891011121314151617181920&lt;?phphighlight_file(__FILE__);functi
         
         
         
+        
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 24
+        Total : 25
         </div>
         <!-- search  -->
     </div>
     <div class="post-archive">
             <div class="archive-year"> 2026 </div>
             <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span>
+            <a class="archive-post-title" href="/2026/05/26/2026ccsssc-final/">2026ccsssc决赛小记</a>
+        </li>
         <li class="archive-post-item">
             <span class="archive-post-date">03/16</span>
             <a class="archive-post-title" href="/2026/03/16/2026ccsssc-wp/">2026软件系统安全赛 WP</a>
@@ -810,6 +831,10 @@ include me1234567891011121314151617181920&lt;?phphighlight_file(__FILE__);functi
         <li class="archive-post-item">
             <span class="archive-post-date">10/07</span>
             <a class="archive-post-title" href="/2025/10/07/bugkuawd-10-7/">bugku-awd小记10.7</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span>
+            <a class="archive-post-title" href="/2025/09/27/2025sdnisc-wp/">鹏云杯第十二届山东省大学生网络安全技能大赛初赛wp</a>
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">08/11</span>
@@ -852,10 +877,6 @@ include me1234567891011121314151617181920&lt;?phphighlight_file(__FILE__);functi
             <a class="archive-post-title" href="/2025/04/06/XYCTF-WP/">XYCTF-WP</a>
         </li>
         <li class="archive-post-item">
-            <span class="archive-post-date">02/16</span>
-            <a class="archive-post-title" href="/2025/02/16/EHAX-WP/">EHAX_WP</a>
-        </li>
-        <li class="archive-post-item">
             <span class="archive-post-date">01/27</span>
             <a class="archive-post-title" href="/2025/01/27/TUCTF-WP/">TUCTF_WP</a>
         </li>
@@ -888,6 +909,10 @@ include me1234567891011121314151617181920&lt;?phphighlight_file(__FILE__);functi
 
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
+            <span class="sidebar-tag-name" data-tags="web">
+                <span class="iconfont-archer">&#xe606;</span>
+                web
+            </span>
             <span class="sidebar-tag-name" data-tags="CTF">
                 <span class="iconfont-archer">&#xe606;</span>
                 CTF
@@ -895,18 +920,6 @@ include me1234567891011121314151617181920&lt;?phphighlight_file(__FILE__);functi
             <span class="sidebar-tag-name" data-tags="吃席">
                 <span class="iconfont-archer">&#xe606;</span>
                 吃席
-            </span>
-            <span class="sidebar-tag-name" data-tags="web">
-                <span class="iconfont-archer">&#xe606;</span>
-                web
-            </span>
-            <span class="sidebar-tag-name" data-tags="ctf">
-                <span class="iconfont-archer">&#xe606;</span>
-                ctf
-            </span>
-            <span class="sidebar-tag-name" data-tags="writeup">
-                <span class="iconfont-archer">&#xe606;</span>
-                writeup
             </span>
             <span class="sidebar-tag-name" data-tags="writeups">
                 <span class="iconfont-archer">&#xe606;</span>
