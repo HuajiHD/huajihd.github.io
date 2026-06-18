@@ -13,7 +13,7 @@
     <meta name="description" content="搞到现在总算有个博客了">
 <meta property="og:type" content="website">
 <meta property="og:title" content="blog">
-<meta property="og:url" content="http://huajihd.github.io/archives/2024/12/index.html">
+<meta property="og:url" content="http://huajihd.github.io/page/3/index.html">
 <meta property="og:site_name" content="blog">
 <meta property="og:description" content="搞到现在总算有个博客了">
 <meta property="og:locale">
@@ -210,8 +210,9 @@
             document.write('<script src="/lib/jquery.min.js" />')
         }
     </script>
+        <body class="home-body">
         <!-- header -->
-        <header class="header header-mobile">
+        <header class="header header-mobile index-header">
     <!-- top read progress line -->
     <div class="header-element">
         <div class="read-progress"></div>
@@ -245,7 +246,7 @@
 </header>
 
         <!-- fixed footer -->
-        <footer class="footer-fixed">
+        <footer class="footer-fixed index-footer-fixed">
     <!-- donate button -->
 
     <!-- back to top button -->
@@ -256,18 +257,24 @@
 
         <!-- wrapper -->
         <div class="wrapper">
-            <div class="site-intro" style="">
+            <div class="site-intro" style="    height:50vh;
+">
     <!-- 主页  -->
+    <!-- 文章页  -->
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/index-bg.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
+                Huajiの小窝.
+            <!-- 文章页  -->
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
+                    搞到现在总算有个博客用了
+            <!-- 文章页  -->
         </p>
         <!-- 文章页 meta -->
     </div>
@@ -401,92 +408,67 @@
                 <main class="main index-page">
             
         <article class="index-post">
-            <a class="abstract-title" href="/2024/12/31/SQLByPass/">
-                <span class="abstract-title-text">sql注入绕过技巧</span>
+            <a class="abstract-title" href="/2024/10/27/oucAutoCheckIn/">
+                <span class="abstract-title-text">ouc接龙管家自动晚打卡</span>
             </a>
             <div class="abstract-content">
-                sql注入绕过技巧刚学，大佬们轻喷（）
-空格绕过：%20 %09 %0a %0b %0c %0d %a0 %00 /**/  /*!*/
-数字注入可以使用科学计数法和小数：123?id=1.0 union select 1,2,3,4--?id=1e0union select 1,2,3,4--
-
-也可以使用括号，如：
-select(user())from huaji where(1=1)and(2=2)
-好像通常是在盲注中使用
-?id=1&#39;and(sleep(ascii(substr(database(),1))=109))--
-and 和or绕过：1234or    ||an...
-            </div>
-            <!-- read more -->
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2026/05/27">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/12/31</span>
-                </div>
-                <!-- tags -->
-                    <div class="abstract-tags" >
-        <a class="post-tag" href="javascript:void(0);" data-tags="web">web</a>
-        <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
-</div>
-
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-            
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/12/25/vbsTestAutomation/">
-                <span class="abstract-title-text">vbs自动化测试</span>
-            </a>
-            <div class="abstract-content">
-                vbs进行自动化测试
-这几天有个课程设计要做，队友是@LTL-77和老卢，是基于余弦相似度实现的代码查重，✌主要负责调试分析的，所以从leetcode上面ctrl+c和ctrl+v下来了百来个样本（为什么这个网站会那么卡？），先用某种方法(AI)把所有题目名称弄下来，第一页如下(内容太多就不完全展示了)：
-123456&quot;exam-room&quot;,&quot;two-sum&quot;,&quot;add-two-numbers&quot;,..........................................&quot;minimum-knight-move...
+                ouc接龙管家自动晚打卡ouc信院晚上打卡，采用python requests和青龙面板
+前几天闲来无事，在github上面搜到ExistoT01学长的自动打卡脚本，突然心生想法，用青龙面板来实现定时打卡。
+注意：仅供学习交流之用，请勿用作商业用途
+大佬说authorization 可能三天左右更换一次，刚写第一天，不知道现在啥情况，过几天我再看一下。
+实现思路requests模拟发出请求，携带data和authorization。
+思路来源近几天整理东西，发现来学校报到时带的两个wifi棒子ufi001c，
+心生歹念，给它来个爆改。
+具体操作先给wifi棒子刷了一个debian包，这个...
             </div>
             <!-- read more -->
             <div class="abstract-post-meta">
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2025/11/10">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/12/25</span>
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/10/27</span>
                 </div>
                 <!-- tags -->
                     <div class="abstract-tags" >
         <a class="post-tag" href="javascript:void(0);" data-tags="python">python</a>
-        <a class="post-tag" href="javascript:void(0);" data-tags="vbs">vbs</a>
-</div>
-
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-            
-        <article class="index-post">
-            <a class="abstract-title" href="/2024/12/06/ouc-rob-blue/">
-                <span class="abstract-title-text">重生之我在牢山抢小蓝</span>
-            </a>
-            <div class="abstract-content">
-                重生之我在牢山抢小蓝我重生了，我前世没有得到的小蓝，这辈子都要拿回来！
-我醒来了，我终于知道我想要做什么了，上一辈子无法获得的小蓝，这辈子我全都要拿回来。
-前置任务：我的小蓝！
-任务目标：你需要抢到一辆小蓝共享电动车
-​	优先选择最近且电量最多的小蓝。
-代码实现如下：（代码仅供学习交流，侵删）
-12345678910111213141516171819202122232425262728293031323334import requests#填写自己的authorizationauthorization=&quot;&quot;#填写目标小蓝编号num=&quot;24070568&qu...
-            </div>
-            <!-- read more -->
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2025/11/10">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/12/06</span>
-                </div>
-                <!-- tags -->
-                    <div class="abstract-tags" >
-        <a class="post-tag" href="javascript:void(0);" data-tags="python">python</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="青龙面板">青龙面板</a>
 </div>
 
             </div>
         </article>
         <div class="index-post-divider"></div>
     <!-- paginator  -->
+        <nav class="page-nav">
+            <a class="extend prev" rel="prev" href="/page/2/">&lt; PREV</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+        </nav>
 </main>
 
                 <!-- profile -->
+                    <div class="profile">
+    <img class="profile-avatar" alt="avatar" src="/avatar/dog.jpg" >
+    <div class="profile-name">HuajiHD</div>
+        <div class="profile-signature">
+            我要成为ctf糕手
+        </div>
+        <div class="profile-social">
+                            <a href="mailto:huajihd@qq.com" class="iconfont-archer email" title="email" ></a>
+                <a href="//github.com/HuajiHD" class="iconfont-archer github" target="_blank" title="github"></a>
+
+        </div>
+        <div class="friends">
+            <div>
+                FRIENDS
+            </div>
+                    <span>
+                        <a href="//www.baidu.com" target="_blank">friendA</a>
+                    </span>
+        </div>
+        <div class="profile-link-item">
+            <a href="/about" class="about-me">
+                ABOUT ME
+            </a>
+        </div>
+</div>
+
             </div>
             <footer class="footer footer-unloaded">
     <!-- social  -->
